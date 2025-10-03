@@ -46,7 +46,7 @@ const RenderQuestion = React.memo(
               data={question.check_boxes}
               renderItem={({ item, index: idx }) => (
                 <CheckBox
-                  isCheck={item.value}
+                  isCheck={typeof item.value == 'string' ? false : item.value}
                   label={item.label}
                   setIsCheck={(newValue) => {
                     handleChangeCheckbox(index, newValue, idx)

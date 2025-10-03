@@ -48,7 +48,6 @@ export default function FormList() {
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       {/* @ts-ignore */}
       <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.title} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />
-      <PrimaryButton onPress={async () => await AsyncStorage.removeItem('forms')} label="RESET (DEBUG ONLY)" />
     </View>
   )
 }
