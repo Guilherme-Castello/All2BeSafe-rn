@@ -23,6 +23,14 @@
 //       }[];
 //     };
 
+export type FormConfig = {
+  name: string,
+  description: string,
+  in_charge: string,
+  weather: boolean,
+  location: boolean
+}
+
 export type FormItem = {
       kind: 'text' | 'input_date' | 'input_time' | 'select' | 'check_boxes';
       title: string;
@@ -37,8 +45,8 @@ export type FormItem = {
     }
 
 export type Form = {
-  questions: FormItem[],
-  title: string,
-  id: number,
-  status: string
+  questions?: FormItem[],
+  id?: number,
+  status?: string,
+  config: FormConfig
 };

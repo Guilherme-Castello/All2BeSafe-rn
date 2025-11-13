@@ -3,7 +3,7 @@ import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
 const serverInstance = axios.create({
-  baseURL: 'https://9dfac2baf3bb.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to config .env]
+  baseURL: 'https://34424e7fafbf.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -80,6 +80,19 @@ const api = {
 
       console.log("PDF salvo em:", fileUri);
       return {success: true}
+    } catch(e) {
+      console.error(e)
+      return {success: false}
+    }
+  },
+
+  getPreviewForm: async (data: any) => {
+    try{
+
+      const response: any = await serverInstance.post('/formularios/generateHtmlPreview', data)
+      console.log(response.data)
+      if (response?.data?.error) throw new Error(response.data.error)
+      return {success: true, template: response.data.template}
     } catch(e) {
       console.error(e)
       return {success: false}

@@ -23,12 +23,12 @@ export const screens = [
     showInDrawer: false
   },
   {
-    name: 'Form Create',
+    name: 'FormCreate',
     title: 'Form Create',
     label: 'Create',
     component: FormCreate,
     requiredPermission: 2,
     icon: 'home',
-    showInDrawer: true
+    showInDrawer: false
   },
 ]
