@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../Utils/colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface QuestionContainerProps {
   children: ReactNode;
   title: string
   id?: string
   canDelete?: boolean
+  hasConfig?: boolean
   onDelete?: () => void
 }
 
-export default function QuestionContainer({ children, title, id = '0', canDelete = false, onDelete }: QuestionContainerProps) {
+export default function QuestionContainer({ children, title, id = '0', canDelete = false, onDelete, hasConfig = false }: QuestionContainerProps) {
   return (
     <View style={{ backgroundColor: colors.primary + '25', paddingVertical: 10, paddingHorizontal: 10, gap: 10, borderRadius: 10 }}>
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -22,6 +24,11 @@ export default function QuestionContainer({ children, title, id = '0', canDelete
       <View style={{ marginHorizontal: 20 }}>
         {children}
       </View>
+      {hasConfig && <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 20}}>
+        <TouchableOpacity onPress={() => console.log('implement')}>
+          <MaterialCommunityIcons name="image" size={20}/>
+        </TouchableOpacity>
+      </View>}
     </View>
   )
 }
