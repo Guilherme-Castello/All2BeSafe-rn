@@ -19,6 +19,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function Header() {
+  const { newForm } = useAuth()
 
   const navigation = useNavigation();
   // @ts-ignore
@@ -35,7 +36,7 @@ function Header() {
     switch (routeName) {
       case "Login":
         return <></>
-      case "FormList":
+      case "Templates":
         return <TouchableOpacity onPress={openDrawer}>
           <MaterialCommunityIcons name='menu' size={26} color={'white'} />
         </TouchableOpacity>
@@ -46,11 +47,13 @@ function Header() {
     }
   }
 
+  const routeName = (currentRoute.name == 'FormCreate' && newForm && newForm.config && newForm.config.name) ? newForm.config.name : currentRoute.name
+
   return (
     <View style={{ backgroundColor: colors.primary, height: 100, width: '100%', justifyContent: 'flex-end' }}>
       <View style={{ paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 20, bottom: 10 }}>
         {renderHeaderButton(currentRoute.name)}
-        <Text style={{ color: 'white', fontSize: 20 }}>{currentRoute.name}</Text>
+        <Text style={{ color: 'white', fontSize: 20 }}>{routeName}</Text>
       </View>
     </View>
   )

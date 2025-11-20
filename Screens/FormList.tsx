@@ -12,12 +12,27 @@ import AnimatedModal from "../Components/AnimatedModal";
 import PrimaryInput from "../Components/PrimaryInput";
 import CheckBox from "../Components/CheckBox";
 import { useAuth } from "../contexts/AuthContext";
+import { MaterialIcons } from "@expo/vector-icons";
 
-function FormCard({ title, status, onPress }: { onPress: () => void, title: string, status: string }) {
+function FormCard({ description, title, status, onPress }: { onPress: () => void, title: string, status: string, description: string }) {
   return (
-    <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.secondary, justifyContent: 'space-around', flexDirection: 'row', marginHorizontal: 20, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
-      <Text>{title}</Text>
-      <Text>{status}</Text>
+    <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.primary+'50', justifyContent: 'space-around', flexDirection: 'row', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
+      <View style={{ width: '15%' }}>
+        <Image source={require('../assets/all2bsafe.png')} style={{ width: 50, height: 50, borderRadius: 10 }} />
+      </View>
+      <View style={{width: '80%'}}>
+        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{fontSize: 16, fontWeight: 700, maxWidth: '85%'}}>{title}</Text>
+          <Text style={[status == 'open' ? {backgroundColor: colors.primary, color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8} : {}]}>Open</Text>
+        </View>
+        <View style={{ width: '100%'}}>
+          <Text>{description}</Text>
+          <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5}}>
+            <MaterialIcons name="person" size={15}/>
+            <Text>All 2B Safe (office)</Text>
+          </View>
+        </View>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -36,7 +51,7 @@ export default function FormList() {
   const [formWeather, setFormWeather] = useState<boolean>(true)
   const [formLocation, setFormLocation] = useState<boolean>(true)
 
-  function resetFormConfigState(){
+  function resetFormConfigState() {
     setFormName('')
     setFormDescription('')
     setFormInCharge('')
@@ -44,10 +59,10 @@ export default function FormList() {
     setFormWeather(true)
   }
 
-  function handleContinue(){
-    if(formName == '' || formDescription == '' || formInCharge == '') return
+  function handleContinue() {
+    if (formName == '' || formDescription == '' || formInCharge == '') return
     resetFormConfigState()
-    setNewForm({...newForm, config: {description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather}, status: 'open'})
+    setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather }, status: 'open' })
   }
 
   useFocusEffect(
@@ -70,32 +85,32 @@ export default function FormList() {
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       {/* @ts-ignore */}
-      <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.config.name} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />
+      <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />
       {/* @ts-ignore */}
-      <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100}} textStyle={{fontSize: 40, color: 'white'}}/>
+      <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
       {isNewFormModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.9} title="Choose an option">
         {({ closeModal }) =>
-          <ScrollView style={{ height: '90%' }} contentContainerStyle={{alignItems: 'center'}}>
+          <ScrollView style={{ height: '90%' }} contentContainerStyle={{ alignItems: 'center' }}>
             <View>
-              <Image source={require('../assets/all2bsafe.png')} width={200} height={200}/>
+              <Image source={require('../assets/all2bsafe.png')} width={200} height={200} />
             </View>
-            <View style={{width: '100%', gap: 10}}>
+            <View style={{ width: '100%', gap: 10 }}>
               <Text>Form name</Text>
-              <PrimaryInput onChange={e => setFormName(e)} value={formName}/>
+              <PrimaryInput onChange={e => setFormName(e)} value={formName} />
 
               <Text>Description</Text>
-              <PrimaryInput onChange={e => setFormDescription(e)} value={formDescription}/>
-              
+              <PrimaryInput onChange={e => setFormDescription(e)} value={formDescription} />
+
               <Text>In charge of</Text>
-              <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge}/>
-              
-              <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <CheckBox label="Get Wheather on fill" isCheck={formWeather} setIsCheck={() => setFormWeather(!formWeather)}/>
-                <CheckBox label="Get Location on fill" isCheck={formLocation} setIsCheck={() => setFormLocation(!formLocation)}/>
+              <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge} />
+
+              <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <CheckBox label="Get Wheather on fill" isCheck={formWeather} setIsCheck={() => setFormWeather(!formWeather)} />
+                <CheckBox label="Get Location on fill" isCheck={formLocation} setIsCheck={() => setFormLocation(!formLocation)} />
               </View>
 
-              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])}/>
-              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])}/>
+              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
+              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} />
             </View>
           </ScrollView>
         }

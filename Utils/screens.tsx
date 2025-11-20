@@ -5,8 +5,8 @@ import Login from "../Screens/Login";
 
 export const screens = [
   {
-    name: 'FormList',
-    title: 'Form List',
+    name: 'Templates',
+    title: 'Templates',
     label: 'List',
     component: FormList,
     requiredPermission: 0,

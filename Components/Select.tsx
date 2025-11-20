@@ -14,11 +14,31 @@ export default function Select({selectedOption, options, setSelectedOption}: Sel
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false)
   
+  function translateOption(op: string){
+    switch(op){
+      case 'text':
+        return 'Text'
+      case 'select':
+        return 'Choose One'
+      case 'check_boxes':
+        return 'Multiple Selection'
+      case 'input_date':
+        return 'Date'
+      case 'input_time':
+        return 'Time'
+      case 'weather':
+        return 'Weather'
+      case 'location':
+        return 'Location'
+      default:
+        return op
+    }
+  }
 
   function SelectItem({ option, closeModal }: { option: string, closeModal: (callBack: () => void) => void }) {
     return (
-      <TouchableOpacity onPress={() => closeModal(() => [setIsSelectOpen(false), setSelectedOption(option)])} style={[{ height: 50, justifyContent: 'center', borderRadius: 20 }, option == selectedOption && { backgroundColor: colors.secondary }]}>
-        <Text style={[{ fontSize: 18, textAlign: 'center' }]}>{option}</Text>
+      <TouchableOpacity onPress={() => closeModal(() => [setIsSelectOpen(false), setSelectedOption(option)])} style={[{ height: 50, justifyContent: 'center', borderRadius: 20 }, option == selectedOption && { backgroundColor: colors.primary }]}>
+        <Text style={[{ fontSize: 18, textAlign: 'center' }, option == selectedOption && { color: 'white' }]}>{translateOption(option)}</Text>
       </TouchableOpacity>
     )
   }
@@ -26,7 +46,7 @@ export default function Select({selectedOption, options, setSelectedOption}: Sel
     <>
       <View>
         <TouchableOpacity onPress={() => setIsSelectOpen(true)} style={{ height: 40, borderRadius: 10, borderColor: 'black', borderWidth: 0.5, justifyContent: 'center', padding: 10, backgroundColor: 'white' }}>
-          <Text>{selectedOption}</Text>
+          <Text>{translateOption(selectedOption)}</Text>
         </TouchableOpacity>
       </View>
       {isSelectOpen && <AnimatedModal position={400} title="Choose an option">

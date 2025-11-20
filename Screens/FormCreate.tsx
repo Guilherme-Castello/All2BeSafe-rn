@@ -17,7 +17,7 @@ export default function FormCreate() {
   const { newForm, setNewForm } = useAuth()
   const [ newFormQuestions, setNewFormQuestions] = useState<FormItem[]>([])
 
-  const componentTypeOptions = ['text', 'select', 'input_date', 'input_time', 'check_boxes']
+  const componentTypeOptions = ['text', 'select', 'input_date', 'input_time', 'check_boxes', 'weather', 'location']
 
   const [formTitle, setFormTitle] = useState<string>('')
 
@@ -52,7 +52,7 @@ export default function FormCreate() {
       return
     }
 
-    const value = (selectedLabel == 'input_date' || selectedLabel == 'input_time') ? new Date() : ''
+    const value = selectedLabel == 'weather' ? 'Sunny with a high of 24°C and a low of 20°C' : (selectedLabel == 'input_date' || selectedLabel == 'input_time') ? new Date() : ''
     const optionalOptions = optionList.map((option, idx) => selectedLabel == 'check_boxes' ? { id: idx, value: false, label: option } : option)
 
     const newQuestion = {

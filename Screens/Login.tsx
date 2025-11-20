@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View } from "react-native";
+import { Image, SafeAreaView, Text, View } from "react-native";
 import PrimaryInput from "../Components/PrimaryInput";
 import { useState } from "react";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -36,6 +36,7 @@ export default function Login() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', paddingHorizontal: 20, gap: 25 }}>
+      <Image source={require('../assets/all2bsafe.png')} style={{ width: 200, height: 200, borderRadius: 10, alignSelf: 'center' }} width={200} height={200} />
       <View>
         <Text>Email</Text>
         <PrimaryInput onChange={setEmail} value={email} placeHolder="johndoe@email.com" />

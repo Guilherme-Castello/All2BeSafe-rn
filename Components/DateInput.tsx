@@ -42,8 +42,8 @@ export default function DateInput({
 
   return (
     <View style={{ marginVertical: 10 }}>
-      <TouchableOpacity onPress={() => setShow(true)} style={[{ backgroundColor: colors.secondary, height: 50, borderRadius: 10, justifyContent: 'center' }]}>
-        <Text style={{ textAlign: 'center' }}>
+      <TouchableOpacity onPress={() => setShow(true)} style={[{ backgroundColor: colors.primary, height: 50, borderRadius: 10, justifyContent: 'center' }]}>
+        <Text style={{ textAlign: 'center', color: 'white' }}>
           {formatedValue()}
         </Text>
       </TouchableOpacity>
