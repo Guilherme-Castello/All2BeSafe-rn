@@ -257,8 +257,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.castellao.securityfirst";
-				PRODUCT_NAME = "securityfirst";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.castellao.alltobesafe";
+				PRODUCT_NAME = "All2BSafe";
 				SWIFT_OBJC_BRIDGING_HEADER = "securityfirst/securityfirst-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -286,8 +286,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.castellao.securityfirst";
-				PRODUCT_NAME = "securityfirst";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.castellao.alltobesafe";
+				PRODUCT_NAME = "All2BSafe";
 				SWIFT_OBJC_BRIDGING_HEADER = "securityfirst/securityfirst-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
