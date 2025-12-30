@@ -2,7 +2,7 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 let verbose = true;
 
-export const axiosinstancesHere = {
+export const axiosinstancesHereAutoSuggest = {
   baseDomain: {
     instance: axios.create({
       baseURL: '',
@@ -12,29 +12,29 @@ export const axiosinstancesHere = {
   setTimeout: 15000
 };
 
-axiosRetry(axiosinstancesHere.baseDomain.instance, {
+axiosRetry(axiosinstancesHereAutoSuggest.baseDomain.instance, {
   retries: 3,
   retryCondition: () => true,
   onRetry: () => console.log('retry')
 });
 
-const hereApi = {
-  getAddressByCoordinate: {
-    get: async (lat: string, long: string, api: string) => {
-      verbose && console.log('Here Request', 'getAddressByCoordinate');
+const hereApiAutoSuggest = {
+  getAddress: {
+    get: async (lat: string, long: string, api: string, query: string) => {
+      verbose && console.log('Here Request', 'getAddress');
       try {
-        const baseUrl = 'https://revgeocode.search.hereapi.com/v1/revgeocode';
-        let params = `?at=${lat},${long}&apiKey=${api}&types=address&lang=pt-BR&limit=1`;
-        const response = await axiosinstancesHere.baseDomain.instance.get(baseUrl + params);
-        return response.data.items[0];
+        const baseUrl = 'https://autosuggest.search.hereapi.com/v1/autosuggest';
+        let params = `?at=${lat},${long}&apiKey=${api}&limit=10&show=details&lang=pt-BR&q=${query}`;
+        console.log(params)
+        const response = await axiosinstancesHereAutoSuggest.baseDomain.instance.get(baseUrl + params);
+        return response.data.items;
       } catch (e) {
-        console.error('HERE ERROR', 'getAddressByCoordinate: ', e);
+        console.error('HERE ERROR', 'getAddress: ', e);
         handleError(e)
       }
     }
-  },
+  }
 };
-
 
 async function handleError(e: any) {
   let parsedErrorMessage = 'Erro desconhecido';
@@ -52,4 +52,4 @@ async function handleError(e: any) {
   return { success: false, e: parsedErrorMessage };
 }
 
-export default hereApi;
+export default hereApiAutoSuggest;

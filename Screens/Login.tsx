@@ -17,17 +17,23 @@ export default function Login() {
   const [password, setPassword] = useState<string>('')
   const [error, setError] = useState<string>('')
 
+  const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false)
+
   const navigate = useNavigation()
 
   async function login() {
     if (email != '' && password != '') {
       try{
+        setIsLoginLoading(true)
         const response = await api.login({ email, password })
         await AsyncStorage.setItem('credentials', JSON.stringify({email, password}))
         setUser(response.user)
       } catch(e: any){
         console.error(e)
         setError(e.message)
+      }
+      finally{
+        setIsLoginLoading(false)
       }
     } else {
       setError('Please insert email and password')
@@ -48,7 +54,7 @@ export default function Login() {
         <Text>Password</Text>
         <PrimaryInput onChange={setPassword} value={password} placeHolder="******" />
       </View>
-      <PrimaryButton label="Enter" onPress={() => login()} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
+      <PrimaryButton label="Enter" isLoading={isLoginLoading} onPress={() => login()} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
       {error != '' && <AnimatedModal position={300} title="Attention!">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>

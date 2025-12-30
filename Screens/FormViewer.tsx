@@ -13,11 +13,14 @@ import Signature from "react-native-signature-canvas";
 export default function FormViewer() {
 
   const route = useRoute();
+
   const { id } = route.params as { id: string };
   const [currentQuestions, setCurrentQuestions] = useState<FormItem[]>()
   const [currentForm, setCurrentForm] = useState<Form>()
   const [downloadFormModal, setDownloadFormModal] = useState<string>('')
   const [feedbackModal, setFeedbackModal] = useState<string>('')
+
+  const [isFormSubmitLoading, setIsFormSubmitLoading] = useState<boolean>(false)
 
   const { user } = useAuth()
 
@@ -86,20 +89,36 @@ export default function FormViewer() {
 
   async function submit(signature: string) {
     console.log(signature)
-    const response = await api.answare(formatAnsware(signature))
-    if (response.err) {
-      setFeedbackModal("There was an error")
-      return
+    try{
+      setIsFormSubmitLoading(true)
+      const response = await api.answare(formatAnsware(signature))
+      if (response.err) {
+        setFeedbackModal("There was an error")
+        return
+      }
+      setFeedbackModal(response.message)
+    } catch(e: any){
+      console.error(e)
+      console.error(e.message)
+    } finally{
+      setIsFormSubmitLoading(false)
     }
-    setFeedbackModal(response.message)
   }
 
   async function downloadForm() {
-    const response = await api.generateAnswaredPdf({ formid: id, userid: user?._id })
-    if (response.success) {
-      setDownloadFormModal('sucess')
-    } else {
-      setDownloadFormModal('error')
+    try{
+      console.log('ok')
+      setIsFormSubmitLoading(true)
+      const response = await api.generateAnswaredPdf({ formid: id, userid: user?._id })
+      if (response.success) {
+        setDownloadFormModal('sucess')
+      } else {
+        setDownloadFormModal('error')
+      }
+    } catch(e){
+      console.error(e)
+    } finally{
+      setIsFormSubmitLoading(false)
     }
   }
   const [signModal, setSignModal] = useState(false)
@@ -112,7 +131,7 @@ export default function FormViewer() {
         keyExtractor={(item) => item.id as any}
         ListFooterComponent={() => (
           <View>
-            <PrimaryButton label="Submit" onPress={() => setSignModal(true)} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
+            <PrimaryButton isLoading={isFormSubmitLoading} label="Submit" onPress={() => setSignModal(true)} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
 
           </View>
         )}
