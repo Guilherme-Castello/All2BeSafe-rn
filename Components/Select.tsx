@@ -7,10 +7,12 @@ import { colors } from "../Utils/colors";
 interface SelectInterface {
   setSelectedOption: (option: string) => void,
   options: string[],
-  selectedOption: string
+  selectedOption: string,
+  position?: number,
+  containerHeight?: number
 }
 
-export default function Select({selectedOption, options, setSelectedOption}: SelectInterface) {
+export default function Select({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180}: SelectInterface) {
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false)
   
@@ -49,10 +51,10 @@ export default function Select({selectedOption, options, setSelectedOption}: Sel
           <Text>{translateOption(selectedOption)}</Text>
         </TouchableOpacity>
       </View>
-      {isSelectOpen && <AnimatedModal position={400} title="Choose an option">
+      {isSelectOpen && <AnimatedModal position={position} title="Choose an option">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
-            <FlatList data={options} renderItem={(a) => <SelectItem option={a.item} closeModal={closeModal} />} style={{ maxHeight: 180, borderBottomWidth: 0.5, borderColor: colors.primary }} contentContainerStyle={{ gap: 2 }} />
+            <FlatList data={options} renderItem={(a) => <SelectItem option={a.item} closeModal={closeModal} />} style={{ maxHeight: containerHeight, borderBottomWidth: 0.5, borderColor: colors.primary }} contentContainerStyle={{ gap: 2 }} />
             <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setIsSelectOpen(false))} />
           </View>
         }

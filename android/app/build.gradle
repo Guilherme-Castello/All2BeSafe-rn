@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.castellao.securityfirst'
+    namespace 'com.castellao.alltobesafe'
     defaultConfig {
-        applicationId 'com.castellao.securityfirst'
+        applicationId 'com.castellao.alltobesafe'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

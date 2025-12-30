@@ -1,4 +1,4 @@
-package com.castellao.securityfirst
+package com.castellao.alltobesafe
 
 import android.os.Build
 import android.os.Bundle

@@ -10,6 +10,7 @@ import RenderQuestion from "../Components/RenderQuestion";
 import api from "../Server/api";
 import RenderHTML from "react-native-render-html";
 import { useAuth } from "../contexts/AuthContext";
+import { useNavigation, useRouter } from "expo-router";
 // @ts-ignore
 
 export default function FormCreate() {
@@ -25,6 +26,7 @@ export default function FormCreate() {
   const [previewTemplate, setPreviewTemplate] = useState('')
 
   const [openConfigModal, setOpenConfigModal] = useState<boolean>(false)
+  const [openPredefinedOptionsModal, setOpenPredefinedOptionsModal] = useState<boolean>(false)
   const [openFinishgModal, setOpenFinishModal] = useState<boolean>(false)
 
   const [selectedLabel, setSelectedLabel] = useState(componentTypeOptions[0])
@@ -35,10 +37,13 @@ export default function FormCreate() {
   const [optionList, setOptionList] = useState<string[]>([])
   const [optionName, setOptionName] = useState<string>('')
 
+  const [isCreateFormloading, setIsCreateFormloading] = useState<boolean>(false)
+
+  const navigate = useNavigation()
 
   function handleAddQuestion() {
     if (selectedLabel == 'check_boxes' || selectedLabel == 'select') {
-      setOpenConfigModal(true)
+      setOpenPredefinedOptionsModal(true)
       return
     } else {
       addQuestion()
@@ -52,7 +57,7 @@ export default function FormCreate() {
       return
     }
 
-    const value = selectedLabel == 'weather' ? 'Sunny with a high of 24°C and a low of 20°C' : (selectedLabel == 'input_date' || selectedLabel == 'input_time') ? new Date() : ''
+    const value = selectedLabel == 'weather' ? '' : (selectedLabel == 'input_date' || selectedLabel == 'input_time') ? new Date() : ''
     const optionalOptions = optionList.map((option, idx) => selectedLabel == 'check_boxes' ? { id: idx, value: false, label: option } : option)
 
     const newQuestion = {
@@ -112,13 +117,17 @@ export default function FormCreate() {
     // }
 
     try {
+      setIsCreateFormloading(true)
       console.log(newForm)
       await api.createForm({...newForm, questions: newFormQuestions})
       setNewFormQuestions([])
       setNewForm(undefined)
       setFormTitle('')
+      navigate.goBack()
     } catch (error) {
       console.error('Error creating form:', error);
+    } finally {
+      setIsCreateFormloading(false)
     }
   }
 
@@ -132,6 +141,31 @@ export default function FormCreate() {
     console.log(newFormQuestions)
     getPreview()
   }, [viewMode])
+
+  const predefinedOptions = [
+    {
+      options: [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      color: colors.safe,
+    },
+    {
+      options: [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      color: colors.secondary,
+    }
+  ]
+
+  useEffect(() => {
+    console.log('aaab')
+    console.log(optionList)
+  }, [optionList])
 
   return (
     <>
@@ -148,7 +182,7 @@ export default function FormCreate() {
           <View style={{ gap: 10, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: colors.primary, paddingHorizontal: 20 }}>
             <View style={{ gap: 5 }}>
               <Text>Question kind: </Text>
-              <Select options={componentTypeOptions} selectedOption={selectedLabel} setSelectedOption={setSelectedLabel} />
+              <Select position={600} containerHeight={400} options={componentTypeOptions} selectedOption={selectedLabel} setSelectedOption={setSelectedLabel} />
             </View>
             <View style={{ gap: 5 }}>
               <Text>Title: </Text>
@@ -159,7 +193,7 @@ export default function FormCreate() {
                 <PrimaryButton onPress={() => handleAddQuestion()} label="Add Question" style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
               </View>
               <View style={{ width: '48%' }}>
-                <PrimaryButton onPress={() => setOpenFinishModal(true)} label="Finish" style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
+                <PrimaryButton onPress={() => setOpenFinishModal(true)} isLoading={isCreateFormloading} label="Finish" style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
               </View>
             </View>
           </View>
@@ -194,10 +228,10 @@ export default function FormCreate() {
           />}
         </View>}
       </SafeAreaView>
-      {openConfigModal && <AnimatedModal position={500} title="Choose an option">
+      {openConfigModal && <AnimatedModal position={700} title="Options">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
-            <FlatList data={optionList} style={{ height: 150 }} renderItem={(option) => {
+            <FlatList data={optionList} style={{ height: 350 }} renderItem={(option) => {
               return (
                 <View style={{ height: 50, justifyContent: 'space-between', borderRadius: 20, flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
                   <Text>{option.item}</Text>
@@ -209,14 +243,53 @@ export default function FormCreate() {
             }} />
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <View style={{ width: '90%' }}>
-                <PrimaryInput onChange={setOptionName} value={optionName} style={{ backgroundColor: 'blue' }} />
+                <PrimaryInput placeHolder="...or add your own option" onChange={setOptionName} value={optionName} />
               </View>
               <TouchableOpacity onPress={() => [setOptionList(prev => [...prev, optionName]), setOptionName('')]} style={{ width: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center', borderRadius: 100 }}>
                 <Text style={{ color: 'white', fontWeight: 700, fontSize: 25, backgroundColor: colors.primary, paddingHorizontal: 10, borderRadius: 100 }}>+</Text>
               </TouchableOpacity>
             </View>
-            <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Submit" onPress={() => closeModal(() => [setOpenConfigModal(false), addQuestion()])} />
-            <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenConfigModal(false))} />
+            <View style={{gap: 5}}>
+              <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Submit" onPress={() => closeModal(() => [setOpenConfigModal(false), addQuestion()])} />
+              <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenConfigModal(false))} />
+            </View>
+          </View>
+        }
+      </AnimatedModal>}
+
+      {openPredefinedOptionsModal && <AnimatedModal position={600} title="Options">
+        {({ closeModal }) =>
+          <View style={{ gap: 20 }}>
+            <FlatList
+              data={predefinedOptions}
+              contentContainerStyle={{width: '100%', justifyContent: 'center', gap: 5}}
+              style={{height: 300}}
+              renderItem={({ item }) => {
+                console.log(item)
+                return <TouchableOpacity style={{ borderColor: item.color, borderWidth: 0.7, width: '100%', height: 35 }} onPress={() => closeModal(() => [setOptionList(prev => [...prev, ...item.options]), setOpenPredefinedOptionsModal(false), setOpenConfigModal(true), console.log(item.options)])}>
+                  <FlatList
+                    data={item.options}
+                    style={{flexDirection: 'row', width: '100%'}}
+                    horizontal
+                    ItemSeparatorComponent={() => <Text style={{fontSize: 20, marginHorizontal: 5, color: item.color}}> | </Text>}
+                    contentContainerStyle={{ justifyContent: 'space-between', paddingHorizontal: 10 }}
+                    renderItem={({ item }) => {
+                      return (
+                          <Text style={{fontSize: 20}}>{item}</Text>
+
+                      )
+                  }}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </TouchableOpacity>
+              }}
+              keyExtractor={(item, index) => index.toString()}
+            />
+
+            <View style={{gap: 5}}>
+              <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Add manually" onPress={() => closeModal(() => [setOpenPredefinedOptionsModal(false), setOpenConfigModal(true)])} />
+              <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenPredefinedOptionsModal(false))} />
+            </View>
           </View>
         }
       </AnimatedModal>}

@@ -74,7 +74,7 @@ function CustomDrawerContent(props: any) {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ alignContent: 'space-between', flex: 1, justifyContent: 'space-between'}}>
       <View style={{ gap: 20}}>
-        <Text style={{ fontSize: 30, textAlign: 'center' }}>Security First</Text>
+        <Text style={{ fontSize: 30, textAlign: 'center' }}>All 2B Safe</Text>
         {screens.map(screen => {
           if (!screen.showInDrawer || Number(user?.access_level) < screen.requiredPermission) return
           return (

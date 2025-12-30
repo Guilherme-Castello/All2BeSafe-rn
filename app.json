@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "security-first",
-    "slug": "security-first",
+    "name": "All 2B Safe",
+    "slug": "all2besafe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.castellao.securityfirst"
+      "bundleIdentifier": "com.castellao.alltobesafe"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,11 +23,11 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "key here"
+          "apiKey": "AIzaSyAWOENgGdjyMam4FPZHs99OcIj3PCDNJqM"
         }
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.castellao.securityfirst"
+      "package": "com.castellao.alltobesafe"
     },
     "web": {
       "favicon": "./assets/favicon.png"

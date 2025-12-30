@@ -9,9 +9,13 @@ import { FormItem } from "../Types/FormStructure";
 import MapView from "react-native-maps";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors } from "../Utils/colors";
+import PrimaryButton from "./PrimaryButton";
+import MapQuestionContent from "./MapQuestionContent";
+import WeatherQuestionContent from "./WeatherQuestionContent";
 
 const RenderQuestion = React.memo(
   ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig }: { onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }) => {
+    console.log(question)
     switch (question.kind) {
       case "text":
         return (
@@ -63,33 +67,14 @@ const RenderQuestion = React.memo(
       case "weather":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <PrimaryInput
-              onChange={(text) => onChangeText(index, text)}
-              value={question.value}
-              icon="sun-compass"
-            />
+            <WeatherQuestionContent index={index} onChangeText={onChangeText} question={question}/>
           </QuestionContainer>
         );
 
       case "location":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <View style={{position: 'relative'}}>
-              <MaterialCommunityIcons name="pin" style={{position: 'absolute', zIndex: 100, top: 150, left: 150}} size={20} color={colors.primary} />
-              <MapView
-                provider="google"
-                region={{
-                  latitude: -23.964779907216926,
-                  longitude: -46.39218581538934,
-                  latitudeDelta: 0.005,
-                  longitudeDelta: 0.005
-                }}
-                style={{
-                  width: 300,
-                  height: 300,
-                }}>
-              </MapView>
-            </View>
+            <MapQuestionContent/>
           </QuestionContainer>
         );
       default:

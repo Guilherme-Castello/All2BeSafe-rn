@@ -31,7 +31,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
 }
 expoAutolinking.useExpoModules()
 
-rootProject.name = 'security-first'
+rootProject.name = 'All 2B Safe'
 
 expoAutolinking.useExpoVersionCatalog()
 
