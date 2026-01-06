@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useState } from "react";
-import { Dimensions, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Form } from "../Types/FormStructure";
 import { colors } from "../Utils/colors";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -40,10 +40,12 @@ function FormCard({ description, title, status, onPress }: { onPress: () => void
 export default function FormList() {
 
   const { setNewForm, newForm } = useAuth()
+  const navigate = useNavigation()
 
   const [loadedForms, setLoadedForms] = useState<Form[]>()
   const [isNewFormModalOpen, setIsNewFormModalOpen] = useState<boolean>(false)
-  const navigate = useNavigation()
+
+  const [listMode, setListMode] = useState<'template' | 'inProgress'>('template')
 
   const [formName, setFormName] = useState<string>('')
   const [formDescription, setFormDescription] = useState<string>('')
@@ -65,6 +67,8 @@ export default function FormList() {
     setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather }, status: 'open' })
   }
 
+  const [loadedInProgressForms, setLoadedInProgressForms] = useState([])
+
   useFocusEffect(
     useCallback(() => {
       console.log('FormList focused')
@@ -74,6 +78,14 @@ export default function FormList() {
         try {
           const forms: any = await api.getForms();
           forms && setLoadedForms(forms)
+          
+          const inProgressFormsRaw: any = await AsyncStorage.getItem('localForms')
+          console.log(inProgressFormsRaw)
+          if(inProgressFormsRaw){
+            const inProgressForms = JSON.parse(inProgressFormsRaw)
+            setLoadedInProgressForms(inProgressForms)
+          }
+
         } catch (error) {
           console.error('Error fetching forms from AsyncStorage:', error);
         }
@@ -82,10 +94,27 @@ export default function FormList() {
     }, [])
   );
 
+
+
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flexDirection: 'row', height: '7%' }}>
+        <TouchableOpacity onPress={() => setListMode('template')} style={[{ width: '50%', justifyContent: 'center', alignItems: 'center' }, listMode == 'template' ? styles.activeViewButton : styles.inactiveViewButton]}>
+          <Text>Templates</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setListMode('inProgress')} style={[{ width: '50%', justifyContent: 'center', alignItems: 'center' }, listMode == 'inProgress' ? styles.activeViewButton : styles.inactiveViewButton]}>
+          <Text>In Progress</Text>
+        </TouchableOpacity>
+      </View>
       {/* @ts-ignore */}
-      <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />
+      {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />}
+      {listMode == 'inProgress' &&
+        <View>
+            {loadedInProgressForms && loadedInProgressForms.map(a => {
+              return <Text>a</Text>
+            })}
+        </View>
+      }
       {/* @ts-ignore */}
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
       {isNewFormModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.9} title="Choose an option">
@@ -118,3 +147,13 @@ export default function FormList() {
     </View>
   )
 }
+const styles = StyleSheet.create({
+  activeViewButton: {
+    borderBottomColor: colors.primary,
+    borderBottomWidth: 5,
+  },
+  inactiveViewButton: {
+    borderBottomColor: colors.primary,
+    borderBottomWidth: 2,
+  }
+})

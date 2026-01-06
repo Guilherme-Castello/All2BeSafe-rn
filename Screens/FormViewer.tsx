@@ -9,6 +9,7 @@ import { colors } from "../Utils/colors";
 import { useAuth } from "../contexts/AuthContext";
 import AnimatedModal from "../Components/AnimatedModal";
 import Signature from "react-native-signature-canvas";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function FormViewer() {
 
@@ -47,7 +48,6 @@ export default function FormViewer() {
         return index === receivedIndex ? {
           ...item, check_boxes: item.check_boxes!.map(box => {
             if (box.id == boxid) {
-              console.log("VALUE: ", typeof box.value)
               return { ...box, value: typeof box.value == 'string' ? true : !box.value }
             }
             return { ...box, value: typeof box.value == 'string' ? false : box.value }
@@ -122,7 +122,38 @@ export default function FormViewer() {
     }
   }
   const [signModal, setSignModal] = useState(false)
-  console.log(id)
+  
+  async function autoSave() {
+    console.log('CCCC')
+    try{
+      if(!currentForm?.id) {
+        console.log('DDDD')
+        console.log(currentForm?.id)
+        return
+      }
+      const localFormsRaw = await AsyncStorage.getItem('localForms')
+      if(localFormsRaw){
+        const localForms = JSON.parse(localFormsRaw)
+        await AsyncStorage.setItem('localForms', JSON.stringify([...localForms, {...currentForm, questions: currentQuestions, status: 'in progress'}]))
+      }
+      await AsyncStorage.setItem('localForms', JSON.stringify([{...currentForm, questions: currentQuestions, status: 'in progress'}]))
+
+      console.log('saved')
+    } catch(e){
+      console.error(e)
+    }
+  }
+
+  useEffect(() => {
+    console.log("AAAAAAAAAAAAAA")
+    const timeout = setTimeout(() => {
+      console.log('BBB')
+      autoSave()
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [currentQuestions])
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center' }}>
       <FlatList
