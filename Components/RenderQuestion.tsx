@@ -15,7 +15,6 @@ import WeatherQuestionContent from "./WeatherQuestionContent";
 
 const RenderQuestion = React.memo(
   ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig }: { onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }) => {
-    console.log(question)
     switch (question.kind) {
       case "text":
         return (

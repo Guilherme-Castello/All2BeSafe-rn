@@ -3,8 +3,9 @@ import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
 const serverInstance = axios.create({
-  baseURL: 'https://api-formularios-render.onrender.com/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
+  // baseURL: 'https://api-formularios-render.onrender.com/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   timeout: 900000,
+  baseURL: 'https://70f7d11d7d8d.ngrok-free.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -64,11 +65,22 @@ const api = {
       throw error;
     }
   },
+  updateAnsware: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/formularios/updateAnsware', data)
+      if (response?.data?.error) throw new Error(response.data.error)
+      return response.data;
+
+    } catch (error: any) {
+      console.error('Error fetching user:', error.message);
+      throw error;
+    }
+  },
 
   generatePdf: async (data: any) => {
-    try{
+    try {
       console.log('response')
-      const response: any = await serverInstance.post('/formularios/generateFormPDFHTML', data, {responseType: "arraybuffer"})
+      const response: any = await serverInstance.post('/formularios/generateFormPDFHTML', data, { responseType: "arraybuffer" })
       if (response?.data?.error) throw new Error(response.data.error)
 
       const base64Data = Buffer.from(response.data, "binary").toString("base64");
@@ -79,69 +91,90 @@ const api = {
       });
 
       console.log("PDF salvo em:", fileUri);
-      return {success: true}
-    } catch(e) {
+      return { success: true }
+    } catch (e) {
       console.error(e)
-      return {success: false}
+      return { success: false }
     }
   },
 
   getPreviewForm: async (data: any) => {
-    try{
+    try {
 
       const response: any = await serverInstance.post('/formularios/generateHtmlPreview', data)
       console.log(response.data)
       if (response?.data?.error) throw new Error(response.data.error)
-      return {success: true, template: response.data.template}
+      return { success: true, template: response.data.template }
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+
+  generateAnswaredPdf: async (data: any) => {
+    try {
+      console.log("response");
+
+      // faz a requisição para gerar o PDF
+      const response: any = await serverInstance.post(
+        "/formularios/generateFormAnswaredPDFHTML",
+        data,
+        { responseType: "arraybuffer" }
+      );
+
+      if (response?.data?.error) throw new Error(response.data.error);
+
+      // pede permissão para escolher o diretório
+      const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+      if (!permissions.granted) {
+        console.log("Permissão negada para salvar arquivo");
+        return { success: false, error: "Permission denied" };
+      }
+
+      // converte o PDF recebido em base64
+      const base64Data = Buffer.from(response.data, "binary").toString("base64");
+
+      // cria o arquivo dentro da pasta escolhida pelo usuário
+      const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
+        permissions.directoryUri,
+        "formulario.pdf",
+        "application/pdf"
+      );
+
+      // escreve o conteúdo no arquivo criado
+      await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      console.log("PDF salvo em:", fileUri);
+      return { success: true, fileUri };
+    } catch (e: any) {
+      console.error(e);
+      return { success: false, error: e.message };
+    }
+  },
+  getUserAnswares: async (data: any) => {
+    try{
+
+      const response: any = await serverInstance.post('/answares/getUserAnswares', data)
+      if (response?.data?.error) throw new Error(response.data.error)
+      return {success: true, forms: response.data.configs}
     } catch(e) {
       console.error(e)
       return {success: false}
     }
   },
-
-  generateAnswaredPdf: async (data: any) => {
-  try {
-    console.log("response");
-
-    // faz a requisição para gerar o PDF
-    const response: any = await serverInstance.post(
-      "/formularios/generateFormAnswaredPDFHTML",
-      data,
-      { responseType: "arraybuffer" }
-    );
-
-    if (response?.data?.error) throw new Error(response.data.error);
-
-    // pede permissão para escolher o diretório
-    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
-
-    if (!permissions.granted) {
-      console.log("Permissão negada para salvar arquivo");
-      return { success: false, error: "Permission denied" };
+  getAnswaredForm: async (data: any) => {
+    try{
+      const response: any = await serverInstance.post('/answares/getAnswaredForm', data)
+      if (response?.data?.error) throw new Error(response.data.error)
+      return response.data.answaredForm
+    } catch(e) {
+      console.error(e)
+      return {success: false}
     }
-
-    // converte o PDF recebido em base64
-    const base64Data = Buffer.from(response.data, "binary").toString("base64");
-
-    // cria o arquivo dentro da pasta escolhida pelo usuário
-    const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
-      permissions.directoryUri,
-      "formulario.pdf",
-      "application/pdf"
-    );
-
-    // escreve o conteúdo no arquivo criado
-    await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    console.log("PDF salvo em:", fileUri);
-    return { success: true, fileUri };
-  } catch (e: any) {
-    console.error(e);
-    return { success: false, error: e.message };
-  }
-}
+  },
 }
 
 export default api;

@@ -39,7 +39,7 @@ function FormCard({ description, title, status, onPress }: { onPress: () => void
 
 export default function FormList() {
 
-  const { setNewForm, newForm } = useAuth()
+  const { setNewForm, newForm, user } = useAuth()
   const navigate = useNavigation()
 
   const [loadedForms, setLoadedForms] = useState<Form[]>()
@@ -71,7 +71,6 @@ export default function FormList() {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('FormList focused')
 
       async function getForms() {
         // const forms = await AsyncStorage.getItem('forms')
@@ -79,12 +78,8 @@ export default function FormList() {
           const forms: any = await api.getForms();
           forms && setLoadedForms(forms)
           
-          const inProgressFormsRaw: any = await AsyncStorage.getItem('localForms')
-          console.log(inProgressFormsRaw)
-          if(inProgressFormsRaw){
-            const inProgressForms = JSON.parse(inProgressFormsRaw)
-            setLoadedInProgressForms(inProgressForms)
-          }
+          const inProgressForms: any = await api.getUserAnswares({uId: user?._id})
+          setLoadedInProgressForms(inProgressForms.forms)
 
         } catch (error) {
           console.error('Error fetching forms from AsyncStorage:', error);
@@ -108,14 +103,8 @@ export default function FormList() {
       </View>
       {/* @ts-ignore */}
       {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />}
-      {listMode == 'inProgress' &&
-        <View>
-            {loadedInProgressForms && loadedInProgressForms.map(a => {
-              return <Text>a</Text>
-            })}
-        </View>
-      }
       {/* @ts-ignore */}
+      {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard status={'OPEN'} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true })} />} />}
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
       {isNewFormModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.9} title="Choose an option">
         {({ closeModal }) =>

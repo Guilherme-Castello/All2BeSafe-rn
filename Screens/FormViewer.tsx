@@ -15,7 +15,7 @@ export default function FormViewer() {
 
   const route = useRoute();
 
-  const { id } = route.params as { id: string };
+  const { id, isAnsware } = route.params as { id: string, isAnsware: boolean };
   const [currentQuestions, setCurrentQuestions] = useState<FormItem[]>()
   const [currentForm, setCurrentForm] = useState<Form>()
   const [downloadFormModal, setDownloadFormModal] = useState<string>('')
@@ -59,8 +59,13 @@ export default function FormViewer() {
 
   async function getSelectedForm() {
     try {
-      const selectedForm: Form | undefined = await api.getFormById(id);
-      selectedForm && setCurrentForm(selectedForm);
+      if(!isAnsware){
+        const selectedForm: Form | undefined = await api.getFormById(id);
+        selectedForm && setCurrentForm(selectedForm);
+      } else {
+        const selectedForm: Form | undefined = await api.getAnswaredForm({aId: id});
+        selectedForm && setCurrentForm(selectedForm);
+      }
     } catch (error) {
       console.error('Error fetching form by ID:', error);
     }
@@ -75,7 +80,6 @@ export default function FormViewer() {
   function formatAnsware(signature: string) {
     const answaredForm = {
       answares: currentQuestions?.map(q => {
-        console.log('Q: ', q)
         // const checkboxesAnsware = 
         return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes }
       }),
@@ -83,20 +87,28 @@ export default function FormViewer() {
       user_id: user?._id,
       signature: signature
     }
-    console.log(answaredForm)
     return answaredForm
   }
 
   async function submit(signature: string) {
-    console.log(signature)
     try{
       setIsFormSubmitLoading(true)
-      const response = await api.answare(formatAnsware(signature))
-      if (response.err) {
-        setFeedbackModal("There was an error")
-        return
+
+      if(isAnsware){
+        const response = await api.updateAnsware({aId: id, updatedAnware: formatAnsware(signature)})
+        if (response.err) {
+          setFeedbackModal("There was an error")
+          return
+        }
+        setFeedbackModal(response.message)
+      } else {
+        const response = await api.answare(formatAnsware(signature))
+        if (response.err) {
+          setFeedbackModal("There was an error")
+          return
+        }
+        setFeedbackModal(response.message)
       }
-      setFeedbackModal(response.message)
     } catch(e: any){
       console.error(e)
       console.error(e.message)
@@ -107,7 +119,6 @@ export default function FormViewer() {
 
   async function downloadForm() {
     try{
-      console.log('ok')
       setIsFormSubmitLoading(true)
       const response = await api.generateAnswaredPdf({ formid: id, userid: user?._id })
       if (response.success) {
@@ -124,10 +135,8 @@ export default function FormViewer() {
   const [signModal, setSignModal] = useState(false)
   
   async function autoSave() {
-    console.log('CCCC')
     try{
       if(!currentForm?.id) {
-        console.log('DDDD')
         console.log(currentForm?.id)
         return
       }
@@ -145,9 +154,7 @@ export default function FormViewer() {
   }
 
   useEffect(() => {
-    console.log("AAAAAAAAAAAAAA")
     const timeout = setTimeout(() => {
-      console.log('BBB')
       autoSave()
     }, 3000)
 
