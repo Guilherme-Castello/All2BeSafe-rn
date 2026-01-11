@@ -77,7 +77,7 @@ export default function FormViewer() {
     }, [id])
   );
 
-  function formatAnsware(signature: string) {
+  function formatAnsware(signature?: string) {
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
@@ -136,30 +136,17 @@ export default function FormViewer() {
   
   async function autoSave() {
     try{
-      if(!currentForm?.id) {
-        console.log(currentForm?.id)
-        return
-      }
-      const localFormsRaw = await AsyncStorage.getItem('localForms')
-      if(localFormsRaw){
-        const localForms = JSON.parse(localFormsRaw)
-        await AsyncStorage.setItem('localForms', JSON.stringify([...localForms, {...currentForm, questions: currentQuestions, status: 'in progress'}]))
-      }
-      await AsyncStorage.setItem('localForms', JSON.stringify([{...currentForm, questions: currentQuestions, status: 'in progress'}]))
-
       console.log('saved')
+      if(isAnsware){
+        const response = await api.updateAnsware({aId: id, updatedAnware: formatAnsware()})
+        if (response.err) {
+          console.log('error')
+        }
+      }
     } catch(e){
       console.error(e)
     }
   }
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      autoSave()
-    }, 3000)
-
-    return () => clearTimeout(timeout)
-  }, [currentQuestions])
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center' }}>
@@ -174,7 +161,7 @@ export default function FormViewer() {
           </View>
         )}
         renderItem={(item) => {
-          return <RenderQuestion question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
+          return <RenderQuestion autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
         }}
       />
 
