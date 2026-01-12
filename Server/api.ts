@@ -3,9 +3,8 @@ import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
 const serverInstance = axios.create({
-  // baseURL: 'https://api-formularios-render.onrender.com/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
+  baseURL: 'https://api-formularios-render.onrender.com/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   timeout: 900000,
-  baseURL: 'https://70f7d11d7d8d.ngrok-free.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
