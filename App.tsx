@@ -14,6 +14,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { colors } from './Utils/colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -101,6 +102,18 @@ function CustomDrawerContent(props: any) {
 }
 
 function PrivateRouter() {
+  
+  React.useEffect(() => {
+    async function requestLocationPermission() {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.warn('Permissão de localização negada.');
+      }
+    }
+
+    requestLocationPermission()
+  }, [])
+
   return (
     <Drawer.Navigator screenOptions={{ header: () => <Header /> }} drawerContent={props => <CustomDrawerContent {...props} />}>
       {screens.map((screen, idx) => {

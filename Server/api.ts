@@ -3,7 +3,7 @@ import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
 const serverInstance = axios.create({
-  baseURL: 'https://2fc1c9cfd1d0.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
+  baseURL: 'https://6756bbeaab66.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   timeout: 900000,
   headers: {
     'Content-Type': 'application/json',
