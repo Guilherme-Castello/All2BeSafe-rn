@@ -9,10 +9,11 @@ interface SelectInterface {
   options: string[],
   selectedOption: string,
   position?: number,
-  containerHeight?: number
+  containerHeight?: number,
+  autoSave?: () => void
 }
 
-export default function Select({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180}: SelectInterface) {
+export default function Select({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180, autoSave}: SelectInterface) {
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false)
   
@@ -39,7 +40,7 @@ export default function Select({selectedOption, options, setSelectedOption, posi
 
   function SelectItem({ option, closeModal }: { option: string, closeModal: (callBack: () => void) => void }) {
     return (
-      <TouchableOpacity onPress={() => closeModal(() => [setIsSelectOpen(false), setSelectedOption(option)])} style={[{ height: 50, justifyContent: 'center', borderRadius: 20 }, option == selectedOption && { backgroundColor: colors.primary }]}>
+      <TouchableOpacity onPress={() => closeModal(() => [setIsSelectOpen(false), setSelectedOption(option), autoSave && autoSave()])} style={[{ height: 50, justifyContent: 'center', borderRadius: 20 }, option == selectedOption && { backgroundColor: colors.primary }]}>
         <Text style={[{ fontSize: 18, textAlign: 'center' }, option == selectedOption && { color: 'white' }]}>{translateOption(option)}</Text>
       </TouchableOpacity>
     )

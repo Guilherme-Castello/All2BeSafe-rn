@@ -9,12 +9,13 @@ import { colors } from "../Utils/colors";
 import { useAuth } from "../contexts/AuthContext";
 import AnimatedModal from "../Components/AnimatedModal";
 import Signature from "react-native-signature-canvas";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function FormViewer() {
 
   const route = useRoute();
 
-  const { id } = route.params as { id: string };
+  const { id, isAnsware } = route.params as { id: string, isAnsware: boolean };
   const [currentQuestions, setCurrentQuestions] = useState<FormItem[]>()
   const [currentForm, setCurrentForm] = useState<Form>()
   const [downloadFormModal, setDownloadFormModal] = useState<string>('')
@@ -47,7 +48,6 @@ export default function FormViewer() {
         return index === receivedIndex ? {
           ...item, check_boxes: item.check_boxes!.map(box => {
             if (box.id == boxid) {
-              console.log("VALUE: ", typeof box.value)
               return { ...box, value: typeof box.value == 'string' ? true : !box.value }
             }
             return { ...box, value: typeof box.value == 'string' ? false : box.value }
@@ -59,8 +59,13 @@ export default function FormViewer() {
 
   async function getSelectedForm() {
     try {
-      const selectedForm: Form | undefined = await api.getFormById(id);
-      selectedForm && setCurrentForm(selectedForm);
+      if(!isAnsware){
+        const selectedForm: Form | undefined = await api.getFormById(id);
+        selectedForm && setCurrentForm(selectedForm);
+      } else {
+        const selectedForm: Form | undefined = await api.getAnswaredForm({aId: id});
+        selectedForm && setCurrentForm(selectedForm);
+      }
     } catch (error) {
       console.error('Error fetching form by ID:', error);
     }
@@ -72,10 +77,9 @@ export default function FormViewer() {
     }, [id])
   );
 
-  function formatAnsware(signature: string) {
+  function formatAnsware(signature?: string) {
     const answaredForm = {
       answares: currentQuestions?.map(q => {
-        console.log('Q: ', q)
         // const checkboxesAnsware = 
         return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes }
       }),
@@ -83,20 +87,28 @@ export default function FormViewer() {
       user_id: user?._id,
       signature: signature
     }
-    console.log(answaredForm)
     return answaredForm
   }
 
   async function submit(signature: string) {
-    console.log(signature)
     try{
       setIsFormSubmitLoading(true)
-      const response = await api.answare(formatAnsware(signature))
-      if (response.err) {
-        setFeedbackModal("There was an error")
-        return
+
+      if(isAnsware){
+        const response = await api.updateAnsware({aId: id, updatedAnware: formatAnsware(signature)})
+        if (response.err) {
+          setFeedbackModal("There was an error")
+          return
+        }
+        setFeedbackModal(response.message)
+      } else {
+        const response = await api.answare(formatAnsware(signature))
+        if (response.err) {
+          setFeedbackModal("There was an error")
+          return
+        }
+        setFeedbackModal(response.message)
       }
-      setFeedbackModal(response.message)
     } catch(e: any){
       console.error(e)
       console.error(e.message)
@@ -107,7 +119,6 @@ export default function FormViewer() {
 
   async function downloadForm() {
     try{
-      console.log('ok')
       setIsFormSubmitLoading(true)
       const response = await api.generateAnswaredPdf({ formid: id, userid: user?._id })
       if (response.success) {
@@ -122,7 +133,21 @@ export default function FormViewer() {
     }
   }
   const [signModal, setSignModal] = useState(false)
-  console.log(id)
+  
+  async function autoSave() {
+    try{
+      console.log('saved')
+      if(isAnsware){
+        const response = await api.updateAnsware({aId: id, updatedAnware: formatAnsware()})
+        if (response.err) {
+          console.log('error')
+        }
+      }
+    } catch(e){
+      console.error(e)
+    }
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center' }}>
       <FlatList
@@ -136,7 +161,7 @@ export default function FormViewer() {
           </View>
         )}
         renderItem={(item) => {
-          return <RenderQuestion question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
+          return <RenderQuestion autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
         }}
       />
 

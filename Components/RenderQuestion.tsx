@@ -14,14 +14,14 @@ import MapQuestionContent from "./MapQuestionContent";
 import WeatherQuestionContent from "./WeatherQuestionContent";
 
 const RenderQuestion = React.memo(
-  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig }: { onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }) => {
-    console.log(question)
+  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn }: { autoSaveFn?: () => void, onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }) => {
     switch (question.kind) {
       case "text":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
             <PrimaryInput
               onChange={(text) => onChangeText(index, text)}
+              onBlur={autoSaveFn}
               value={question.value}
             />
           </QuestionContainer>
@@ -29,20 +29,20 @@ const RenderQuestion = React.memo(
       case "select":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <Select options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(index, text)} />
+            <Select autoSave={autoSaveFn} options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(index, text)} />
           </QuestionContainer>
         )
 
       case "input_date":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => onChangeText(index, date.toString())} mode="date" />
+            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(index, date.toString()), autoSaveFn && autoSaveFn()]} mode="date" />
           </QuestionContainer>
         )
       case "input_time":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => onChangeText(index, date.toString())} mode="time" />
+            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(index, date.toString()), autoSaveFn && autoSaveFn()]} mode="time" />
           </QuestionContainer>
         )
 
@@ -54,6 +54,7 @@ const RenderQuestion = React.memo(
               renderItem={({ item, index: idx }) => (
                 <CheckBox
                   isCheck={typeof item.value == 'string' ? false : item.value}
+                  autoSave={autoSaveFn}
                   label={item.label}
                   setIsCheck={(newValue) => {
                     handleChangeCheckbox(index, newValue, idx)

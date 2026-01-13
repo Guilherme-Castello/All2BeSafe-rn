@@ -107,7 +107,6 @@ export default function FormCreate() {
     if (newForm == undefined) {
       return
     }
-    console.log({...newForm, questions: newFormQuestions})
     setNewForm({...newForm, questions: newFormQuestions})
 
     // let newFormCompleteStructure: any = {

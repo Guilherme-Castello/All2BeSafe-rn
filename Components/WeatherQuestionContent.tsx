@@ -8,12 +8,10 @@ export default function WeatherQuestionContent({onChangeText, question, index}: 
   
   async function fetchWeather() {
     const response =  await getWeather(0, 0)
-    console.log(response)
     formatWeather(response)
   }
 
   function formatWeather(weather: any){
-    console.log(weather)
     onChangeText(index, `${weather.weather[0].description}, ${weather.main.temp}°C, ${weather.main.humidity}g/m³`)
     // return `${weather.weather.description}`
   }

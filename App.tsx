@@ -26,11 +26,9 @@ function Header() {
   const openDrawer = () => navigation.toggleDrawer()
 
   const state = useNavigationState(state => state);
-  console.log("Navigation state:", state);
 
   // Última rota ativa
   const currentRoute = state.routes[state.index];
-  console.log("Tela atual:", currentRoute.name);
 
   function renderHeaderButton(routeName: string) {
     switch (routeName) {
