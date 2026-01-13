@@ -148,7 +148,8 @@ export default function FormCreate() {
         "No",
         "N/A"
       ],
-      color: colors.safe,
+      //color: colors.safe,
+      color: colors.primary,
     },
     {
       options: [
@@ -157,7 +158,9 @@ export default function FormCreate() {
         "Unsure",
         "N/A"
       ],
-      color: colors.secondary,
+      //color: colors.secondary,
+      color: colors.primary,
+
     }
   ]
 
@@ -265,7 +268,7 @@ export default function FormCreate() {
               style={{height: 300}}
               renderItem={({ item }) => {
                 console.log(item)
-                return <TouchableOpacity style={{ borderColor: item.color, borderWidth: 0.7, width: '100%', height: 35 }} onPress={() => closeModal(() => [setOptionList(prev => [...prev, ...item.options]), setOpenPredefinedOptionsModal(false), setOpenConfigModal(true), console.log(item.options)])}>
+                return <TouchableOpacity style={{ borderColor: item.color, borderWidth: 0.9, width: '100%', height: 36, borderRadius:15 }} onPress={() => closeModal(() => [setOptionList(prev => [...prev, ...item.options]), setOpenPredefinedOptionsModal(false), setOpenConfigModal(true), console.log(item.options)])}>
                   <FlatList
                     data={item.options}
                     style={{flexDirection: 'row', width: '100%'}}
