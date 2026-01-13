@@ -14,7 +14,27 @@ import CheckBox from "../Components/CheckBox";
 import { useAuth } from "../contexts/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function FormCard({ description, title, status, onPress }: { onPress: () => void, title: string, status: string, description: string }) {
+function FormCard({ description, title, status, onPress, isAnsware = false }: { isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
+
+  function getStatusColor(){
+    switch(status){
+      case 'open':
+        return colors.primary
+      case 'in_progress':
+        return colors.secondary
+      case 'done':
+        return colors.safe
+    }
+  }
+
+  function translateStatus(){
+    switch(status){
+      case 'open': return 'Open'
+      case 'in_progress': return 'In Progress'
+      case 'done': return 'Done'
+    }
+  }
+
   return (
     <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.primary+'50', justifyContent: 'space-around', flexDirection: 'row', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
       <View style={{ width: '15%' }}>
@@ -22,15 +42,15 @@ function FormCard({ description, title, status, onPress }: { onPress: () => void
       </View>
       <View style={{width: '80%'}}>
         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{fontSize: 16, fontWeight: 700, maxWidth: '85%'}}>{title}</Text>
-          <Text style={[status == 'open' ? {backgroundColor: colors.primary, color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8} : {}]}>Open</Text>
+          <Text style={{fontSize: 16, fontWeight: 700, maxWidth: '75%'}}>{title}</Text>
+          <Text style={[{backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8}]}>{translateStatus()}</Text>
         </View>
         <View style={{ width: '100%'}}>
           <Text>{description}</Text>
-          <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5}}>
+          {!isAnsware && <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5}}>
             <MaterialIcons name="person" size={15}/>
             <Text>All 2B Safe (office)</Text>
-          </View>
+          </View>}
         </View>
       </View>
     </TouchableOpacity>
@@ -43,7 +63,11 @@ export default function FormList() {
   const navigate = useNavigation()
 
   const [loadedForms, setLoadedForms] = useState<Form[]>()
+
   const [isNewFormModalOpen, setIsNewFormModalOpen] = useState<boolean>(false)
+  const [isNewAnswareModalOpen, setIsNewAnswareModalOpen] = useState<boolean>(false)
+  const [answareName, setAnswareName] = useState<string>('')
+  const [templateToOpen, setTemplateToOpen] = useState<string>('')
 
   const [listMode, setListMode] = useState<'template' | 'inProgress'>('template')
 
@@ -86,7 +110,7 @@ export default function FormList() {
         }
       }
       getForms();
-    }, [])
+    }, [listMode])
   );
 
 
@@ -102,10 +126,31 @@ export default function FormList() {
         </TouchableOpacity>
       </View>
       {/* @ts-ignore */}
-      {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={item.item.status} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item._id })} />} />}
+      {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={'open'} title={item.item.config.name} description={item.item.config.description} onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]} />} />}
       {/* @ts-ignore */}
-      {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard status={'OPEN'} title={item.item.config.name} description={item.item.config.description} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true })} />} />}
+      {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard isAnsware status={item.item.status} title={item.item.name} description={`Template: ${item.item.config.name}`} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true })} />} />}
+      
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
+      
+      
+      
+      {isNewAnswareModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.6} title="Choose an option">
+        {({ closeModal }) =>
+          <ScrollView style={{ height: '90%' }} contentContainerStyle={{ alignItems: 'center' }}>
+            <View>
+              <Image source={require('../assets/all2bsafe.png')} width={200} height={200} />
+            </View>
+            <View style={{ width: '100%', gap: 10 }}>
+              <Text>Form name</Text>
+              <PrimaryInput onChange={e => setAnswareName(e)} value={answareName} />
+
+              {/* @ts-ignore */}
+              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormViewer", { id: templateToOpen, aName: answareName }), setIsNewAnswareModalOpen(false), setAnswareName('')])} />
+              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewAnswareModalOpen(false), resetFormConfigState(), setAnswareName('')])} />
+            </View>
+          </ScrollView>
+        }
+      </AnimatedModal>}
       {isNewFormModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.9} title="Choose an option">
         {({ closeModal }) =>
           <ScrollView style={{ height: '90%' }} contentContainerStyle={{ alignItems: 'center' }}>
