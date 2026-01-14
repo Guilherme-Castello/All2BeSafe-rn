@@ -1,0 +1,1983 @@
+{
+  "_id": {
+    "$oid": "6967e3e4ad23ee982b60b0a3"
+  },
+  "questions": [
+    {
+      "kind": "text",
+      "title": "* Client / Site",
+      "options": [],
+      "id": "0",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "* Project / Job",
+      "options": [],
+      "id": "1",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "* Area conducted",
+      "options": [],
+      "id": "2",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "input_date",
+      "title": "* Conducted on",
+      "options": [],
+      "id": "3",
+      "value": "2026-01-14T17:32:38.175Z",
+      "check_boxes": []
+    },
+    {
+      "kind": "input_time",
+      "title": "* Conducted on",
+      "options": [],
+      "id": "4",
+      "value": "2026-01-14T17:32:54.026Z",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "* Prepared by",
+      "options": [],
+      "id": "5",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "weather",
+      "title": "Weather Conditions",
+      "options": [],
+      "id": "6",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "location",
+      "title": "* GPS Location",
+      "options": [],
+      "id": "7",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "Inspection Lenght",
+      "options": [],
+      "id": "8",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Previous reports reviewed and\r\naddressed and posted?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "9",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Previous issues corrected?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "10",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Supervisor assigned?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "11",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Near Miss Reporting",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "12",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Hazard Recognition Reporting",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "13",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Subcontractors documents/Proof of\r\ntraining in order?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "14",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Other",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "15",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Clean, Level ground",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "16",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Adequate Ramps",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "17",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Adequate unobstructed stairs",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "18",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Other",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "19",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. General Housekeeping",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "20",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Walking - Working Surfaces",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "21",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Unprotected Sides or Holes",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "22",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Impalement Hazards",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "23",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Sanitary Facilities",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "24",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Water - Trash Receptacles",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "25",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Material Storage/Lay Down",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "26",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Other",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "27",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. General site air quality",
+      "options": [
+        "Good",
+        "Fair"
+      ],
+      "id": "28",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "B. Air quality monitoring record",
+      "options": [],
+      "id": "29",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. All OHSA Required Posters",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "30",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Emergency Evacuations",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "31",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Emergency Contacts List",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "32",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "D. Other ",
+      "options": [],
+      "id": "33",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. CPR / First Aid Training",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "34",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. First Aid Kit (No Expired Items) ",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "35",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Eye Wash Facilities on site?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "36",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Access to Eye Wash Station",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "37",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "E. Other",
+      "options": [],
+      "id": "38",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Hard Hats",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "39",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Safety Glasses with Side Shields",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "40",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Face Shield / Goggles (If Required)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "41",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Respiratory Protection (If Required) ",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "42",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Hearing Protection (If required)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "43",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Clothing (FRC etc. if required)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "44",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Gloves ",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "45",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Foot Protection",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "46",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "I. Other",
+      "options": [],
+      "id": "47",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Working at heights Trained Personnel\r\n(Competent Person)?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "48",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. CSA=approved and verified equipment",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "49",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Worn Properly",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "50",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. In safe, usable condition ",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "51",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Suitable Anchorage Points",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "52",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Suitable Life Lines",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "53",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Inspected/Color Coded",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "54",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Stored Properly",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "55",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "I. Emergency Rescue Plany",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "56",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "J. Other",
+      "options": [],
+      "id": "57",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Proper angle (extension Ladders)",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "58",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Base/Footing/Set Up ",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "59",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Inspections/Color Coded",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "60",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Proper Type for Task (Grade 1)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "61",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "E. Other",
+      "options": [],
+      "id": "62",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. In Good Condition? ",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "63",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Inspected/Color Coded",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "64",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Whip-Checks",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "65",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "D. Other",
+      "options": [],
+      "id": "66",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Trained Personnel (Competent\r\nPerson)?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "67",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Access/Egress",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "68",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Soil Condition",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "69",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Water Accumulating",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "70",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Shoring/Shielding/Sloping",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "71",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Barricades",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "72",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Spell Pile",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "73",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Air Monitoring",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "74",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "I. Emergency Rescue Plan",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "75",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "J. Other",
+      "options": [],
+      "id": "76",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Trained Personnel (Competent\r\nPerson)?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "77",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Attendant Trained",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "78",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Entrants Trained",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "79",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Attendant Wearing",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "80",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Attendant Sign In Sheet",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "81",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Permit Required?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "82",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Permit Followed?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "83",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Air Monitoring",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "84",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "I. Emergency Rescue Plan",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "85",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "J. Other",
+      "options": [],
+      "id": "86",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. G.F.C.I.'s",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "87",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Extension Cords",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "88",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Power Tools",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "89",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Lock Out/Tag Out",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "90",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Assured Ground Inspected",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "91",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Surface cables buried or protected",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "92",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "G. Other",
+      "options": [],
+      "id": "93",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Hot Work Permit (if required)?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "94",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Fire Watch Assigned",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "95",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Fire Extinguisher/Inspected?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "96",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Combustibles removed/isolated",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "97",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Hot Work Barricade (if required)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "98",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Gas Can(s)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "99",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "G. Other",
+      "options": [],
+      "id": "100",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Properly located",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "101",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. In good condition",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "102",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Properly secured",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "103",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Properly moved or lifted",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "104",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "E. Other",
+      "options": [],
+      "id": "105",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Capacity Tags",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "106",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Hooks and Latches",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "107",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Chain falls/Come-a-longs",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "108",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Tag Lines",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "109",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Inspected/Color Coded",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "110",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Designated Qualified Rigger",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "111",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Damage",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "112",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "H. Other",
+      "options": [],
+      "id": "113",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Trained Personnel (Competent\r\nPerson)?",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "114",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Top and Mid-rails, Toe boards",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "115",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Platform Decked/Fully Planked and\r\nSecured",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "116",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Level Footing/Set up",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "117",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Vertical and Horizontal bracing",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "118",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Push/Pulls in place ",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "119",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Foot planks/side brackets",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "120",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Access/Egress",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "121",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "I. Away from Powerlines",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "122",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "J. Barricades",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "123",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "K. Inspection/Tagged Correctly",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "124",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "L. Other",
+      "options": [],
+      "id": "125",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Crane Inspection",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "126",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Operator Manual",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "127",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Crane Setup",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "128",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Crane Swing Radius",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "129",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Flagman with Vest",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "130",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Operator Qualified and Certified",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "131",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "G. Designated Qualified Signaler",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "132",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "H. Fall Zone Procedures",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "133",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "I. Lift Plan (if required)",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "134",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "J. Other",
+      "options": [],
+      "id": "135",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Equipment Inspections",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "136",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Operator Qualified and Certified",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "137",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Operator Manual",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "138",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Flagman with Vest",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "139",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Proper setup and use",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "140",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "F. Other",
+      "options": [],
+      "id": "141",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Trained traffic control persons",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "142",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Regulation Sign",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "143",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Properly dressed (including vest)",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "144",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "D. Other",
+      "options": [],
+      "id": "145",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Properly located (within 4,5 m)",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "146",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. Entrances clearly marked",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "147",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Proper lighting (if applicable)",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "148",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "D. Other",
+      "options": [],
+      "id": "149",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. Rods & Cylinders properly labeled ",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "150",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. SDS readily available",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "151",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. Properly secured ground cables",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "152",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Properly eyes protection worn ",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "153",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Fire extinguisher readily available",
+      "options": [
+        "Yes",
+        "No",
+        "N/A"
+      ],
+      "id": "154",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "F. Other ",
+      "options": [],
+      "id": "155",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "A. All personnel trained - Right to Know ",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "156",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "B. SDS on Site",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "157",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "C. SDS for all chemicals/Toxic",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "158",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "D. Substances on site",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "159",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "E. Proper Storage of Chemicals/Toxic\r\nsubstances",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "160",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "select",
+      "title": "F. Proper PPE for Handling Chemicals/\r\nToxic substances",
+      "options": [
+        "Safe",
+        "Not safe",
+        "Unsure",
+        "N/A"
+      ],
+      "id": "161",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "G. Other",
+      "options": [],
+      "id": "162",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "* Safety Representative (Sign)",
+      "options": [],
+      "id": "163",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "* Construction Supervisor(Sign)",
+      "options": [],
+      "id": "164",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "Staff present at time of inspection?",
+      "options": [],
+      "id": "165",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "Material supplied obs",
+      "options": [],
+      "id": "166",
+      "value": "",
+      "check_boxes": []
+    },
+    {
+      "kind": "text",
+      "title": "Material supplied (photo)",
+      "options": [],
+      "id": "167",
+      "value": "",
+      "check_boxes": []
+    }
+  ],
+  "config": {
+    "name": "Inspection - Template Master",
+    "description": "Global form for inspection",
+    "in_charge": "André ",
+    "weather": true,
+    "location": true,
+    "_id": {
+      "$oid": "6967e3e4ad23ee982b60b0a4"
+    }
+  },
+  "created_at": {
+    "$date": "2026-01-14T18:43:48.344Z"
+  },
+  "__v": 0
+}
