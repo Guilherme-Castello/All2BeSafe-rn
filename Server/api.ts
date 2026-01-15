@@ -3,7 +3,7 @@ import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
 const serverInstance = axios.create({
-  baseURL: 'https://6756bbeaab66.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
+  baseURL: 'https://4c8e4389d241.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   timeout: 900000,
   headers: {
     'Content-Type': 'application/json',
@@ -54,6 +54,7 @@ const api = {
 
   answare: async (data: any) => {
     try {
+      console.log('data: ', data)
       const response: any = await serverInstance.post('/formularios/answare', data)
       if (response?.data?.error) throw new Error(response.data.error)
       return response.data;

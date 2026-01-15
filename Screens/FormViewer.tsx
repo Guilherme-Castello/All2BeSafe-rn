@@ -45,6 +45,20 @@ export default function FormViewer() {
     });
   }, []);
 
+  const handleChangeCoords = useCallback((receivedIndex: number, newCoord: {latitude: string, longitude: string}) => {
+    console.log('AA1')
+    console.log(newCoord)
+    setCurrentQuestions((prev) => {
+      if (prev == undefined) return undefined
+      const test = prev.map((item, index) => {
+        if (index === receivedIndex) {
+          return { ...item, coords: newCoord }
+        } else { return item }
+      })
+      return test
+    });
+  }, []);
+
   const handleChangeCheckbox = useCallback((receivedIndex: number, check: boolean, boxid: number) => {
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
@@ -93,7 +107,8 @@ export default function FormViewer() {
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
-        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes }
+        console.log('found q', q)
+        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords}
       }),
       form_id: id,
       user_id: user?._id,
@@ -150,6 +165,7 @@ export default function FormViewer() {
   const [signModal, setSignModal] = useState(false)
   
   async function autoSave() {
+    console.log('saving')
     try{
       if(isAnsware || firstAnswareId != undefined){
         const response = await api.updateAnsware({aId: firstAnswareId || id, updatedAnware: formatAnsware()})
@@ -181,7 +197,7 @@ export default function FormViewer() {
             </View>
           )}
           renderItem={(item) => {
-            return <RenderQuestion autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
+            return <RenderQuestion handleChangeCoords={handleChangeCoords} autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
           }}
         />
       </LoadingContainer>

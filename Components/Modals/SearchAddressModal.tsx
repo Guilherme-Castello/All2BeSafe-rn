@@ -5,8 +5,9 @@ import PrimaryButton from "../PrimaryButton";
 import { useEffect, useState } from "react";
 import { colors } from "../../Utils/colors";
 import googleApi from "../../Server/google";
+import LocationAddressType from "../../Types/LocationAddress";
 
-export default function SearchAddressModal({openSearch, setOpenSearch, setCoords, coords}: {openSearch: boolean, setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>, setCoords: React.Dispatch<React.SetStateAction<{
+export default function SearchAddressModal({openSearch, setOpenSearch, setCoords, coords, createAddressFromResponse, setAddressName, animateMap}: {openSearch: boolean, setOpenSearch: React.Dispatch<React.SetStateAction<boolean>>, setCoords: React.Dispatch<React.SetStateAction<{
     latitude: number;
     longitude: number;
     latitudeDelta: number;
@@ -16,7 +17,15 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
     longitude: number;
     latitudeDelta: number;
     longitudeDelta: number;
-}}) {
+}, createAddressFromResponse(data: any, provider?: "google" | "foursquare" | "here"): LocationAddressType,
+   setAddressName(e: string): void,
+   animateMap(region: {
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+}): void
+}) {
   
   const [searchAddressByName, setSearchAddressByName] = useState<string>('')
   const [googleUUID, setGoogleUUID] = useState()
@@ -36,7 +45,7 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
         }
         const response: any = await googleApi.getAddress.get(
           value,
-          ,
+          'AIzaSyAWOENgGdjyMam4FPZHs99OcIj3PCDNJqM',
           coords.latitude.toString(),
           coords.longitude.toString(),
           googleUUID
@@ -67,8 +76,21 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
     }
   }, [debouncedValue]);
 
+  async function handleSelectGoogle(placeId: string) {
+    const suggestionDetails = await googleApi.getAddressDetail.get(
+      placeId,
+      'AIzaSyAWOENgGdjyMam4FPZHs99OcIj3PCDNJqM',
+      googleUUID
+    );
+    const formattedAddress = createAddressFromResponse(suggestionDetails?.data.result);
+    console.log(formattedAddress)
+    // setAddressName(handleAddressName(formattedAddress))
+    setCoords({...coords, latitude: formattedAddress.geolocation.lat, longitude: formattedAddress.geolocation.lng})
+    animateMap({...coords, latitude: formattedAddress.geolocation.lat, longitude: formattedAddress.geolocation.lng})
+  }
 
-  function AddressItem({item}: {item: any}){
+
+  function AddressItem({item, closeFn}: {item: any, closeFn: () => void}){
 
     function getFirstField(){
       return item.structured_formatting.main_text
@@ -76,9 +98,9 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
     function getSecondField(){
       return item.structured_formatting.secondary_text
     }
-
+    console.log(item)
     return (
-      <TouchableOpacity style={{paddingVertical: 10}}>
+      <TouchableOpacity style={{paddingVertical: 10}} onPress={() => [handleSelectGoogle(item.place_id), closeFn()]}>
         <Text style={{fontSize: 16, fontWeight: 700}}>{getFirstField()}</Text>
         <Text style={{fontSize: 15}}>{getSecondField()}</Text>
       </TouchableOpacity>
@@ -96,7 +118,7 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
               data={suggestions}
               renderItem={(list) => {
                 console.log(list.item)
-                return <AddressItem item={list.item}/>
+                return <AddressItem item={list.item} closeFn={() => closeModal(() => setOpenSearch(false))}/>
               }}
             />
             <PrimaryButton label="close" onPress={() => closeModal(() => setOpenSearch(false))} style={{ backgroundColor: colors.danger }} />

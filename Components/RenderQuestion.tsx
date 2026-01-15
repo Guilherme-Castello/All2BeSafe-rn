@@ -14,7 +14,10 @@ import MapQuestionContent from "./MapQuestionContent";
 import WeatherQuestionContent from "./WeatherQuestionContent";
 
 const RenderQuestion = React.memo(
-  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn }: { autoSaveFn?: () => void, onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }) => {
+  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords }: {handleChangeCoords: (receivedIndex: number, newCoord: {
+    latitude: string;
+    longitude: string;
+}) => void, autoSaveFn?: () => void, onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }, ) => {
     switch (question.kind) {
       case "text":
         return (
@@ -75,7 +78,7 @@ const RenderQuestion = React.memo(
       case "location":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <MapQuestionContent/>
+            <MapQuestionContent onChangeText={onChangeText} index={index} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn}/>
           </QuestionContainer>
         );
       default:
