@@ -54,6 +54,7 @@ const api = {
 
   answare: async (data: any) => {
     try {
+      console.log('data: ', data)
       const response: any = await serverInstance.post('/formularios/answare', data)
       if (response?.data?.error) throw new Error(response.data.error)
       return response.data;

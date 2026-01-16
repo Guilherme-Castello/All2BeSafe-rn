@@ -32,17 +32,21 @@ export type FormConfig = {
 }
 
 export type FormItem = {
-      kind: 'text' | 'input_date' | 'input_time' | 'select' | 'check_boxes' | 'weather' | 'location';
-      title: string;
-      value: string;
-      id: number;
-      options: string[] | undefined;
-      check_boxes: {
-        label: string;
-        value: boolean;
-        id: number;
-      }[] | undefined;
-    }
+  kind: 'text' | 'input_date' | 'input_time' | 'select' | 'check_boxes' | 'weather' | 'location';
+  title: string;
+  value: string;
+  id: number;
+  options: string[] | undefined;
+  check_boxes: {
+    label: string;
+    value: boolean;
+    id: number;
+  }[] | undefined;
+  coords : {
+    latitude: string
+    longitude: string
+  }
+}
 
 export type Form = {
   questions?: FormItem[],
