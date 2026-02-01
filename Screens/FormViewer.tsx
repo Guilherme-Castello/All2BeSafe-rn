@@ -11,6 +11,7 @@ import AnimatedModal from "../Components/AnimatedModal";
 import Signature from "react-native-signature-canvas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingContainer from "../Components/LoadingContainer";
+import RenderQuestionContainer from "../Components/RenderQuestionContainer";
 
 export default function FormViewer() {
 
@@ -27,17 +28,18 @@ export default function FormViewer() {
 
   const [firstAnswareId, setFirstAnswareId] = useState()
 
-  const { user } = useAuth()
+  const { user, setCurrentOpenForm } = useAuth()
 
   useEffect(() => {
     currentForm && setCurrentQuestions(currentForm.questions)
   }, [currentForm])
 
   const handleChangeText = useCallback((receivedIndex: number, newText: string) => {
+    console.log(receivedIndex)
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
       const test = prev.map((item, index) => {
-        if (index === receivedIndex) {
+        if (index == receivedIndex) {
           return { ...item, value: newText }
         } else { return item }
       })
@@ -45,9 +47,7 @@ export default function FormViewer() {
     });
   }, []);
 
-  const handleChangeCoords = useCallback((receivedIndex: number, newCoord: {latitude: string, longitude: string}) => {
-    console.log('AA1')
-    console.log(newCoord)
+  const handleChangeCoords = useCallback((receivedIndex: number, newCoord: { latitude: string, longitude: string }) => {
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
       const test = prev.map((item, index) => {
@@ -78,11 +78,11 @@ export default function FormViewer() {
   async function getSelectedForm() {
     try {
       setIsLoading(true)
-      if(!isAnsware){
+      if (!isAnsware) {
         const selectedForm: Form | undefined = await api.getFormById(id);
         selectedForm && setCurrentForm(selectedForm);
       } else {
-        const selectedForm: Form | undefined = await api.getAnswaredForm({aId: id});
+        const selectedForm: Form | undefined = await api.getAnswaredForm({ aId: id });
         selectedForm && setCurrentForm(selectedForm);
       }
     } catch (error) {
@@ -99,16 +99,28 @@ export default function FormViewer() {
       return () => {
         console.log('Out')
         setFirstAnswareId(undefined)
+        setCurrentOpenForm('')
+        setIsLoading(true)
       }
     }, [id])
   );
+
+  useEffect(() => {
+    if (!isLoading && currentForm?.config?.name) {
+      if(isAnsware){
+        setCurrentOpenForm(aName)
+      } else {
+        setCurrentOpenForm(currentForm?.config?.name)
+      }
+    }
+  }, [isLoading, currentForm])
 
   function formatAnsware(signature?: string) {
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
         console.log('found q', q)
-        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords}
+        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords }
       }),
       form_id: id,
       user_id: user?._id,
@@ -119,11 +131,11 @@ export default function FormViewer() {
   }
 
   async function submit(signature: string) {
-    try{
+    try {
       setIsFormSubmitLoading(true)
 
-      if(isAnsware || firstAnswareId != undefined){
-        const response = await api.updateAnsware({aId: firstAnswareId || id, updatedAnware: formatAnsware(signature)})
+      if (isAnsware || firstAnswareId != undefined) {
+        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware(signature) })
         if (response.err) {
           setFeedbackModal("There was an error")
           return
@@ -139,16 +151,16 @@ export default function FormViewer() {
 
         setFeedbackModal(response.message)
       }
-    } catch(e: any){
+    } catch (e: any) {
       console.error(e)
       console.error(e.message)
-    } finally{
+    } finally {
       setIsFormSubmitLoading(false)
     }
   }
 
   async function downloadForm() {
-    try{
+    try {
       setIsFormSubmitLoading(true)
       const response = await api.generateAnswaredPdf({ formid: id, userid: user?._id })
       if (response.success) {
@@ -156,19 +168,19 @@ export default function FormViewer() {
       } else {
         setDownloadFormModal('error')
       }
-    } catch(e){
+    } catch (e) {
       console.error(e)
-    } finally{
+    } finally {
       setIsFormSubmitLoading(false)
     }
   }
   const [signModal, setSignModal] = useState(false)
-  
+
   async function autoSave() {
     console.log('saving')
-    try{
-      if(isAnsware || firstAnswareId != undefined){
-        const response = await api.updateAnsware({aId: firstAnswareId || id, updatedAnware: formatAnsware()})
+    try {
+      if (isAnsware || firstAnswareId != undefined) {
+        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware() })
         if (response.err) {
           console.log('error')
         }
@@ -178,28 +190,37 @@ export default function FormViewer() {
         setFirstAnswareId(response.answare._id)
         console.log('Auto Submited')
       }
-    } catch(e){
+    } catch (e) {
       console.error(e)
     }
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: 'white', paddingHorizontal: 20, justifyContent: 'center' }}>
+    <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>
-        <FlatList
+        {currentQuestions && <RenderQuestionContainer
+          formQuestions={currentQuestions}
+          handleChangeCheckbox={handleChangeCheckbox}
+          onChangeText={handleChangeText}
+          handleChangeCoords={handleChangeCoords}
+          hasFooterButton
+          isFooterButtonLoading={isFormSubmitLoading}
+          setSignModal={setSignModal}
+          autoSaveFn={autoSave}
+        />}
+        {/* <FlatList
           contentContainerStyle={{ gap: 12, paddingVertical: 40 }}
           data={currentQuestions}
           keyExtractor={(item) => item.id as any}
           ListFooterComponent={() => (
             <View>
               <PrimaryButton isLoading={isFormSubmitLoading} label="Submit" onPress={() => setSignModal(true)} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
-
             </View>
           )}
           renderItem={(item) => {
             return <RenderQuestion handleChangeCoords={handleChangeCoords} autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
           }}
-        />
+        /> */}
       </LoadingContainer>
 
       {downloadFormModal && (

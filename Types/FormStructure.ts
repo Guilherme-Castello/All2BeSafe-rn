@@ -35,6 +35,7 @@ export type FormItem = {
   kind: 'text' | 'input_date' | 'input_time' | 'select' | 'check_boxes' | 'weather' | 'location';
   title: string;
   value: string;
+  section: string;
   id: number;
   options: string[] | undefined;
   check_boxes: {

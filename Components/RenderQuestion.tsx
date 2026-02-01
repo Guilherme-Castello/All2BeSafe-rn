@@ -21,7 +21,7 @@ const RenderQuestion = React.memo(
     switch (question.kind) {
       case "text":
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
+          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <PrimaryInput
               onChange={(text) => onChangeText(index, text)}
               onBlur={autoSaveFn}
@@ -31,27 +31,27 @@ const RenderQuestion = React.memo(
         );
       case "select":
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
+          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <Select autoSave={autoSaveFn} options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(index, text)} />
           </QuestionContainer>
         )
 
       case "input_date":
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(index, date.toString()), autoSaveFn && autoSaveFn()]} mode="date" />
+          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(Number(index), date.toString()), autoSaveFn && autoSaveFn()]} mode="date" />
           </QuestionContainer>
         )
       case "input_time":
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(index, date.toString()), autoSaveFn && autoSaveFn()]} mode="time" />
+          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+            <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(Number(index), date.toString()), autoSaveFn && autoSaveFn()]} mode="time" />
           </QuestionContainer>
         )
 
       case "check_boxes":
         return (
-          <QuestionContainer hasConfig={hasConfig} title={question.title} id={(index + 1).toString()} canDelete={canDelete} onDelete={onDelete}>
+          <QuestionContainer hasConfig={hasConfig} title={question.title} id={(Number(index) + 1).toString()} canDelete={canDelete} onDelete={onDelete}>
             <FlatList
               data={question.check_boxes}
               renderItem={({ item, index: idx }) => (
@@ -60,7 +60,7 @@ const RenderQuestion = React.memo(
                   autoSave={autoSaveFn}
                   label={item.label}
                   setIsCheck={(newValue) => {
-                    handleChangeCheckbox(index, newValue, idx)
+                    handleChangeCheckbox(Number(index), newValue, idx)
                   }}
                 />
               )}
@@ -70,15 +70,15 @@ const RenderQuestion = React.memo(
 
       case "weather":
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <WeatherQuestionContent index={index} onChangeText={onChangeText} question={question}/>
+          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+            <WeatherQuestionContent index={Number(index)} onChangeText={onChangeText} question={question}/>
           </QuestionContainer>
         );
 
       case "location":
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(index + 1).toString()}>
-            <MapQuestionContent onChangeText={onChangeText} index={index} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn}/>
+          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+            <MapQuestionContent onChangeText={onChangeText} index={Number(index)} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn}/>
           </QuestionContainer>
         );
       default:

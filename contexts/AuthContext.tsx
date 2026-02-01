@@ -8,7 +8,8 @@ interface AuthContextData {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>
   newForm: Form | undefined
   setNewForm: React.Dispatch<React.SetStateAction<Form | undefined>>
-
+  setCurrentOpenForm: React.Dispatch<React.SetStateAction<string>>
+  currentOpenForm: string
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [user, setUser] = useState<User>()
   const [newForm, setNewForm] = useState<Form | undefined>()
+  const [currentOpenForm, setCurrentOpenForm] = useState('')
 
   return (
     <AuthContext.Provider
@@ -24,7 +26,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         setUser,
         setNewForm,
-        newForm
+        newForm,
+        currentOpenForm,
+        setCurrentOpenForm,
       }}>
       {children}
     </AuthContext.Provider>
