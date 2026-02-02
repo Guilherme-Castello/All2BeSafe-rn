@@ -109,12 +109,12 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
 
   return (
     <>
-      {openSearch && <AnimatedModal position={Dimensions.get('screen').height * 0.7} title="Choose an option">
+      {openSearch && <AnimatedModal position={Dimensions.get('screen').height * 0.9} title="Choose an option">
         {({ closeModal }) =>
           <View style={{ gap: 10 }}>
             <PrimaryInput value={searchAddressByName} onChange={setSearchAddressByName} />
             <FlatList
-              style={{ height: '75%' }}
+              style={{ height: '70%' }}
               data={suggestions}
               renderItem={(list) => {
                 console.log(list.item)

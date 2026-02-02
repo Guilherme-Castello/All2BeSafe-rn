@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function Header() {
-  const { newForm } = useAuth()
+  const { newForm, currentOpenForm } = useAuth()
 
   const navigation = useNavigation();
   // @ts-ignore
@@ -48,11 +48,23 @@ function Header() {
 
   const routeName = (currentRoute.name == 'FormCreate' && newForm && newForm.config && newForm.config.name) ? newForm.config.name : currentRoute.name
 
+  function getRouteName() {
+    console.log(currentRoute.name)
+    console.log(currentOpenForm)
+    if (currentRoute.name == 'FormCreate' && newForm && newForm.config && newForm.config.name) {
+      return newForm.config.name
+    } else if (currentRoute.name == 'FormViewer' && currentOpenForm != '') {
+      return currentOpenForm
+    } else {
+      return currentRoute.name
+    }
+  }
+
   return (
     <View style={{ backgroundColor: colors.primary, height: 100, width: '100%', justifyContent: 'flex-end' }}>
       <View style={{ paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 20, bottom: 10 }}>
         {renderHeaderButton(currentRoute.name)}
-        <Text style={{ color: 'white', fontSize: 20 }}>{routeName}</Text>
+        <Text style={{ color: 'white', fontSize: 20 }}>{getRouteName()}</Text>
       </View>
     </View>
   )
@@ -71,8 +83,8 @@ function CustomDrawerContent(props: any) {
   }
 
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={{ alignContent: 'space-between', flex: 1, justifyContent: 'space-between'}}>
-      <View style={{ gap: 20}}>
+    <DrawerContentScrollView {...props} contentContainerStyle={{ alignContent: 'space-between', flex: 1, justifyContent: 'space-between' }}>
+      <View style={{ gap: 20 }}>
         <Text style={{ fontSize: 30, textAlign: 'center' }}>All 2B Safe</Text>
         {screens.map(screen => {
           if (!screen.showInDrawer || Number(user?.access_level) < screen.requiredPermission) return
@@ -94,7 +106,7 @@ function CustomDrawerContent(props: any) {
           <MaterialCommunityIcons name={'exit-run'} size={20} color={'white'} />
           <Text style={{ color: 'white', fontWeight: 700 }}>Logout</Text>
         </TouchableOpacity>
-        <Text style={{textAlign: 'center'}}>v1.0.0</Text>
+        <Text style={{ textAlign: 'center' }}>v2.0.0</Text>
       </View>
 
     </DrawerContentScrollView >
@@ -102,7 +114,7 @@ function CustomDrawerContent(props: any) {
 }
 
 function PrivateRouter() {
-  
+
   React.useEffect(() => {
     async function requestLocationPermission() {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -132,7 +144,7 @@ function PrivateRouter() {
   )
 }
 
-function PublicRouter(){
+function PublicRouter() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={Login} />
@@ -140,15 +152,15 @@ function PublicRouter(){
   );
 }
 
-function Routes(){
+function Routes() {
   const { user } = useAuth();
   React.useEffect(() => {
     console.log(user)
   }, [user])
-  if(user){
-    return <PrivateRouter/>
+  if (user) {
+    return <PrivateRouter />
   } else {
-    return <PublicRouter/>
+    return <PublicRouter />
   }
 }
 
@@ -157,7 +169,7 @@ export default function App() {
     <PortalProvider>
       <AuthProvider>
         <NavigationContainer>
-          <Routes/>
+          <Routes />
         </NavigationContainer>
       </AuthProvider>
     </PortalProvider>

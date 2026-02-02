@@ -128,7 +128,7 @@ export default function FormList() {
       {/* @ts-ignore */}
       {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={'open'} title={item.item.config.name} description={item.item.config.description} onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]} />} />}
       {/* @ts-ignore */}
-      {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard isAnsware status={item.item.status} title={item.item.name} description={`Template: ${item.item.config.name}`} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true })} />} />}
+      {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard isAnsware status={item.item.status} title={item.item.name} description={`Template: ${item.item.config.name}`} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })} />} />}
       
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
       

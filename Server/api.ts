@@ -100,7 +100,6 @@ const api = {
     try {
 
       const response: any = await serverInstance.post('/formularios/generateHtmlPreview', data)
-      console.log(response.data)
       if (response?.data?.error) throw new Error(response.data.error)
       return { success: true, template: response.data.template }
     } catch (e) {
