@@ -1,3 +1,4 @@
+
 {
   "version": "0.2.0",
   "configurations": [
@@ -13,3 +14,17 @@
   ]
 }
 
+
+/*{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Hermes",
+      "type": "reactnative",
+      "request": "attach",
+      "port": 8081,
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
+  */
