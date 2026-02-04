@@ -13,6 +13,7 @@ import PrimaryInput from "../Components/PrimaryInput";
 import CheckBox from "../Components/CheckBox";
 import { useAuth } from "../contexts/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Search } from "../Components/Search";
 
 function FormCard({ description, title, status, onPress, isAnsware = false }: { isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
 
@@ -116,23 +117,25 @@ export default function FormList() {
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <View style={{ flexDirection: 'row', height: '7%' }}>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>    
+      <View style={{ flexDirection: 'row', height: '7%' }}>         
         <TouchableOpacity onPress={() => setListMode('template')} style={[{ width: '50%', justifyContent: 'center', alignItems: 'center' }, listMode == 'template' ? styles.activeViewButton : styles.inactiveViewButton]}>
           <Text>Templates</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setListMode('inProgress')} style={[{ width: '50%', justifyContent: 'center', alignItems: 'center' }, listMode == 'inProgress' ? styles.activeViewButton : styles.inactiveViewButton]}>
           <Text>In Progress</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>        
       </View>
+
+      <Search placeholder="what do you want to search?" />
+
       {/* @ts-ignore */}
       {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={'open'} title={item.item.config.name} description={item.item.config.description} onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]} />} />}
       {/* @ts-ignore */}
       {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard isAnsware status={item.item.status} title={item.item.name} description={`Template: ${item.item.config.name}`} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })} />} />}
       
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
-      
-      
+          
       
       {isNewAnswareModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.6} title="Choose an option">
         {({ closeModal }) =>
