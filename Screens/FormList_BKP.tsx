@@ -14,9 +14,6 @@ import CheckBox from "../Components/CheckBox";
 import { useAuth } from "../contexts/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Search } from "../Components/Search";
-// Importe sua função de normalização aqui. 
-// Se o caminho for diferente, ajuste conforme sua estrutura.
-import { normalizeString } from "../Utils/string"; 
 
 function FormCard({ description, title, status, onPress, isAnsware = false }: { isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
 
@@ -28,8 +25,6 @@ function FormCard({ description, title, status, onPress, isAnsware = false }: { 
         return colors.secondary
       case 'done':
         return colors.safe
-      default:
-        return colors.primary
     }
   }
 
@@ -38,7 +33,6 @@ function FormCard({ description, title, status, onPress, isAnsware = false }: { 
       case 'open': return 'Open'
       case 'in_progress': return 'In Progress'
       case 'done': return 'Done'
-      default: return status
     }
   }
 
@@ -49,7 +43,7 @@ function FormCard({ description, title, status, onPress, isAnsware = false }: { 
       </View>
       <View style={{width: '80%'}}>
         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{fontSize: 16, fontWeight: '700', maxWidth: '75%'}}>{title}</Text>
+          <Text style={{fontSize: 16, fontWeight: 700, maxWidth: '75%'}}>{title}</Text>
           <Text style={[{backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8}]}>{translateStatus()}</Text>
         </View>
         <View style={{ width: '100%'}}>
@@ -69,16 +63,7 @@ export default function FormList() {
   const { setNewForm, newForm, user } = useAuth()
   const navigate = useNavigation()
 
-  // Dados originais (Brutos)
-  const [loadedForms, setLoadedForms] = useState<Form[]>([])
-  const [loadedInProgressForms, setLoadedInProgressForms] = useState([])
-
-  // Dados Filtrados (Para exibição)
-  const [filteredTemplates, setFilteredTemplates] = useState<Form[]>([])
-  const [filteredInProgress, setFilteredInProgress] = useState([])
-
-  // Estado da Pesquisa
-  const [searchTerm, setSearchTerm] = useState('')
+  const [loadedForms, setLoadedForms] = useState<Form[]>()
 
   const [isNewFormModalOpen, setIsNewFormModalOpen] = useState<boolean>(false)
   const [isNewAnswareModalOpen, setIsNewAnswareModalOpen] = useState<boolean>(false)
@@ -107,77 +92,28 @@ export default function FormList() {
     setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather }, status: 'open' })
   }
 
-  // Carregamento Inicial dos Dados
+  const [loadedInProgressForms, setLoadedInProgressForms] = useState([])
+
   useFocusEffect(
     useCallback(() => {
+
       async function getForms() {
+        // const forms = await AsyncStorage.getItem('forms')
         try {
           const forms: any = await api.getForms();
-          if(forms){
-            setLoadedForms(forms)
-            setFilteredTemplates(forms) // Inicializa filtro com tudo
-          }
+          forms && setLoadedForms(forms)
           
           const inProgressForms: any = await api.getUserAnswares({uId: user?._id})
-          if(inProgressForms && inProgressForms.forms){
-            setLoadedInProgressForms(inProgressForms.forms)
-            setFilteredInProgress(inProgressForms.forms) // Inicializa filtro com tudo
-          }
+          setLoadedInProgressForms(inProgressForms.forms)
 
         } catch (error) {
-          console.error('Error fetching forms:', error);
+          console.error('Error fetching forms from AsyncStorage:', error);
         }
       }
       getForms();
-    }, []) // Removi listMode das dependencias para evitar re-fetch desnecessário ao trocar aba
+    }, [listMode])
   );
 
-  // Lógica de Filtro Inteligente
-  useEffect(() => {
-    const term = normalizeString(searchTerm);
-
-    // Se não tiver termo, restaura as listas originais
-    if (term === '') {
-      setFilteredTemplates(loadedForms);
-      setFilteredInProgress(loadedInProgressForms);
-      return;
-    }
-
-    // 1. Filtra Templates (loadedForms)
-    if(loadedForms) {
-      const filteredT = loadedForms.filter((item: any) => {
-        const name = normalizeString(item.config?.name || '');
-        const desc = normalizeString(item.config?.description || '');
-        const user = normalizeString(item.in_charge || ''); // Assumindo que in_charge está na raiz ou ajuste conforme o objeto
-        
-        // Tratamento de data seguro
-        let date = '';
-        if(item.created_at) {
-            date = new Date(item.created_at).toLocaleDateString('pt-BR');
-        }
-
-        return name.includes(term) || desc.includes(term) || user.includes(term) || date.includes(term);
-      });
-      setFilteredTemplates(filteredT);
-    }
-
-    // 2. Filtra In Progress (loadedInProgressForms)
-    if(loadedInProgressForms) {
-      const filteredP = loadedInProgressForms.filter((item: any) => {
-        const name = normalizeString(item.name || ''); // Nome do form respondido
-        const templateName = normalizeString(item.config?.name || ''); // Nome do template original
-        
-        let date = '';
-        if(item.created_at) {
-            date = new Date(item.created_at).toLocaleDateString('pt-BR');
-        }
-
-        return name.includes(term) || templateName.includes(term) || date.includes(term);
-      });
-      setFilteredInProgress(filteredP);
-    }
-
-  }, [searchTerm, loadedForms, loadedInProgressForms]);
 
 
   return (
@@ -191,53 +127,16 @@ export default function FormList() {
         </TouchableOpacity>        
       </View>
 
-      {/* Componente Search atualizado com props de controle */}
-      <Search 
-        placeholder="what do you want to search?" 
-        value={searchTerm}
-        onChangeText={setSearchTerm}
-      />
-
-      {/* Listas usando os dados FILTRADOS */}
-      {/* @ts-ignore */}
-      {listMode == 'template' && (
-        <FlatList 
-            contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }} 
-            data={filteredTemplates} 
-            keyExtractor={(item: any) => item._id || Math.random().toString()}
-            renderItem={(item) => (
-                <FormCard 
-                    status={'open'} 
-                    title={item.item.config.name} 
-                    description={item.item.config.description} 
-                    onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]} 
-                    isAnsware={false}
-                />
-            )} 
-        />
-      )}
+      <Search placeholder="what do you want to search?" />
 
       {/* @ts-ignore */}
-      {listMode == 'inProgress' && (
-        <FlatList 
-            contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }} 
-            data={filteredInProgress} 
-            keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
-            renderItem={(item) => (
-                <FormCard 
-                    isAnsware 
-                    status={item.item.status} 
-                    title={item.item.name} 
-                    description={`Template: ${item.item.config.name}`} 
-                    onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })}                     
-                />
-            )} 
-        />
-      )}
+      {listMode == 'template' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedForms} renderItem={(item) => <FormCard status={'open'} title={item.item.config.name} description={item.item.config.description} onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]} />} />}
+      {/* @ts-ignore */}
+      {listMode == 'inProgress' && <FlatList contentContainerStyle={{ gap: 10, top: 10 }} data={loadedInProgressForms} renderItem={(item) => <FormCard isAnsware status={item.item.status} title={item.item.name} description={`Template: ${item.item.config.name}`} onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })} />} />}
       
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
           
-      {/* MANTIVE SEUS MODAIS ORIGINAIS ABAIXO SEM ALTERAÇÕES */}
+      
       {isNewAnswareModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.6} title="Choose an option">
         {({ closeModal }) =>
           <ScrollView style={{ height: '90%' }} contentContainerStyle={{ alignItems: 'center' }}>
