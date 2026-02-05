@@ -1,7 +1,7 @@
 import FormCreate from "../Screens/FormCreate";
 import FormList from "../Screens/FormList";
 import FormViewer from "../Screens/FormViewer";
-import Login from "../Screens/Login";
+import UserCreate from "../Screens/UserCreate";
 
 export const screens = [
   {
@@ -27,8 +27,17 @@ export const screens = [
     title: 'Form Create',
     label: 'Create',
     component: FormCreate,
-    requiredPermission: 2,
+    requiredPermission: 1,
     icon: 'home',
     showInDrawer: false
+  },
+  {
+    name: 'UserCreate',
+    title: 'Create User',
+    label: 'Create User',
+    component: UserCreate,
+    requiredPermission: 2,
+    icon: 'file-document',
+    showInDrawer: true
   },
 ]
