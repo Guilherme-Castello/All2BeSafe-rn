@@ -167,7 +167,8 @@ const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
               borderRightColor: 'lightgray',
               borderBottomColor: 'lightgray',
               flexDirection: 'row',
-              position: 'relative'
+              position: 'relative',
+              backgroundColor:'white'
             },
             inputStyle
           ]}>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontFamily: 'PoppinsRegular',
     lineHeight: 20,
-    fontSize: 14
+    fontSize: 14,
   },
   inputCase: {
     width: '100%',

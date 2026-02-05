@@ -52,6 +52,17 @@ const api = {
     }
   },
 
+  registerUser: async (registerData: any) => {
+    try {
+      const response: any = await serverInstance.post(`/users/register`, registerData);
+      if (response?.data?.error) throw new Error(response.data.error)
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating user:', error.message);
+      throw error;
+    }
+  },
+
   answare: async (data: any) => {
     try {
       console.log('data: ', data)

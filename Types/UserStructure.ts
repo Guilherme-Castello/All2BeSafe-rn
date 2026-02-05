@@ -4,5 +4,6 @@ export type User = {
     password: string,
     access_level: string,
     email: string,
+    company: string
     created_at: string,
 }
