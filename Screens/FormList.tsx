@@ -16,12 +16,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Search } from "../Components/Search";
 // Importe sua função de normalização aqui. 
 // Se o caminho for diferente, ajuste conforme sua estrutura.
-import { normalizeString } from "../Utils/string"; 
+import { normalizeString } from "../Utils/string";
 
 function FormCard({ description, title, status, onPress, isAnsware = false }: { isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
 
-  function getStatusColor(){
-    switch(status){
+  function getStatusColor() {
+    switch (status) {
       case 'open':
         return colors.primary
       case 'in_progress':
@@ -33,8 +33,8 @@ function FormCard({ description, title, status, onPress, isAnsware = false }: { 
     }
   }
 
-  function translateStatus(){
-    switch(status){
+  function translateStatus() {
+    switch (status) {
       case 'open': return 'Open'
       case 'in_progress': return 'In Progress'
       case 'done': return 'Done'
@@ -43,19 +43,19 @@ function FormCard({ description, title, status, onPress, isAnsware = false }: { 
   }
 
   return (
-    <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.primary+'50', justifyContent: 'space-around', flexDirection: 'row', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
+    <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.primary + '50', justifyContent: 'space-around', flexDirection: 'row', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
       <View style={{ width: '15%' }}>
         <Image source={require('../assets/all2bsafe.png')} style={{ width: 50, height: 50, borderRadius: 10 }} />
       </View>
-      <View style={{width: '80%'}}>
+      <View style={{ width: '80%' }}>
         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{fontSize: 16, fontWeight: '700', maxWidth: '75%'}}>{title}</Text>
-          <Text style={[{backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8}]}>{translateStatus()}</Text>
+          <Text style={{ fontSize: 16, fontWeight: '700', maxWidth: '75%' }}>{title}</Text>
+          <Text style={[{ backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8 }]}>{translateStatus()}</Text>
         </View>
-        <View style={{ width: '100%'}}>
+        <View style={{ width: '100%' }}>
           <Text>{description}</Text>
-          {!isAnsware && <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5}}>
-            <MaterialIcons name="person" size={15}/>
+          {!isAnsware && <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5 }}>
+            <MaterialIcons name="person" size={15} />
             <Text>All 2B Safe (office)</Text>
           </View>}
         </View>
@@ -113,13 +113,14 @@ export default function FormList() {
       async function getForms() {
         try {
           const forms: any = await api.getForms();
-          if(forms){
+          if (forms) {
             setLoadedForms(forms)
             setFilteredTemplates(forms) // Inicializa filtro com tudo
           }
-          
-          const inProgressForms: any = await api.getUserAnswares({uId: user?._id})
-          if(inProgressForms && inProgressForms.forms){
+
+          const inProgressForms: any = await api.getUserAnswares({ uId: user?._id })
+          console.log(inProgressForms)
+          if (inProgressForms && inProgressForms.forms) {
             setLoadedInProgressForms(inProgressForms.forms)
             setFilteredInProgress(inProgressForms.forms) // Inicializa filtro com tudo
           }
@@ -144,16 +145,16 @@ export default function FormList() {
     }
 
     // 1. Filtra Templates (loadedForms)
-    if(loadedForms) {
+    if (loadedForms) {
       const filteredT = loadedForms.filter((item: any) => {
         const name = normalizeString(item.config?.name || '');
         const desc = normalizeString(item.config?.description || '');
         const user = normalizeString(item.in_charge || ''); // Assumindo que in_charge está na raiz ou ajuste conforme o objeto
-        
+
         // Tratamento de data seguro
         let date = '';
-        if(item.created_at) {
-            date = new Date(item.created_at).toLocaleDateString('pt-BR');
+        if (item.created_at) {
+          date = new Date(item.created_at).toLocaleDateString('pt-BR');
         }
 
         return name.includes(term) || desc.includes(term) || user.includes(term) || date.includes(term);
@@ -162,14 +163,14 @@ export default function FormList() {
     }
 
     // 2. Filtra In Progress (loadedInProgressForms)
-    if(loadedInProgressForms) {
+    if (loadedInProgressForms) {
       const filteredP = loadedInProgressForms.filter((item: any) => {
         const name = normalizeString(item.name || ''); // Nome do form respondido
         const templateName = normalizeString(item.config?.name || ''); // Nome do template original
-        
+
         let date = '';
-        if(item.created_at) {
-            date = new Date(item.created_at).toLocaleDateString('pt-BR');
+        if (item.created_at) {
+          date = new Date(item.created_at).toLocaleDateString('pt-BR');
         }
 
         return name.includes(term) || templateName.includes(term) || date.includes(term);
@@ -181,19 +182,19 @@ export default function FormList() {
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>    
-      <View style={{ flexDirection: 'row', height: '7%' }}>         
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flexDirection: 'row', height: '7%' }}>
         <TouchableOpacity onPress={() => setListMode('template')} style={[{ width: '50%', justifyContent: 'center', alignItems: 'center' }, listMode == 'template' ? styles.activeViewButton : styles.inactiveViewButton]}>
           <Text>Templates</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setListMode('inProgress')} style={[{ width: '50%', justifyContent: 'center', alignItems: 'center' }, listMode == 'inProgress' ? styles.activeViewButton : styles.inactiveViewButton]}>
           <Text>In Progress</Text>
-        </TouchableOpacity>        
+        </TouchableOpacity>
       </View>
 
       {/* Componente Search atualizado com props de controle */}
-      <Search 
-        placeholder="what do you want to search?" 
+      <Search
+        placeholder="what do you want to search?"
         value={searchTerm}
         onChangeText={setSearchTerm}
       />
@@ -201,42 +202,43 @@ export default function FormList() {
       {/* Listas usando os dados FILTRADOS */}
       {/* @ts-ignore */}
       {listMode == 'template' && (
-        <FlatList 
-            contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }} 
-            data={filteredTemplates} 
-            keyExtractor={(item: any) => item._id || Math.random().toString()}
-            renderItem={(item) => (
-                <FormCard 
-                    status={'open'} 
-                    title={item.item.config.name} 
-                    description={item.item.config.description} 
-                    onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]} 
-                    isAnsware={false}
-                />
-            )} 
+        <FlatList
+          contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }}
+          data={filteredTemplates}
+          keyExtractor={(item: any) => item._id || Math.random().toString()}
+          renderItem={(item) => (
+            <FormCard
+              status={'open'}
+              title={item.item.config.name}
+              description={item.item.config.description}
+              onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]}
+              isAnsware={false}
+            />
+          )}
         />
       )}
 
       {/* @ts-ignore */}
       {listMode == 'inProgress' && (
-        <FlatList 
-            contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }} 
-            data={filteredInProgress} 
-            keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
-            renderItem={(item) => (
-                <FormCard 
-                    isAnsware 
-                    status={item.item.status} 
-                    title={item.item.name} 
-                    description={`Template: ${item.item.config.name}`} 
-                    onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })}                     
-                />
-            )} 
+        <FlatList
+          contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }}
+          data={filteredInProgress}
+          keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
+          renderItem={(item) => (
+            <FormCard
+              isAnsware
+              status={item.item.status}
+              title={item.item.name}
+              description={`Template: ${item.item.config.name}`}
+              // @ts-ignore
+              onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })}
+            />
+          )}
         />
       )}
-      
+
       <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
-          
+
       {/* MANTIVE SEUS MODAIS ORIGINAIS ABAIXO SEM ALTERAÇÕES */}
       {isNewAnswareModalOpen && <AnimatedModal position={Dimensions.get('screen').height * 0.6} title="Choose an option">
         {({ closeModal }) =>
