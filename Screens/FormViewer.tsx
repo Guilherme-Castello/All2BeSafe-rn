@@ -122,7 +122,7 @@ export default function FormViewer() {
         console.log('found q', q)
         return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords }
       }),
-      form_id: id,
+      template_id: id,
       user_id: user?._id,
       name: aName,
       signature: signature
@@ -136,20 +136,20 @@ export default function FormViewer() {
 
       if (isAnsware || firstAnswareId != undefined) {
         const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware(signature) })
+        
         if (response.err) {
           setFeedbackModal("There was an error")
           return
         }
-        setFeedbackModal(response.message)
+        setFeedbackModal(response.content.message)
       } else {
         const response = await api.answare(formatAnsware(signature))
         if (response.err) {
           setFeedbackModal("There was an error")
           return
         }
-        console.log(response.answare._id)
 
-        setFeedbackModal(response.message)
+        setFeedbackModal(response.content.message)
       }
     } catch (e: any) {
       console.error(e)
@@ -187,7 +187,7 @@ export default function FormViewer() {
         console.log('saved')
       } else {
         const response = await api.answare(formatAnsware())
-        setFirstAnswareId(response.answare._id)
+        setFirstAnswareId(response.content._id)
         console.log('Auto Submited')
       }
     } catch (e) {
