@@ -11,9 +11,10 @@ interface QuestionContainerProps {
   hasConfig?: boolean
   hasPhoto?: boolean
   onDelete?: () => void
+  uploadImage?: () => void
 }
 
-export default function QuestionContainer({ children, title, id = '0', canDelete = false, onDelete, hasConfig = true , hasPhoto = true }: QuestionContainerProps) {
+export default function QuestionContainer({ children, title, id = '0', canDelete = false, onDelete, hasConfig = true , hasPhoto = false, uploadImage }: QuestionContainerProps) {
   return (
     <View style={{ backgroundColor: colors.primary + '25', paddingVertical: 10, paddingHorizontal: 10, gap: 10, borderRadius: 10 }}>
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -46,7 +47,7 @@ export default function QuestionContainer({ children, title, id = '0', canDelete
           <Text style={{ marginLeft: 6, fontSize: 14 }}>Add Note</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => console.log('implement')}>
+        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => uploadImage && uploadImage()}>
           <MaterialCommunityIcons name="camera-plus" size={20} /> 
           <Text style={{ marginLeft: 6, fontSize: 14 }}>Media</Text>
         </TouchableOpacity>

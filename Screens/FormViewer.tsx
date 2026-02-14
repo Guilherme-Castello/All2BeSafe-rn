@@ -120,7 +120,7 @@ export default function FormViewer() {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
         console.log('found q', q)
-        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords }
+        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords, answare_images: ['debug', 'img2'] }
       }),
       template_id: id,
       user_id: user?._id,
@@ -195,10 +195,15 @@ export default function FormViewer() {
     }
   }
 
+  async function uploadImage(){
+    console.log("UPLOAD IMAGE")
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>
         {currentQuestions && <RenderQuestionContainer
+          uploadImage={uploadImage}
           formQuestions={currentQuestions}
           handleChangeCheckbox={handleChangeCheckbox}
           onChangeText={handleChangeText}

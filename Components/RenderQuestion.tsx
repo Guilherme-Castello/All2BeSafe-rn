@@ -14,15 +14,21 @@ import MapQuestionContent from "./MapQuestionContent";
 import WeatherQuestionContent from "./WeatherQuestionContent";
 
 const RenderQuestion = React.memo(
-  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords }: {handleChangeCoords: (receivedIndex: number, newCoord: {
-    latitude: string;
-    longitude: string;
-}) => void, autoSaveFn?: () => void, onDelete?: () => void; canDelete?: boolean; hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void }, ) => {
+  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords, uploadImage }: {
+    handleChangeCoords: (receivedIndex: number, newCoord: {latitude: string; longitude: string;}) => void,
+    autoSaveFn?: () => void,
+    onDelete?: () => void;
+    canDelete?: boolean;
+    uploadImage?: () => void
+    hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void
+  },) => {
     switch (question.kind) {
       case "text":
+        console.log(question)
         return (
-          <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <PrimaryInput
+              // @ts-ignore
               onChange={(text) => onChangeText(index, text)}
               onBlur={autoSaveFn}
               value={question.value}
@@ -71,14 +77,14 @@ const RenderQuestion = React.memo(
       case "weather":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
-            <WeatherQuestionContent index={Number(index)} onChangeText={onChangeText} question={question}/>
+            <WeatherQuestionContent index={Number(index)} onChangeText={onChangeText} question={question} />
           </QuestionContainer>
         );
 
       case "location":
         return (
           <QuestionContainer hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
-            <MapQuestionContent onChangeText={onChangeText} index={Number(index)} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn}/>
+            <MapQuestionContent onChangeText={onChangeText} index={Number(index)} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn} />
           </QuestionContainer>
         );
       default:

@@ -18,6 +18,7 @@ interface RenderQuestionContainer {
   setSignModal?: (value: React.SetStateAction<boolean>) => void;
   isFooterButtonLoading?: boolean;
   autoSaveFn?: () => Promise<void>
+  uploadImage?: () => void
   handleChangeCoords?: (receivedIndex: number, newCoord: {
     latitude: string;
     longitude: string;
@@ -35,7 +36,8 @@ export default function RenderQuestionContainer({
   setSignModal,
   isFooterButtonLoading,
   autoSaveFn,
-  handleChangeCoords
+  handleChangeCoords,
+  uploadImage
 }: RenderQuestionContainer) {
 
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -128,6 +130,7 @@ export default function RenderQuestionContainer({
         return (
           <View style={{ paddingHorizontal: 10 }}>
             <RenderQuestion
+              uploadImage={uploadImage}
               handleChangeCoords={handleChangeCoords as any}
               hasConfig={hasConfig}
               canDelete={canDelete}
