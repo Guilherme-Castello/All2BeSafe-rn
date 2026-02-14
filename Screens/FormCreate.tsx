@@ -56,7 +56,6 @@ export default function FormCreate() {
   const [formTitle, setFormTitle] = useState<string>('')
 
   const [viewMode, setViewMode] = useState<'create' | 'preview'>('create')
-  const [previewTemplate, setPreviewTemplate] = useState('')
 
   const [openConfigModal, setOpenConfigModal] = useState<boolean>(false)
   const [openPredefinedOptionsModal, setOpenPredefinedOptionsModal] = useState<boolean>(false)
@@ -195,15 +194,6 @@ export default function FormCreate() {
       setIsCreateFormloading(false)
     }
   }
-
-  useEffect(() => {
-
-    async function getPreview() {
-      const html = await api.getPreviewForm({ form: newFormQuestions })
-      setPreviewTemplate(html as any)
-    }
-    getPreview()
-  }, [viewMode])
 
   const predefinedOptions = [
     {

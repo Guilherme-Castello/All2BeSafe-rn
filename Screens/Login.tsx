@@ -29,13 +29,20 @@ export default function Login() {
       try {
         setIsLoginLoading(true);
         const response = await api.login({ email, password });
+        
+        if(!response.success){
+          setError(response.message)
+          return
+        }
+
+        
         await AsyncStorage.setItem(
           "credentials",
           JSON.stringify({ email, password })
         );
-        setUser(response.user);
+        setUser(response.content.user);
       } catch (e: any) {
-        console.error(e);
+        console.error('Login screen error: ', e);
         setError(e.message);
       } finally {
         setIsLoginLoading(false);
