@@ -34,6 +34,28 @@ export default function FormViewer() {
     currentForm && setCurrentQuestions(currentForm.questions)
   }, [currentForm])
 
+  const handleChangeImage = useCallback((receivedIndex: number, newText: string) => {
+    console.log(receivedIndex)
+    setCurrentQuestions((prev) => {
+      if (prev == undefined) return undefined
+      const test = prev.map((item, index) => {
+        if (index == receivedIndex) {
+          // @ts-ignore
+          if(item.answare_images){
+            // @ts-ignore
+            return { ...item, answare_images: [...item.answare_images, newText] }
+          } else {
+            // @ts-ignore
+            return { ...item, answare_images: [newText] }
+          }
+        } else { return item }
+      })
+      return test
+    });
+
+    autoSave()
+  }, []);
+
   const handleChangeText = useCallback((receivedIndex: number, newText: string) => {
     console.log(receivedIndex)
     setCurrentQuestions((prev) => {
@@ -107,7 +129,7 @@ export default function FormViewer() {
 
   useEffect(() => {
     if (!isLoading && currentForm?.config?.name) {
-      if(isAnsware){
+      if (isAnsware) {
         setCurrentOpenForm(aName)
       } else {
         setCurrentOpenForm(currentForm?.config?.name)
@@ -115,12 +137,15 @@ export default function FormViewer() {
     }
   }, [isLoading, currentForm])
 
-  function formatAnsware(signature?: string) {
+  function formatAnsware(signature?: string, image?: string) {
+    console.log('IMAGE RECEIVED')
+    console.log(image)
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
         console.log('found q', q)
-        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords, answare_images: ['debug', 'img2'] }
+        // @ts-ignore
+        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords, answare_images: q.answare_images }
       }),
       template_id: id,
       user_id: user?._id,
@@ -136,7 +161,7 @@ export default function FormViewer() {
 
       if (isAnsware || firstAnswareId != undefined) {
         const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware(signature) })
-        
+
         if (response.err) {
           setFeedbackModal("There was an error")
           return
@@ -176,17 +201,18 @@ export default function FormViewer() {
   }
   const [signModal, setSignModal] = useState(false)
 
-  async function autoSave() {
+  async function autoSave(imageUrl?: string) {
     console.log('saving')
+    console.log(imageUrl)
     try {
       if (isAnsware || firstAnswareId != undefined) {
-        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware() })
+        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware('', imageUrl) })
         if (response.err) {
           console.log('error')
         }
         console.log('saved')
       } else {
-        const response = await api.answare(formatAnsware())
+        const response = await api.answare(formatAnsware('', imageUrl))
         setFirstAnswareId(response.content._id)
         console.log('Auto Submited')
       }
@@ -195,8 +221,12 @@ export default function FormViewer() {
     }
   }
 
-  async function uploadImage(){
-    console.log("UPLOAD IMAGE")
+  async function uploadImage(uri: string, id: string) {
+    console.log("UPLOAD IMAGE > Received")
+    const response = await api.uploadImage(uri)
+    console.log('response: ', response.fileName)
+    handleChangeImage(Number(id), response.fileName)
+    // await autoSave(response.fileName)
   }
 
   return (

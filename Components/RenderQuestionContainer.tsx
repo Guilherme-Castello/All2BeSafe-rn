@@ -18,7 +18,7 @@ interface RenderQuestionContainer {
   setSignModal?: (value: React.SetStateAction<boolean>) => void;
   isFooterButtonLoading?: boolean;
   autoSaveFn?: () => Promise<void>
-  uploadImage?: () => void
+  uploadImage?: (uri: string, id: string) => void
   handleChangeCoords?: (receivedIndex: number, newCoord: {
     latitude: string;
     longitude: string;

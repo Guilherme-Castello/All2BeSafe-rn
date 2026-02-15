@@ -2,10 +2,14 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
+const baseAPIUrl = 'https://0db1-2804-14d-8e86-9cfc-d5f3-a404-be78-4cd4.ngrok-free.app'
+
 const serverInstance = axios.create({
-  baseURL: 'https://daf0-2804-14d-8e86-9cfc-d52a-c8da-8464-2030.ngrok-free.app/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
+  baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   // To start ngrok, use: ngrok http 5000. I'll connect to your localhost:5000 and permit u to access your local API from the app
   timeout: 900000,
+  maxBodyLength: Infinity,
+  maxContentLength: Infinity,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -78,6 +82,8 @@ const api = {
     try {
 
       const response: any = await serverInstance.post('/answares/updateAnsware', data)
+      console.log("RECEIVED RESPONSE")
+      console.log(response)
       if (response?.data?.error) throw new Error(response.data.error)
       return response.data;
 
@@ -130,23 +136,57 @@ const api = {
     }
   },
   getUserAnswares: async (data: any) => {
-    try{
+    try {
 
       const response: any = await serverInstance.post('/answares/getUserAnswares', data)
       if (response?.data?.error) throw new Error(response.data.error)
-      return {success: true, forms: response.data.content}
-    } catch(e) {
+      return { success: true, forms: response.data.content }
+    } catch (e) {
       console.error(e)
-      return {success: false}
+      return { success: false }
     }
   },
   getAnswaredForm: async (data: any) => {
-    try{
+    try {
       const response: any = await serverInstance.post('/answares/getAnswaredTemplate', data)
       return response.data.content
-    } catch(e) {
+    } catch (e) {
       console.error(e)
-      return {success: false}
+      return { success: false }
+    }
+  },
+  uploadImage: async (data: any) => {
+    try {
+      console.log(data)
+      const formData = new FormData()
+      formData.append('file', {
+        uri: data,
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      } as any);
+      // await serverInstance.post('/images/uploadImage', null);
+      const response = await fetch(
+        baseAPIUrl+'/api/images/uploadImage',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+      const responseJson = await response.json()
+      console.log('request > ok')
+      return responseJson
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+  getImageUrl: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/images/getImageUrl', data)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
     }
   },
 }
