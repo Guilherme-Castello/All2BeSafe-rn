@@ -3,19 +3,17 @@ import QuestionContainer from "./QuestionContainer";
 import PrimaryInput from "./PrimaryInput";
 import Select from "./Select";
 import DateInput from "./DateInput";
-import { FlatList, View } from "react-native";
+import { FlatList } from "react-native";
 import CheckBox from "./CheckBox";
 import { FormItem } from "../Types/FormStructure";
-import MapView from "react-native-maps";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { colors } from "../Utils/colors";
-import PrimaryButton from "./PrimaryButton";
 import MapQuestionContent from "./MapQuestionContent";
 import WeatherQuestionContent from "./WeatherQuestionContent";
+import SignatureQuestionContainer from "./SignatureQuestionContainer";
 
 const RenderQuestion = React.memo(
-  ({ question, index, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords, uploadImage }: {
+  ({ question, index, handleChangeSignature, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords, uploadImage }: {
     handleChangeCoords: (receivedIndex: number, newCoord: {latitude: string; longitude: string;}) => void,
+    handleChangeSignature: (receivedIndex: number, uri: string) => void,
     autoSaveFn?: () => void,
     onDelete?: () => void;
     canDelete?: boolean;
@@ -88,6 +86,13 @@ const RenderQuestion = React.memo(
             <MapQuestionContent onChangeText={onChangeText} index={Number(index)} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn} />
           </QuestionContainer>
         );
+
+      case "signature":
+        return (
+          <QuestionContainer images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+            <SignatureQuestionContainer onChangeText={onChangeText} index={Number(index)} question={question} handleChangeSignature={handleChangeSignature} autoSaveFn={autoSaveFn} />
+          </QuestionContainer>
+        )
       default:
         return null;
     }

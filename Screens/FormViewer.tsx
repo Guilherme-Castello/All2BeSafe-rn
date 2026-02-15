@@ -29,12 +29,43 @@ export default function FormViewer() {
   const [firstAnswareId, setFirstAnswareId] = useState()
 
   const { user, setCurrentOpenForm } = useAuth()
+  const [forcedSave, setForcedSave] = useState<number>(0)
 
   useEffect(() => {
     currentForm && setCurrentQuestions(currentForm.questions)
   }, [currentForm])
 
-  const handleChangeImage = useCallback((receivedIndex: number, newText: string) => {
+  useEffect(() => {
+    autoSave()
+  }, [forcedSave])
+
+  // Sim, essa function está bem estranha rs
+
+  // Basicamente, o autosave() nem sempre funciona quando precisamos que ele rode logo após a atualizaçao de alguma image, entao
+  // criei um mecanismo que observa um estado externo (forcedSave). Toda vez que forceAutoSave() é chamado, ele atualiza o estado
+  // forcedSave, que está sendo observado por um useEffect que roda a funçao autoSave()
+  
+  // Em caso de duvidas, pode me chamar
+  function forceAutoSave(){
+    setForcedSave(prev => prev+1)
+  }
+
+  const handleChangeSignature = useCallback(async (receivedIndex: number, newText: string) => {
+    console.log(receivedIndex)
+    setCurrentQuestions((prev) => {
+      if (prev == undefined) return undefined
+      const test = prev.map((item, index) => {
+        if (index == receivedIndex) {
+          return { ...item, value: newText }
+        } else { return item }
+      })
+      return test
+    });
+
+    forceAutoSave()
+  }, []);
+
+  const handleChangeImage = useCallback(async (receivedIndex: number, newText: string) => {
     console.log(receivedIndex)
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
@@ -53,7 +84,7 @@ export default function FormViewer() {
       return test
     });
 
-    autoSave()
+    forceAutoSave()
   }, []);
 
   const handleChangeText = useCallback((receivedIndex: number, newText: string) => {
@@ -139,7 +170,6 @@ export default function FormViewer() {
 
   function formatAnsware(signature?: string, image?: string) {
     console.log('IMAGE RECEIVED')
-    console.log(image)
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
@@ -233,6 +263,7 @@ export default function FormViewer() {
     <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>
         {currentQuestions && <RenderQuestionContainer
+          handleChangeSignature={handleChangeSignature}
           uploadImage={uploadImage}
           formQuestions={currentQuestions}
           handleChangeCheckbox={handleChangeCheckbox}

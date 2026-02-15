@@ -20,7 +20,7 @@ export default function FormCreate() {
   const { newForm, setNewForm } = useAuth()
   const [newFormQuestions, setNewFormQuestions] = useState<FormItem[]>([])
 
-  const componentTypeOptions = ['text', 'select', 'input_date', 'input_time', 'check_boxes', 'weather', 'location']
+  const componentTypeOptions = ['text', 'select', 'input_date', 'input_time', 'check_boxes', 'weather', 'location', 'signature']
 
   // const sectionOptions = ['Section1', 'Section2', 'Section3']
   const [sectionOptions, setSectionOptions] = useState<string[]>([

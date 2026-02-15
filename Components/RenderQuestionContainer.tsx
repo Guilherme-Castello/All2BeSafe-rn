@@ -23,10 +23,12 @@ interface RenderQuestionContainer {
     latitude: string;
     longitude: string;
   }) => void
+  handleChangeSignature?: (receivedIndex: number, uri: string) => void,
 }
 
 export default function RenderQuestionContainer({
   formQuestions,
+  handleChangeSignature,
   removeQuestion,
   hasConfig, 
   canDelete, 
@@ -130,6 +132,7 @@ export default function RenderQuestionContainer({
         return (
           <View style={{ paddingHorizontal: 10 }}>
             <RenderQuestion
+              handleChangeSignature={handleChangeSignature as any}
               uploadImage={uploadImage}
               handleChangeCoords={handleChangeCoords as any}
               hasConfig={hasConfig}

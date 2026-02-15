@@ -32,7 +32,7 @@ export type FormConfig = {
 }
 
 export type FormItem = {
-  kind: 'text' | 'input_date' | 'input_time' | 'select' | 'check_boxes' | 'weather' | 'location';
+  kind: 'text' | 'input_date' | 'input_time' | 'select' | 'check_boxes' | 'weather' | 'location' | "signature";
   title: string;
   value: string;
   section: string;
