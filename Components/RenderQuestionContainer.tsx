@@ -15,7 +15,6 @@ interface RenderQuestionContainer {
   onChangeText: (index: number, value: string) => void;
   handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void;
   hasFooterButton?: boolean
-  setSignModal?: (value: React.SetStateAction<boolean>) => void;
   isFooterButtonLoading?: boolean;
   autoSaveFn?: () => Promise<void>
   uploadImage?: (uri: string, id: string) => void
@@ -23,6 +22,7 @@ interface RenderQuestionContainer {
     latitude: string;
     longitude: string;
   }) => void
+  onSubmit: () => void
   handleChangeSignature?: (receivedIndex: number, uri: string) => void,
 }
 
@@ -35,10 +35,10 @@ export default function RenderQuestionContainer({
   handleChangeCheckbox, 
   onChangeText, 
   hasFooterButton = false,
-  setSignModal,
   isFooterButtonLoading,
   autoSaveFn,
   handleChangeCoords,
+  onSubmit,
   uploadImage
 }: RenderQuestionContainer) {
 
@@ -95,7 +95,7 @@ export default function RenderQuestionContainer({
           return
         }
         return <View>
-          <PrimaryButton isLoading={isFooterButtonLoading} label="Submit" onPress={() => [setSignModal && setSignModal(true)]} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
+          <PrimaryButton isLoading={isFooterButtonLoading} label="Submit" onPress={() => [onSubmit && onSubmit()]} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
         </View>
       }}
       renderItem={({ item, index }) => {

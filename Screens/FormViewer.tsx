@@ -185,12 +185,12 @@ export default function FormViewer() {
     return answaredForm
   }
 
-  async function submit(signature: string) {
+  async function submit() {
     try {
       setIsFormSubmitLoading(true)
 
       if (isAnsware || firstAnswareId != undefined) {
-        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware(signature) })
+        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware() })
 
         if (response.err) {
           setFeedbackModal("There was an error")
@@ -198,7 +198,7 @@ export default function FormViewer() {
         }
         setFeedbackModal(response.content.message)
       } else {
-        const response = await api.answare(formatAnsware(signature))
+        const response = await api.answare(formatAnsware())
         if (response.err) {
           setFeedbackModal("There was an error")
           return
@@ -229,7 +229,6 @@ export default function FormViewer() {
       setIsFormSubmitLoading(false)
     }
   }
-  const [signModal, setSignModal] = useState(false)
 
   async function autoSave(imageUrl?: string) {
     console.log('saving')
@@ -271,22 +270,9 @@ export default function FormViewer() {
           handleChangeCoords={handleChangeCoords}
           hasFooterButton
           isFooterButtonLoading={isFormSubmitLoading}
-          setSignModal={setSignModal}
+          onSubmit={submit}
           autoSaveFn={autoSave}
         />}
-        {/* <FlatList
-          contentContainerStyle={{ gap: 12, paddingVertical: 40 }}
-          data={currentQuestions}
-          keyExtractor={(item) => item.id as any}
-          ListFooterComponent={() => (
-            <View>
-              <PrimaryButton isLoading={isFormSubmitLoading} label="Submit" onPress={() => setSignModal(true)} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
-            </View>
-          )}
-          renderItem={(item) => {
-            return <RenderQuestion handleChangeCoords={handleChangeCoords} autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
-          }}
-        /> */}
       </LoadingContainer>
 
       {downloadFormModal && (
@@ -307,31 +293,6 @@ export default function FormViewer() {
               <View style={{ gap: 10 }}>
                 <PrimaryButton label="Ok" onPress={() => closeModal(() => setFeedbackModal(''))} />
                 {feedbackModal != "There was an error" && <PrimaryButton label="Download" onPress={() => closeModal(() => [setFeedbackModal(''), downloadForm()])} />}
-              </View>
-            </View>
-          }
-        </AnimatedModal>)}
-
-      {signModal && (
-        <AnimatedModal position={700} title="Attention">
-          {({ closeModal }) =>
-            <View>
-              <Text>{feedbackModal}</Text>
-              <View style={{ gap: 10, flex: 1 }}>
-                <View style={{ height: 600, backgroundColor: 'red' }}>
-                  <Signature
-                    onOK={(signature) => [submit(signature), closeModal(() => setSignModal(false))]}
-                    descriptionText="Assine aqui"
-                    clearText="Limpar"
-                    confirmText="Salvar"
-                    webStyle={`
-                  .m-signature-pad {box-shadow: none; border: none;}
-                  .m-signature-pad--footer {}
-                `}
-                  />
-                </View>
-                {/* <PrimaryButton label="Ok" onPress={() => closeModal(() => [setSignModal(false), submit()])}/> */}
-                <PrimaryButton label="Cancel" onPress={() => closeModal(() => setSignModal(false))} />
               </View>
             </View>
           }
