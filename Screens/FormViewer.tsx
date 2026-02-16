@@ -29,10 +29,63 @@ export default function FormViewer() {
   const [firstAnswareId, setFirstAnswareId] = useState()
 
   const { user, setCurrentOpenForm } = useAuth()
+  const [forcedSave, setForcedSave] = useState<number>(0)
 
   useEffect(() => {
     currentForm && setCurrentQuestions(currentForm.questions)
   }, [currentForm])
+
+  useEffect(() => {
+    autoSave()
+  }, [forcedSave])
+
+  // Sim, essa function está bem estranha rs
+
+  // Basicamente, o autosave() nem sempre funciona quando precisamos que ele rode logo após a atualizaçao de alguma image, entao
+  // criei um mecanismo que observa um estado externo (forcedSave). Toda vez que forceAutoSave() é chamado, ele atualiza o estado
+  // forcedSave, que está sendo observado por um useEffect que roda a funçao autoSave()
+  
+  // Em caso de duvidas, pode me chamar
+  function forceAutoSave(){
+    setForcedSave(prev => prev+1)
+  }
+
+  const handleChangeSignature = useCallback(async (receivedIndex: number, newText: string) => {
+    console.log(receivedIndex)
+    setCurrentQuestions((prev) => {
+      if (prev == undefined) return undefined
+      const test = prev.map((item, index) => {
+        if (index == receivedIndex) {
+          return { ...item, value: newText }
+        } else { return item }
+      })
+      return test
+    });
+
+    forceAutoSave()
+  }, []);
+
+  const handleChangeImage = useCallback(async (receivedIndex: number, newText: string) => {
+    console.log(receivedIndex)
+    setCurrentQuestions((prev) => {
+      if (prev == undefined) return undefined
+      const test = prev.map((item, index) => {
+        if (index == receivedIndex) {
+          // @ts-ignore
+          if(item.answare_images){
+            // @ts-ignore
+            return { ...item, answare_images: [...item.answare_images, newText] }
+          } else {
+            // @ts-ignore
+            return { ...item, answare_images: [newText] }
+          }
+        } else { return item }
+      })
+      return test
+    });
+
+    forceAutoSave()
+  }, []);
 
   const handleChangeText = useCallback((receivedIndex: number, newText: string) => {
     console.log(receivedIndex)
@@ -107,7 +160,7 @@ export default function FormViewer() {
 
   useEffect(() => {
     if (!isLoading && currentForm?.config?.name) {
-      if(isAnsware){
+      if (isAnsware) {
         setCurrentOpenForm(aName)
       } else {
         setCurrentOpenForm(currentForm?.config?.name)
@@ -115,12 +168,14 @@ export default function FormViewer() {
     }
   }, [isLoading, currentForm])
 
-  function formatAnsware(signature?: string) {
+  function formatAnsware(signature?: string, image?: string) {
+    console.log('IMAGE RECEIVED')
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
         console.log('found q', q)
-        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords }
+        // @ts-ignore
+        return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords, answare_images: q.answare_images }
       }),
       template_id: id,
       user_id: user?._id,
@@ -130,20 +185,20 @@ export default function FormViewer() {
     return answaredForm
   }
 
-  async function submit(signature: string) {
+  async function submit() {
     try {
       setIsFormSubmitLoading(true)
 
       if (isAnsware || firstAnswareId != undefined) {
-        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware(signature) })
-        
+        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware() })
+
         if (response.err) {
           setFeedbackModal("There was an error")
           return
         }
         setFeedbackModal(response.content.message)
       } else {
-        const response = await api.answare(formatAnsware(signature))
+        const response = await api.answare(formatAnsware())
         if (response.err) {
           setFeedbackModal("There was an error")
           return
@@ -174,19 +229,19 @@ export default function FormViewer() {
       setIsFormSubmitLoading(false)
     }
   }
-  const [signModal, setSignModal] = useState(false)
 
-  async function autoSave() {
+  async function autoSave(imageUrl?: string) {
     console.log('saving')
+    console.log(imageUrl)
     try {
       if (isAnsware || firstAnswareId != undefined) {
-        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware() })
+        const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware('', imageUrl) })
         if (response.err) {
           console.log('error')
         }
         console.log('saved')
       } else {
-        const response = await api.answare(formatAnsware())
+        const response = await api.answare(formatAnsware('', imageUrl))
         setFirstAnswareId(response.content._id)
         console.log('Auto Submited')
       }
@@ -195,32 +250,29 @@ export default function FormViewer() {
     }
   }
 
+  async function uploadImage(uri: string, id: string) {
+    console.log("UPLOAD IMAGE > Received")
+    const response = await api.uploadImage(uri)
+    console.log('response: ', response.fileName)
+    handleChangeImage(Number(id), response.fileName)
+    // await autoSave(response.fileName)
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>
         {currentQuestions && <RenderQuestionContainer
+          handleChangeSignature={handleChangeSignature}
+          uploadImage={uploadImage}
           formQuestions={currentQuestions}
           handleChangeCheckbox={handleChangeCheckbox}
           onChangeText={handleChangeText}
           handleChangeCoords={handleChangeCoords}
           hasFooterButton
           isFooterButtonLoading={isFormSubmitLoading}
-          setSignModal={setSignModal}
+          onSubmit={submit}
           autoSaveFn={autoSave}
         />}
-        {/* <FlatList
-          contentContainerStyle={{ gap: 12, paddingVertical: 40 }}
-          data={currentQuestions}
-          keyExtractor={(item) => item.id as any}
-          ListFooterComponent={() => (
-            <View>
-              <PrimaryButton isLoading={isFormSubmitLoading} label="Submit" onPress={() => setSignModal(true)} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
-            </View>
-          )}
-          renderItem={(item) => {
-            return <RenderQuestion handleChangeCoords={handleChangeCoords} autoSaveFn={autoSave} question={item.item} index={item.index} onChangeText={handleChangeText} handleChangeCheckbox={handleChangeCheckbox} />
-          }}
-        /> */}
       </LoadingContainer>
 
       {downloadFormModal && (
@@ -241,31 +293,6 @@ export default function FormViewer() {
               <View style={{ gap: 10 }}>
                 <PrimaryButton label="Ok" onPress={() => closeModal(() => setFeedbackModal(''))} />
                 {feedbackModal != "There was an error" && <PrimaryButton label="Download" onPress={() => closeModal(() => [setFeedbackModal(''), downloadForm()])} />}
-              </View>
-            </View>
-          }
-        </AnimatedModal>)}
-
-      {signModal && (
-        <AnimatedModal position={700} title="Attention">
-          {({ closeModal }) =>
-            <View>
-              <Text>{feedbackModal}</Text>
-              <View style={{ gap: 10, flex: 1 }}>
-                <View style={{ height: 600, backgroundColor: 'red' }}>
-                  <Signature
-                    onOK={(signature) => [submit(signature), closeModal(() => setSignModal(false))]}
-                    descriptionText="Assine aqui"
-                    clearText="Limpar"
-                    confirmText="Salvar"
-                    webStyle={`
-                  .m-signature-pad {box-shadow: none; border: none;}
-                  .m-signature-pad--footer {}
-                `}
-                  />
-                </View>
-                {/* <PrimaryButton label="Ok" onPress={() => closeModal(() => [setSignModal(false), submit()])}/> */}
-                <PrimaryButton label="Cancel" onPress={() => closeModal(() => setSignModal(false))} />
               </View>
             </View>
           }

@@ -15,27 +15,31 @@ interface RenderQuestionContainer {
   onChangeText: (index: number, value: string) => void;
   handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void;
   hasFooterButton?: boolean
-  setSignModal?: (value: React.SetStateAction<boolean>) => void;
   isFooterButtonLoading?: boolean;
   autoSaveFn?: () => Promise<void>
+  uploadImage?: (uri: string, id: string) => void
   handleChangeCoords?: (receivedIndex: number, newCoord: {
     latitude: string;
     longitude: string;
   }) => void
+  onSubmit: () => void
+  handleChangeSignature?: (receivedIndex: number, uri: string) => void,
 }
 
 export default function RenderQuestionContainer({
   formQuestions,
+  handleChangeSignature,
   removeQuestion,
   hasConfig, 
   canDelete, 
   handleChangeCheckbox, 
   onChangeText, 
   hasFooterButton = false,
-  setSignModal,
   isFooterButtonLoading,
   autoSaveFn,
-  handleChangeCoords
+  handleChangeCoords,
+  onSubmit,
+  uploadImage
 }: RenderQuestionContainer) {
 
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -91,7 +95,7 @@ export default function RenderQuestionContainer({
           return
         }
         return <View>
-          <PrimaryButton isLoading={isFooterButtonLoading} label="Submit" onPress={() => [setSignModal && setSignModal(true)]} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
+          <PrimaryButton isLoading={isFooterButtonLoading} label="Submit" onPress={() => [onSubmit && onSubmit()]} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
         </View>
       }}
       renderItem={({ item, index }) => {
@@ -128,6 +132,8 @@ export default function RenderQuestionContainer({
         return (
           <View style={{ paddingHorizontal: 10 }}>
             <RenderQuestion
+              handleChangeSignature={handleChangeSignature as any}
+              uploadImage={uploadImage}
               handleChangeCoords={handleChangeCoords as any}
               hasConfig={hasConfig}
               canDelete={canDelete}

@@ -33,6 +33,8 @@ export default function Select({selectedOption, options, setSelectedOption, posi
         return 'Weather'
       case 'location':
         return 'Location'
+      case 'signature':
+        return 'Signature'
       default:
         return op
     }

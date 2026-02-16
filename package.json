@@ -20,6 +20,8 @@
     "axios": "^1.11.0",
     "axios-retry": "^4.5.0",
     "expo": "~53.0.17",
+    "expo-image": "^3.0.11",
+    "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.7",
     "expo-location": "^19.0.8",
     "expo-router": "^5.1.3",
