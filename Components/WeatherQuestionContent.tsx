@@ -18,7 +18,7 @@ export default function WeatherQuestionContent({onChangeText, question, index}: 
 
   async function fetchWeather() {
 
-    console.log('Vai buscar clima');
+    //console.log('Vai buscar clima');
 
     try {
       const location = await Location.getCurrentPositionAsync({
@@ -43,7 +43,7 @@ export default function WeatherQuestionContent({onChangeText, question, index}: 
   }
 
   function formatWeather(weather: any){    
-    onChangeText(index, `MIN.${weather.currentConditionsHistory.maxTemperature.degrees}° - MAX.${weather.currentConditionsHistory.minTemperature.degrees}° - ${weather.weatherCondition.description.text} -  ${weather.temperature.degrees}°C - ${weather.relativeHumidity}g/m³`)       
+    onChangeText(index, `MIN.${weather.currentConditionsHistory.minTemperature.degrees}° - MAX.${weather.currentConditionsHistory.maxTemperature.degrees}° \n${weather.weatherCondition.description.text} \nNow: ${weather.temperature.degrees}°C - Humidity: ${weather.relativeHumidity}g/m³`)       
   }
 
   
@@ -51,8 +51,11 @@ export default function WeatherQuestionContent({onChangeText, question, index}: 
     <View style={{gap: 16}}>
       <PrimaryInput
         onChange={(text) => onChangeText(index, text)}
-        value={question.value}
-        icon="sun-compass"
+        value={question.value}    
+        multiline
+        numberOfLines={3}
+        inputStyle={{ minHeight: 80 }}            
+        //icon="sun-compass"
       />
       <PrimaryButton label="Refetch" onPress={() => fetchWeather()}/>
 

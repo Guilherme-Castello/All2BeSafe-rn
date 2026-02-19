@@ -2,7 +2,9 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://28cb-2804-14d-8e86-9cfc-55ab-9223-e25c-5e32.ngrok-free.app'
+const baseAPIUrl = 'https://hexahydric-unluxuriously-dorethea.ngrok-free.dev'
+                    
+//const baseAPIUrl = 'https://28cb-2804-14d-8e86-9cfc-55ab-9223-e25c-5e32.ngrok-free.app'
 
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]

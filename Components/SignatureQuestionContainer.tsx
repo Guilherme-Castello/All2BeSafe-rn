@@ -60,7 +60,7 @@ export default function SignatureQuestionContainer({
 
   return (
     <>
-      <View style={{alignItems: 'center'}}>
+      <View style={{alignItems: 'center', gap: 16}}>
         <PrimaryButton style={{width: '100%'}} label="Asign" onPress={() => setIsOpen(true)} />
         {url && <Image
           source={url}
