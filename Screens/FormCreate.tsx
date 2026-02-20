@@ -1,6 +1,6 @@
 import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Select from "../Components/Select";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import PrimaryInput from "../Components/PrimaryInput";
 import AnimatedModal from "../Components/AnimatedModal";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -13,6 +13,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigation, useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RenderQuestionContainer from "../Components/RenderQuestionContainer";
+import { useFocusEffect } from "@react-navigation/native";
 // @ts-ignore
 
 export default function FormCreate() {
@@ -23,33 +24,7 @@ export default function FormCreate() {
   const componentTypeOptions = ['text', 'select', 'input_date', 'input_time', 'check_boxes', 'weather', 'location', 'signature']
 
   // const sectionOptions = ['Section1', 'Section2', 'Section3']
-  const [sectionOptions, setSectionOptions] = useState<string[]>([
-    "REGISTRATION DETAILS",
-    "BEHAVIOR",
-    "SITES ACCESS",
-    "WORK AREAS",
-    "AIR QUALITY",
-    "JOB SITE POSTERS",
-    "HEALTH / FIRST AID",
-    "PERSONAL PROTECTIVE EQUIPAMENT",
-    "FALL PROTECTION / WORKING AT HEIGHTS",
-    "LADDERS",
-    "TOOLS AND EQUIPAMENT",
-    "EXCAVATIONS",
-    "CONFINED SPACE",
-    "ELETRICAL",
-    "FIRE SAFETY",
-    "GAS CYLINDERS",
-    "RIGGING AND HOISTING",
-    "SCAFFOLD",
-    "CRANE EQUIPAMENT",
-    "EQUIPAMENT",
-    "TRAFFIC CONTROL",
-    "PUBLIC WAY PROTECTION",
-    "WELDING",
-    "WHMIS",
-    "MATERIAL SUPPLIED / OTHER"
-  ])
+  const [sectionOptions, setSectionOptions] = useState<string[]>([])
   const [openSectionModal, setOpenSectionModal] = useState<boolean>(false)
   const [newSectionName, setNewSectionName] = useState<string>('')
 
@@ -159,33 +134,7 @@ export default function FormCreate() {
       setNewFormQuestions([])
       setNewForm(undefined)
       setFormTitle('')
-      setSectionOptions([
-        "REGISTRATION DETAILS",
-        "BEHAVIOR",
-        "SITES ACCESS",
-        "WORK AREAS",
-        "AIR QUALITY",
-        "JOB SITE POSTERS",
-        "HEALTH / FIRST AID",
-        "PERSONAL PROTECTIVE EQUIPAMENT",
-        "FALL PROTECTION / WORKING AT HEIGHTS",
-        "LADDERS",
-        "TOOLS AND EQUIPAMENT",
-        "EXCAVATIONS",
-        "CONFINED SPACE",
-        "ELETRICAL",
-        "FIRE SAFETY",
-        "GAS CYLINDERS",
-        "RIGGING AND HOISTING",
-        "SCAFFOLD",
-        "CRANE EQUIPAMENT",
-        "EQUIPAMENT",
-        "TRAFFIC CONTROL",
-        "PUBLIC WAY PROTECTION",
-        "WELDING",
-        "WHMIS",
-        "MATERIAL SUPPLIED / OTHER"
-      ])
+      setSectionOptions([])
       setSelectedSection('')
       navigate.goBack()
     } catch (error) {
@@ -217,6 +166,23 @@ export default function FormCreate() {
 
     }
   ]
+
+  async function listSections() {
+    const sectionsReturned = await api.listSections({})
+    console.log(sectionsReturned)
+    setSectionOptions(sectionsReturned.content.map((section: any) => section.name))
+    setSelectedSection((sectionsReturned.content.map((section: any) => section.name))[0])
+  }
+
+  useFocusEffect(
+      useCallback(() => {
+        listSections()
+        
+        return () => {
+  
+        }
+      }, [])
+    )
 
   return (
     <>

@@ -2,6 +2,7 @@ import CompanyCreate from "../Screens/CompanyCreate";
 import FormCreate from "../Screens/FormCreate";
 import FormList from "../Screens/FormList";
 import FormViewer from "../Screens/FormViewer";
+import SectionManager from "../Screens/SectionManager";
 import UserCreate from "../Screens/UserCreate";
 
 export const screens = [
@@ -47,6 +48,15 @@ export const screens = [
     label: 'Create Company',
     component: CompanyCreate,
     requiredPermission: 3,
+    icon: 'file-document',
+    showInDrawer: true
+  },
+  {
+    name: 'SectionManager',
+    title: 'Section Manager',
+    label: 'Section Manager',
+    component: SectionManager,
+    requiredPermission: 2,
     icon: 'file-document',
     showInDrawer: true
   },
