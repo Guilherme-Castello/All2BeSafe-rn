@@ -1,12 +1,13 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import PrimaryInput from "../Components/PrimaryInput";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Select from "../Components/Select";
 import api from "../Server/api";
 import { useAuth } from "../contexts/AuthContext";
 import PrimaryButton from "../Components/PrimaryButton";
 import AnimatedModal from "../Components/AnimatedModal";
 import { colors } from "../Utils/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function UserCreate() {
 
@@ -21,11 +22,18 @@ export default function UserCreate() {
   const [repassword, setRePassword] = useState("")
   const [accessLevel, setAccessLevel] = useState("0")
 
+  const [companies, setCompanies] = useState<any>()
+  const [selectedCompany, setSelectedCompany] = useState<any>()
+  const [choosedCompany, setChoosedCompany] = useState<any>()
+
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   async function createUser() {
     if (!user) return
     if (password != repassword) return
+    if (user.access_level == "3" && !choosedCompany) return
+
     setIsLoading(true)
     try {
       const createdUser = await api.registerUser({
@@ -33,10 +41,10 @@ export default function UserCreate() {
         email: email,
         password: password,
         access_level: accessLevel,
-        company: "0001"
+        company: user.access_level == "3" ? choosedCompany.code : user.company
       })
 
-      if(!createdUser.success){
+      if (!createdUser.success) {
         setError(createdUser.message)
         return
       }
@@ -49,6 +57,36 @@ export default function UserCreate() {
       setIsLoading(false)
     }
   }
+
+  async function getCompanies() {
+    const companies = await api.getCompanies({})
+    console.log(companies.content[0])
+    setCompanies(companies.content)
+  }
+
+  function getCompanyByName(name: string) {
+    if (!companies) return
+    const foundCompany = companies.find((company: any) => company.name == name)
+    setSelectedCompany(name)
+    setChoosedCompany(foundCompany)
+    console.log(foundCompany)
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getCompanies()
+
+      return () => {
+        setName("")
+        setEmail("")
+        setPassword("")
+        setRePassword("")
+        setAccessLevel("0")
+        setSelectedCompany(undefined)
+        setChoosedCompany(undefined)
+      }
+    }, [])
+  )
 
   return (
     <SafeAreaView style={{ marginHorizontal: 15, marginTop: 10 }}>
@@ -65,6 +103,11 @@ export default function UserCreate() {
 
           <Text>Repeat Password</Text>
           <PrimaryInput isPassword onChange={setRePassword} value={repassword} />
+
+          {user && user.access_level == "3" && <View>
+            <Text>Company</Text>
+            {companies && <Select options={companies.map((company: any) => company.name)} selectedOption={selectedCompany} setSelectedOption={(e: string) => getCompanyByName(e)} />}
+          </View>}
 
           <Text>Access Level</Text>
           {/* <PrimaryInput onChange={setAccessLevel} value={accessLevel}/> */}
