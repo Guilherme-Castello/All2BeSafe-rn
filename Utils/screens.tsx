@@ -1,3 +1,4 @@
+import CompanyCreate from "../Screens/CompanyCreate";
 import FormCreate from "../Screens/FormCreate";
 import FormList from "../Screens/FormList";
 import FormViewer from "../Screens/FormViewer";
@@ -37,6 +38,15 @@ export const screens = [
     label: 'Create User',
     component: UserCreate,
     requiredPermission: 2,
+    icon: 'file-document',
+    showInDrawer: true
+  },
+  {
+    name: 'CompanyCreate',
+    title: 'Create Company',
+    label: 'Create Company',
+    component: CompanyCreate,
+    requiredPermission: 3,
     icon: 'file-document',
     showInDrawer: true
   },

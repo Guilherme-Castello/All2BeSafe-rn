@@ -13,7 +13,9 @@ export default function SignatureQuestionContainer({
   index,
   question,
   handleChangeSignature,
+  hasConfig,
   autoSaveFn }: {
+    hasConfig?: boolean
     autoSaveFn: (() => void) | undefined,
     handleChangeSignature: (receivedIndex: number, uri: string) => void,
     question: FormItem,
@@ -47,6 +49,8 @@ export default function SignatureQuestionContainer({
   }
 
   async function getUrl(image: string) {
+    if(image == "") return
+    
     console.log('CALLING');
     setUrl(undefined)
     const url = await api.getImageUrl({ fileName: image })
@@ -54,14 +58,14 @@ export default function SignatureQuestionContainer({
   }
 
   useEffect(() => {
-    if(!question) return
+    if(!question || hasConfig) return
     getUrl(question.value)
   }, [question])
 
   return (
     <>
       <View style={{alignItems: 'center', gap: 16}}>
-        <PrimaryButton style={{width: '100%'}} label="Asign" onPress={() => setIsOpen(true)} />
+        <PrimaryButton style={{width: '100%'}} label="Asign" onPress={() => [hasConfig ? () => console.warn('disabled on create form screen') : setIsOpen(true)]} />
         {url && <Image
           source={url}
           key={index}

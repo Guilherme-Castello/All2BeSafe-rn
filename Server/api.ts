@@ -69,6 +69,26 @@ const api = {
     }
   },
 
+  registerCompany: async (registerData: any) => {
+    try {
+      const response: any = await serverInstance.post(`/companies/register`, registerData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating user:', error.message);
+      throw error;
+    }
+  },
+
+  getCompanies: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post(`/companies/companyList`, data);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating user:', error.message);
+      throw error;
+    }
+  },
+
   answare: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/answares/answare', data)
@@ -100,7 +120,7 @@ const api = {
 
       // faz a requisição para gerar o PDF
       const response: any = await serverInstance.post(
-        "/templates/generateFormAnswaredPDFHTML",
+        "/templates/generateAnswarePDF",
         data,
         { responseType: "arraybuffer" }
       );
@@ -175,7 +195,6 @@ const api = {
         }
       );
       const responseJson = await response.json()
-      console.log('request > ok')
       return responseJson
     } catch (e) {
       console.error(e)

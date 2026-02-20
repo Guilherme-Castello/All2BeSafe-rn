@@ -22,7 +22,7 @@ interface RenderQuestionContainer {
     latitude: string;
     longitude: string;
   }) => void
-  onSubmit: () => void
+  onSubmit?: () => void
   handleChangeSignature?: (receivedIndex: number, uri: string) => void,
 }
 
