@@ -8,6 +8,7 @@ import PrimaryButton from "../Components/PrimaryButton";
 import AnimatedModal from "../Components/AnimatedModal";
 import { colors } from "../Utils/colors";
 import { useFocusEffect } from "@react-navigation/native";
+import PermissionTable from "../Components/PermissionTable";
 
 export default function UserCreate() {
 
@@ -91,7 +92,7 @@ export default function UserCreate() {
   return (
     <SafeAreaView style={{ marginHorizontal: 15, marginTop: 10 }}>
       <ScrollView style={{ height: '80%' }}>
-        <View style={{ gap: 5 }}>
+        <View style={{ gap: 5, marginBottom: 10 }}>
           <Text>Name</Text>
           <PrimaryInput onChange={setName} value={name} />
 
@@ -112,6 +113,7 @@ export default function UserCreate() {
           <Text>Access Level</Text>
           {/* <PrimaryInput onChange={setAccessLevel} value={accessLevel}/> */}
           <Select options={["0", "1", "2"]} selectedOption={accessLevel} setSelectedOption={e => setAccessLevel(e)} />
+          <PermissionTable userAccessLevel={user?.access_level}/>
         </View>
       </ScrollView>
       <View>

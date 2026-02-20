@@ -175,6 +175,37 @@ const api = {
       return { success: false }
     }
   },
+
+  listSections: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/sections/listSections', data)
+      return response.data
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+
+  newSection: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/sections/newSection', data)
+      return response.data
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+
+  deleteSection: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/sections/deleteSection', data)
+      return response.data
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+
   uploadImage: async (data: any) => {
     try {
       console.log(data)
