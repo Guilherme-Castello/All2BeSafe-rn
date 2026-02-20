@@ -90,7 +90,7 @@ const RenderQuestion = React.memo(
       case "signature":
         return (
           <QuestionContainer images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
-            <SignatureQuestionContainer onChangeText={onChangeText} index={Number(index)} question={question} handleChangeSignature={handleChangeSignature} autoSaveFn={autoSaveFn} />
+            <SignatureQuestionContainer hasConfig={hasConfig} onChangeText={onChangeText} index={Number(index)} question={question} handleChangeSignature={handleChangeSignature} autoSaveFn={autoSaveFn} />
           </QuestionContainer>
         )
       default:

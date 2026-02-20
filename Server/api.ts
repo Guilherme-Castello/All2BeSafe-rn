@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://28cb-2804-14d-8e86-9cfc-55ab-9223-e25c-5e32.ngrok-free.app'
+const baseAPIUrl = 'https://25da-2804-14d-8e86-9cfc-59c0-c928-12fa-46f6.ngrok-free.app'
 
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
@@ -98,7 +98,7 @@ const api = {
 
       // faz a requisição para gerar o PDF
       const response: any = await serverInstance.post(
-        "/templates/generateFormAnswaredPDFHTML",
+        "/templates/generateAnswarePDF",
         data,
         { responseType: "arraybuffer" }
       );
@@ -173,7 +173,6 @@ const api = {
         }
       );
       const responseJson = await response.json()
-      console.log('request > ok')
       return responseJson
     } catch (e) {
       console.error(e)
