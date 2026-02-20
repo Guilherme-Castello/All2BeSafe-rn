@@ -83,6 +83,7 @@ function CustomDrawerContent(props: any) {
     <DrawerContentScrollView {...props} contentContainerStyle={{ alignContent: 'space-between', flex: 1, justifyContent: 'space-between' }}>
       <View style={{ gap: 20 }}>
         <Text style={{ fontSize: 30, textAlign: 'center' }}>All 2B Safe</Text>
+        <Text style={{ fontSize: 15, textAlign: 'center' }}>{user?.name}</Text>
         {screens.map(screen => {
           if (!screen.showInDrawer || Number(user?.access_level) < screen.requiredPermission) return
           return (
@@ -103,7 +104,7 @@ function CustomDrawerContent(props: any) {
           <MaterialCommunityIcons name={'exit-run'} size={20} color={'white'} />
           <Text style={{ color: 'white', fontWeight: 700 }}>Logout</Text>
         </TouchableOpacity>
-        <Text style={{ textAlign: 'center' }}>v2.0.0</Text>
+        <Text style={{ textAlign: 'center' }}>v3.0.0</Text>
       </View>
 
     </DrawerContentScrollView >

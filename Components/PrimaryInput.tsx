@@ -31,6 +31,8 @@ interface PrimaryInput {
   labelStyle?: StyleProp<TextStyle>
   formatKind?: 'phone' | 'cpf'
   autoCapitalize?: "none" | "sentences" | "words" | "characters" | undefined
+  multiline?: boolean;
+  numberOfLines?: number;
 }
 
 const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
@@ -52,7 +54,9 @@ const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
       disabled = false,
       labelStyle,
       formatKind = '',
-      autoCapitalize
+      autoCapitalize,
+      multiline = false,
+      numberOfLines = 1,      
     },
     ref
   ) => {
@@ -186,11 +190,17 @@ const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
               maxLength={defineMaxLength()}
               keyboardType={isPhone ? 'phone-pad' : keyboardType}
               secureTextEntry={isPassword}
-              style={[styles.input]}
+              //style={[styles.input]}
+              style={[
+                styles.input,
+                multiline && { height: undefined, minHeight: 40, textAlignVertical: 'top' }
+              ]}              
               placeholder={placeHolder}
               value={defineFormatData(value)}
               onChangeText={handleChangeText}
               onBlur={onBlur}
+              multiline={multiline}
+              numberOfLines={numberOfLines}
             />
           )}
           {Icon && <View style={{ position: 'absolute', right: 25, top: 8 }}>{Icon}</View>}
@@ -203,7 +213,7 @@ const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
+    //height: 40,
     padding: 10,
     color: 'gray',
     width: '100%',
