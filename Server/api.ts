@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://25da-2804-14d-8e86-9cfc-59c0-c928-12fa-46f6.ngrok-free.app'
+const baseAPIUrl = 'https://2a96-2804-14d-8e86-9cfc-ddc8-7350-7942-49c3.ngrok-free.app'
 
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
@@ -60,6 +60,26 @@ const api = {
   registerUser: async (registerData: any) => {
     try {
       const response: any = await serverInstance.post(`/users/register`, registerData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating user:', error.message);
+      throw error;
+    }
+  },
+
+  registerCompany: async (registerData: any) => {
+    try {
+      const response: any = await serverInstance.post(`/companies/register`, registerData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating user:', error.message);
+      throw error;
+    }
+  },
+
+  getCompanies: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post(`/companies/companyList`, data);
       return response.data;
     } catch (error: any) {
       console.error('Error creating user:', error.message);
