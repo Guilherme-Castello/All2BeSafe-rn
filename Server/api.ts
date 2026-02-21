@@ -203,6 +203,16 @@ const api = {
     }
   },
 
+  setAsDone: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/answares/setAsDone', data)
+      return response.data
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+
   uploadImage: async (data: any) => {
     try {
       console.log(data)

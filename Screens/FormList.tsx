@@ -18,7 +18,13 @@ import { Search } from "../Components/Search";
 // Se o caminho for diferente, ajuste conforme sua estrutura.
 import { normalizeString } from "../Utils/string";
 
-function FormCard({ description, title, status, onPress, isAnsware = false }: { isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
+function FormCard({ getForms, aId, description, title, status, onPress, isAnsware = false }: {getForms?: () => Promise<void>, aId?: string, isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
+  const [optionsModalOpen, setOptionsModalOpen] = useState<boolean>(false)
+
+  async function setAsDone() {
+    await api.setAsDone({ aId })
+    getForms && await getForms()
+  }
 
   function getStatusColor() {
     switch (status) {
@@ -43,24 +49,34 @@ function FormCard({ description, title, status, onPress, isAnsware = false }: { 
   }
 
   return (
-    <TouchableOpacity onPress={onPress} style={{ backgroundColor: colors.primary + '50', justifyContent: 'space-around', flexDirection: 'row', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
-      <View style={{ width: '15%' }}>
-        <Image source={require('../assets/all2bsafe.png')} style={{ width: 50, height: 50, borderRadius: 10 }} />
-      </View>
-      <View style={{ width: '80%' }}>
-        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ fontSize: 16, fontWeight: '700', maxWidth: '75%' }}>{title}</Text>
-          <Text style={[{ backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8 }]}>{translateStatus()}</Text>
+    <>
+      <TouchableOpacity onLongPress={() => isAnsware ? setOptionsModalOpen(true) : console.log("A lot better, huh?")} onPress={onPress} style={{ backgroundColor: colors.primary + '50', flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
+        <View style={{ width: '15%' }}>
+          <Image source={require('../assets/all2bsafe.png')} style={{ width: 50, height: 50, borderRadius: 10 }} />
         </View>
-        <View style={{ width: '100%' }}>
-          <Text>{description}</Text>
-          {!isAnsware && <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5 }}>
-            <MaterialIcons name="person" size={15} />
-            <Text>All 2B Safe (office)</Text>
-          </View>}
+        <View style={{ width: '80%' }}>
+          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={{ fontSize: 16, fontWeight: '700', maxWidth: '75%' }}>{title}</Text>
+            <Text style={[{ backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8 }]}>{translateStatus()}</Text>
+          </View>
+          <View style={{ width: '100%' }}>
+            <Text>{description}</Text>
+            {!isAnsware && <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5 }}>
+              <MaterialIcons name="person" size={15} />
+              <Text>All 2B Safe (office)</Text>
+            </View>}
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {optionsModalOpen && <AnimatedModal position={500} title="Choose an option">
+        {({ closeModal }) =>
+          <View style={{ gap: 20 }}>
+            <TouchableOpacity onPress={() => closeModal(() => [setAsDone(), setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18 }}>Set as "done"</Text></TouchableOpacity>
+            <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOptionsModalOpen(false))} />
+          </View>
+        }
+      </AnimatedModal>}
+    </>
   )
 }
 
@@ -107,29 +123,31 @@ export default function FormList() {
     setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather }, status: 'open' })
   }
 
+  async function getForms() {
+    try {
+      const forms: any = await api.getForms();
+      if (forms) {
+        setLoadedForms(forms)
+        setFilteredTemplates(forms) // Inicializa filtro com tudo
+      }
+
+      const inProgressForms: any = await api.getUserAnswares({ uId: user?._id })
+      if (inProgressForms && inProgressForms.forms) {
+        setLoadedInProgressForms(inProgressForms.forms)
+        setFilteredInProgress(inProgressForms.forms) // Inicializa filtro com tudo
+      }
+
+    } catch (error) {
+      console.error('Error fetching forms:', error);
+    }
+  }
+
   // Carregamento Inicial dos Dados
   useFocusEffect(
     useCallback(() => {
-      async function getForms() {
-        try {
-          const forms: any = await api.getForms();
-          if (forms) {
-            setLoadedForms(forms)
-            setFilteredTemplates(forms) // Inicializa filtro com tudo
-          }
 
-          const inProgressForms: any = await api.getUserAnswares({ uId: user?._id })
-          if (inProgressForms && inProgressForms.forms) {
-            setLoadedInProgressForms(inProgressForms.forms)
-            setFilteredInProgress(inProgressForms.forms) // Inicializa filtro com tudo
-          }
-
-        } catch (error) {
-          console.error('Error fetching forms:', error);
-        }
-      }
       getForms();
-    }, []) // Removi listMode das dependencias para evitar re-fetch desnecessário ao trocar aba
+    }, [listMode])
   );
 
   // Lógica de Filtro Inteligente
@@ -225,6 +243,8 @@ export default function FormList() {
           keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
           renderItem={(item) => (
             <FormCard
+              getForms={getForms}
+              aId={item.item.answare_id}
               isAnsware
               status={item.item.status}
               title={item.item.name}
