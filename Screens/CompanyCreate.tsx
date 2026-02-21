@@ -44,7 +44,7 @@ export default function CompanyCreate() {
   }
 
   return (
-    <SafeAreaView style={{ marginHorizontal: 15, marginTop: 10 }}>
+    <SafeAreaView style={{ paddingHorizontal: 15, paddingTop: 10, backgroundColor: "white" }}>
       <ScrollView style={{ height: '80%' }}>
         <View style={{ gap: 5 }}>
           <Text>Company Name</Text>

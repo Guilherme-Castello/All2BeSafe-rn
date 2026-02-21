@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://2a96-2804-14d-8e86-9cfc-ddc8-7350-7942-49c3.ngrok-free.app'
+const baseAPIUrl = 'https://8c81-2804-14d-8e86-9cfc-5074-bf7e-e1b-fff4.ngrok-free.app'
                     
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
@@ -173,6 +173,16 @@ const api = {
     }
   },
 
+  addNote: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/answares/addNote', data)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+
   listSections: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/sections/listSections', data)
@@ -186,6 +196,7 @@ const api = {
   newSection: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/sections/newSection', data)
+      console.log(response.data)
       return response.data
     } catch (e) {
       console.error(e)

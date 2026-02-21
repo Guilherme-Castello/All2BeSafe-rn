@@ -6,6 +6,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
 import api from "../Server/api";
 import { ScrollView } from "react-native-gesture-handler";
+import AnimatedModal from "./AnimatedModal";
+import PrimaryButton from "./PrimaryButton";
+import PrimaryInput from "./PrimaryInput";
 interface QuestionContainerProps {
   children: ReactNode;
   title: string
@@ -14,14 +17,18 @@ interface QuestionContainerProps {
   hasConfig?: boolean
   hasPhoto?: boolean
   onDelete?: () => void
+  aId?: string
+  answareNote?: string,
   uploadImage?: (uri: string, id: string) => void
   images?: string[]
 }
 
 
-export default function QuestionContainer({ images, children, title, id = '0', canDelete = false, onDelete, hasConfig = true, hasPhoto = false, uploadImage }: QuestionContainerProps) {
+export default function QuestionContainer({ answareNote, images, children, title, aId = "0", id = '0', canDelete = false, onDelete, hasConfig = true, hasPhoto = false, uploadImage }: QuestionContainerProps) {
 
   const [urlList, setUrlList] = useState<string[]>([])
+  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
+  const [newNote, setNewNote] = useState("")
 
   async function handleUploadImage() {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -40,19 +47,39 @@ export default function QuestionContainer({ images, children, title, id = '0', c
 
     // console.log('picked image')
     // @ts-ignore
-    uploadImage(result.assets[0].uri, parseInt(id)-1)
+    uploadImage(result.assets[0].uri, parseInt(id) - 1)
+  }
+
+  async function handleAddNote() {
+    try {
+      if (!aId || !id) return
+      console.log({ aId: aId, qId: String(parseInt(id) - 1), aNote: "Teste" })
+      const result = await api.addNote({ aId: aId, qId: String(parseInt(id) - 1), aNote: newNote })
+      console.log("result")
+      console.log(result)
+    } catch (e) {
+
+    }
   }
 
   async function getUrl(images: string[]) {
-  setUrlList([])
-  const urls = await Promise.all(
-    images.map(image =>
-      api.getImageUrl({ fileName: image })
-    )
-  );
+    setUrlList([])
+    const urls = await Promise.all(
+      images.map(image =>
+        api.getImageUrl({ fileName: image })
+      )
+    );
 
-  setUrlList(urls);
-}
+    setUrlList(urls);
+  }
+
+
+  useEffect(() => {
+    console.log(answareNote)
+    if(!answareNote) return
+
+    setNewNote(answareNote)
+  }, [answareNote])
 
   useEffect(() => {
     if (!hasPhoto) return
@@ -95,7 +122,7 @@ export default function QuestionContainer({ images, children, title, id = '0', c
 
       {hasConfig && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 20 }}>
 
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => console.log('implement')}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setIsNoteModalOpen(true)}>
           <MaterialCommunityIcons name="book-edit" size={20} />
           <Text style={{ marginLeft: 6, fontSize: 14 }}>Add Note</Text>
         </TouchableOpacity>
@@ -110,6 +137,26 @@ export default function QuestionContainer({ images, children, title, id = '0', c
           <Text style={{ marginLeft: 6, fontSize: 14 }}>Action</Text>
         </TouchableOpacity>
       </View>}
+      {isNoteModalOpen && (
+        <AnimatedModal position={300} title="Insert your note">
+          {({ closeModal }) => (
+            <View style={{ gap: 20 }}>
+              <PrimaryInput label="Insert your note" onChange={setNewNote} value={newNote} />
+              <PrimaryButton
+                textStyle={{ color: "white", fontSize: 18 }}
+                label="Send"
+                onPress={() => closeModal(() => [setIsNoteModalOpen(false), handleAddNote()])}
+              />
+              <PrimaryButton
+                style={{ backgroundColor: colors.danger }}
+                textStyle={{ color: "white", fontSize: 18 }}
+                label="Close"
+                onPress={() => closeModal(() => setIsNoteModalOpen(false))}
+              />
+            </View>
+          )}
+        </AnimatedModal>
+      )}
     </View>
   )
 }

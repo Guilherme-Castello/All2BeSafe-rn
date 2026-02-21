@@ -68,10 +68,13 @@ function FormCard({ getForms, aId, description, title, status, onPress, isAnswar
           </View>
         </View>
       </TouchableOpacity>
-      {optionsModalOpen && <AnimatedModal position={500} title="Choose an option">
+      {optionsModalOpen && <AnimatedModal position={700} title="Choose an option">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <TouchableOpacity onPress={() => closeModal(() => [setAsDone(), setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18 }}>Set as "done"</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => closeModal(() => [setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>Details</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => closeModal(() => [setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>View</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => closeModal(() => [setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>Export Report</Text></TouchableOpacity>
             <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOptionsModalOpen(false))} />
           </View>
         }
