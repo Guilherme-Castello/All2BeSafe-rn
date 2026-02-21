@@ -46,8 +46,6 @@ function Header() {
   const routeName = (currentRoute.name == 'FormCreate' && newForm && newForm.config && newForm.config.name) ? newForm.config.name : currentRoute.name
 
   function getRouteName() {
-    console.log(currentRoute.name)
-    console.log(currentOpenForm)
     if (currentRoute.name == 'FormCreate' && newForm && newForm.config && newForm.config.name) {
       return newForm.config.name
     } else if (currentRoute.name == 'FormViewer' && currentOpenForm != '') {

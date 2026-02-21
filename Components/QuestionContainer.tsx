@@ -44,7 +44,6 @@ export default function QuestionContainer({ images, children, title, id = '0', c
   }
 
   async function getUrl(images: string[]) {
-  console.log('CALLING');
   setUrlList([])
   const urls = await Promise.all(
     images.map(image =>

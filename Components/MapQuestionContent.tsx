@@ -147,7 +147,6 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
   }
 
   async function fetchCurrentLocation() {
-    console.log('a')
     try {
       setIsLocationLoading(true)
       const location = await Location.getCurrentPositionAsync({
@@ -173,13 +172,9 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
 
 
   useEffect(() => {
-    console.log('q')
-    console.log(question)
     if(question && question.coords && question?.coords?.latitude) {
-      console.log('inside if')
       return
     } else {
-      console.log('INSIDE ELSE')
       fetchCurrentLocation()
     }
   }, [question])

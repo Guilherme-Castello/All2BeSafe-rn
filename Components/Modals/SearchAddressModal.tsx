@@ -50,7 +50,6 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
           coords.longitude.toString(),
           googleUUID
         );
-        console.log(response.data.predictions)
         setSuggestions(response.data.predictions);
       } catch (error) {
         console.error('Error fetching the API', error);

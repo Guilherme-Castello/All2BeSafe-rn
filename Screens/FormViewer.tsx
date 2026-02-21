@@ -28,6 +28,11 @@ export default function FormViewer() {
 
   const [firstAnswareId, setFirstAnswareId] = useState()
 
+  const [sectionPercentages, setSectionPercentages] = useState<{
+    section_name: string;
+    percentage: number;
+  }[] | undefined>()
+
   const { user, setCurrentOpenForm } = useAuth()
   const [forcedSave, setForcedSave] = useState<number>(0)
 
@@ -44,10 +49,10 @@ export default function FormViewer() {
   // Basicamente, o autosave() nem sempre funciona quando precisamos que ele rode logo após a atualizaçao de alguma image, entao
   // criei um mecanismo que observa um estado externo (forcedSave). Toda vez que forceAutoSave() é chamado, ele atualiza o estado
   // forcedSave, que está sendo observado por um useEffect que roda a funçao autoSave()
-  
+
   // Em caso de duvidas, pode me chamar
-  function forceAutoSave(){
-    setForcedSave(prev => prev+1)
+  function forceAutoSave() {
+    setForcedSave(prev => prev + 1)
   }
 
   const handleChangeSignature = useCallback(async (receivedIndex: number, newText: string) => {
@@ -72,7 +77,7 @@ export default function FormViewer() {
       const test = prev.map((item, index) => {
         if (index == receivedIndex) {
           // @ts-ignore
-          if(item.answare_images){
+          if (item.answare_images) {
             // @ts-ignore
             return { ...item, answare_images: [...item.answare_images, newText] }
           } else {
@@ -138,6 +143,7 @@ export default function FormViewer() {
         const selectedForm: Form | undefined = await api.getAnswaredForm({ aId: id });
         selectedForm && setCurrentForm(selectedForm);
       }
+      autoSave()
     } catch (error) {
       console.error('Error fetching form by ID:', error);
     } finally {
@@ -153,6 +159,7 @@ export default function FormViewer() {
         console.log('Out')
         setFirstAnswareId(undefined)
         setCurrentOpenForm('')
+        setSectionPercentages(undefined)
         setIsLoading(true)
       }
     }, [id])
@@ -192,6 +199,7 @@ export default function FormViewer() {
       if (isAnsware || firstAnswareId != undefined) {
         const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware() })
 
+        setSectionPercentages(response.content.complete_percentage)
         if (response.err) {
           setFeedbackModal("There was an error")
           return
@@ -232,19 +240,19 @@ export default function FormViewer() {
   }
 
   async function autoSave(imageUrl?: string) {
-    console.log('saving')
-    console.log(imageUrl)
     try {
       if (isAnsware || firstAnswareId != undefined) {
         const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware('', imageUrl) })
+
+        setSectionPercentages(response.content.complete_percentage)
         if (response.err) {
           console.log('error')
         }
-        console.log('saved')
       } else {
         const response = await api.answare(formatAnsware('', imageUrl))
+
+        setSectionPercentages(response.content.complete_percentage)
         setFirstAnswareId(response.content._id)
-        console.log('Auto Submited')
       }
     } catch (e) {
       console.error(e)
@@ -263,6 +271,7 @@ export default function FormViewer() {
     <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>
         {currentQuestions && <RenderQuestionContainer
+          sectionPercentage={sectionPercentages}
           handleChangeSignature={handleChangeSignature}
           uploadImage={uploadImage}
           formQuestions={currentQuestions}
