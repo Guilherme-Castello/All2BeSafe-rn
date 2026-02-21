@@ -23,6 +23,7 @@ interface RenderQuestionContainer {
     longitude: string;
   }) => void
   onSubmit?: () => void
+  aId?: string
   handleChangeSignature?: (receivedIndex: number, uri: string) => void,
   sectionPercentage?: {
     section_name: string;
@@ -44,7 +45,8 @@ export default function RenderQuestionContainer({
   handleChangeCoords,
   onSubmit,
   uploadImage,
-  sectionPercentage
+  sectionPercentage,
+  aId
 }: RenderQuestionContainer) {
 
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -140,6 +142,7 @@ export default function RenderQuestionContainer({
         return (
           <View style={{ paddingHorizontal: 10 }}>
             <RenderQuestion
+              aId={aId}
               handleChangeSignature={handleChangeSignature as any}
               uploadImage={uploadImage}
               handleChangeCoords={handleChangeCoords as any}

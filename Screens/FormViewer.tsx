@@ -37,6 +37,7 @@ export default function FormViewer() {
   const [forcedSave, setForcedSave] = useState<number>(0)
 
   useEffect(() => {
+    console.log(currentQuestions)
     currentForm && setCurrentQuestions(currentForm.questions)
   }, [currentForm])
 
@@ -271,6 +272,7 @@ export default function FormViewer() {
     <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>
         {currentQuestions && <RenderQuestionContainer
+          aId={(firstAnswareId != undefined) ? firstAnswareId : id}
           sectionPercentage={sectionPercentages}
           handleChangeSignature={handleChangeSignature}
           uploadImage={uploadImage}
