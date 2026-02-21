@@ -1,8 +1,9 @@
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import AnimatedModal from "./AnimatedModal";
 import PrimaryButton from "./PrimaryButton";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { colors } from "../Utils/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface SelectInterface {
   setSelectedOption: (option: string) => void,
@@ -16,7 +17,7 @@ interface SelectInterface {
 export default function Select({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180, autoSave}: SelectInterface) {
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false)
-  
+  const [renderCount, setRenderCount] = useState(0)
   function translateOption(op: string){
     switch(op){
       case 'text':
@@ -40,9 +41,26 @@ export default function Select({selectedOption, options, setSelectedOption, posi
     }
   }
 
+  useFocusEffect(
+      useCallback(() => {
+  
+        return () => {
+          setRenderCount(0)
+        }
+      }, [])
+    );
+
+  useEffect(() => {
+    setRenderCount(prev => prev+1)
+    if(renderCount < 1) return
+    
+    autoSave && autoSave()
+
+  }, [selectedOption])
+
   function SelectItem({ option, closeModal }: { option: string, closeModal: (callBack: () => void) => void }) {
     return (
-      <TouchableOpacity onPress={() => closeModal(() => [setIsSelectOpen(false), setSelectedOption(option), autoSave && autoSave()])} style={[{ height: 50, justifyContent: 'center', borderRadius: 20 }, option == selectedOption && { backgroundColor: colors.primary }]}>
+      <TouchableOpacity onPress={() => closeModal(() => [setIsSelectOpen(false), setSelectedOption(option)])} style={[{ height: 50, justifyContent: 'center', borderRadius: 20 }, option == selectedOption && { backgroundColor: colors.primary }]}>
         <Text style={[{ fontSize: 18, textAlign: 'center' }, option == selectedOption && { color: 'white' }]}>{translateOption(option)}</Text>
       </TouchableOpacity>
     )

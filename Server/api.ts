@@ -2,10 +2,8 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://hexahydric-unluxuriously-dorethea.ngrok-free.dev'
+const baseAPIUrl = 'https://2a96-2804-14d-8e86-9cfc-ddc8-7350-7942-49c3.ngrok-free.app'
                     
-//const baseAPIUrl = 'https://28cb-2804-14d-8e86-9cfc-55ab-9223-e25c-5e32.ngrok-free.app'
-
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
   // To start ngrok, use: ngrok http 5000. I'll connect to your localhost:5000 and permit u to access your local API from the app
@@ -102,10 +100,7 @@ const api = {
   },
   updateAnsware: async (data: any) => {
     try {
-
       const response: any = await serverInstance.post('/answares/updateAnsware', data)
-      console.log("RECEIVED RESPONSE")
-      console.log(response)
       if (response?.data?.error) throw new Error(response.data.error)
       return response.data;
 

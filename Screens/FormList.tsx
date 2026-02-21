@@ -119,7 +119,6 @@ export default function FormList() {
           }
 
           const inProgressForms: any = await api.getUserAnswares({ uId: user?._id })
-          console.log(inProgressForms)
           if (inProgressForms && inProgressForms.forms) {
             setLoadedInProgressForms(inProgressForms.forms)
             setFilteredInProgress(inProgressForms.forms) // Inicializa filtro com tudo

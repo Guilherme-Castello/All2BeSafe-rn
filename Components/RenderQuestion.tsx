@@ -22,8 +22,6 @@ const RenderQuestion = React.memo(
   },) => {
     switch (question.kind) {
       case "text":
-        console.log("QUESTION: ")
-        console.log(question)
         return (
           <QuestionContainer images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <PrimaryInput

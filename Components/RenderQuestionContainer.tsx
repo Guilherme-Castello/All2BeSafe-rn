@@ -24,6 +24,10 @@ interface RenderQuestionContainer {
   }) => void
   onSubmit?: () => void
   handleChangeSignature?: (receivedIndex: number, uri: string) => void,
+  sectionPercentage?: {
+    section_name: string;
+    percentage: number;
+  }[] | undefined
 }
 
 export default function RenderQuestionContainer({
@@ -39,7 +43,8 @@ export default function RenderQuestionContainer({
   autoSaveFn,
   handleChangeCoords,
   onSubmit,
-  uploadImage
+  uploadImage,
+  sectionPercentage
 }: RenderQuestionContainer) {
 
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -118,6 +123,9 @@ export default function RenderQuestionContainer({
             >
               <Text style={{ fontSize: 16, fontWeight: '600', color: 'white' }}>
                 {item.title}
+              </Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: 'white' }}>
+                {sectionPercentage && sectionPercentage.find(section => section.section_name == item.title)?.percentage.toFixed(0)+"%"}
               </Text>
 
               <MaterialCommunityIcons
