@@ -72,7 +72,7 @@ export default function Select({selectedOption, options, setSelectedOption, posi
           <Text>{translateOption(selectedOption)}</Text>
         </TouchableOpacity>
       </View>
-      {isSelectOpen && <AnimatedModal position={position} title="Choose an option">
+      {isSelectOpen && <AnimatedModal onClose={() => setIsSelectOpen(false)} position={position} title="Choose an option">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <FlatList data={options} renderItem={(a) => <SelectItem option={a.item} closeModal={closeModal} />} style={{ maxHeight: containerHeight, borderBottomWidth: 0.5, borderColor: colors.primary }} contentContainerStyle={{ gap: 2 }} />

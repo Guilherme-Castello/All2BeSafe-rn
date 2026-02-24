@@ -288,7 +288,7 @@ export default function FormViewer() {
       </LoadingContainer>
 
       {downloadFormModal && (
-        <AnimatedModal position={400} title="Attention">
+        <AnimatedModal onClose={() => setDownloadFormModal("")} position={400} title="Attention">
           {({ closeModal }) =>
             <View>
               <Text>{downloadFormModal == 'sucess' ? 'Your answare was downloaded successfuly' : 'There was an error while downloading your form'}</Text>
@@ -298,7 +298,7 @@ export default function FormViewer() {
         </AnimatedModal>)}
 
       {feedbackModal && (
-        <AnimatedModal position={400} title="Attention">
+        <AnimatedModal onClose={() => setFeedbackModal("")} position={400} title="Attention">
           {({ closeModal }) =>
             <View>
               <Text>{feedbackModal}</Text>

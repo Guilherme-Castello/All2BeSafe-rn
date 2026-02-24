@@ -108,7 +108,7 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
 
   return (
     <>
-      {openSearch && <AnimatedModal position={Dimensions.get('screen').height * 0.9} title="Choose an option">
+      {openSearch && <AnimatedModal onClose={() => setOpenSearch(false)} position={Dimensions.get('screen').height * 0.9} title="Choose an option">
         {({ closeModal }) =>
           <View style={{ gap: 10 }}>
             <PrimaryInput value={searchAddressByName} onChange={setSearchAddressByName} />

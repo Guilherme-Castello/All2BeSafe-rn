@@ -75,7 +75,7 @@ export default function SignatureQuestionContainer({
         />}
       </View>
       {isOpen && (
-        <AnimatedModal position={700} title="Attention">
+        <AnimatedModal onClose={() => setIsOpen(false)} position={700} title="Attention">
           {({ closeModal }) =>
             <View>
               <Text>Insert your sign</Text>

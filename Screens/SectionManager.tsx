@@ -62,7 +62,7 @@ export default function SectionManager() {
         }}
       />
       {errorMsg !== "" && (
-        <AnimatedModal position={300} title="Attention!">
+        <AnimatedModal onClose={() => setErrorMsg("")} position={300} title="Attention!">
           {({ closeModal }) => (
             <View style={{ gap: 20 }}>
               <Text>{errorMsg}</Text>

@@ -138,7 +138,7 @@ export default function QuestionContainer({ answareNote, images, children, title
         </TouchableOpacity>
       </View>}
       {isNoteModalOpen && (
-        <AnimatedModal position={300} title="Insert your note">
+        <AnimatedModal onClose={() => setIsNoteModalOpen(false)} position={300} title="Insert your note">
           {({ closeModal }) => (
             <View style={{ gap: 20 }}>
               <PrimaryInput label="Insert your note" onChange={setNewNote} value={newNote} />

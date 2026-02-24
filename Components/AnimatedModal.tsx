@@ -6,20 +6,35 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
-import { Dimensions, Keyboard, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, Dimensions, Keyboard, StyleSheet, Text, View } from 'react-native';
 import { Portal } from '@gorhom/portal';
 
 interface AnimatedModalProps {
   title?: string;
   position?: number;
+  onClose: () => void;
   children:
   | React.ReactNode
   | ((props: { closeModal: (callBack: () => void) => void }) => React.ReactNode);
 }
 
-export default function AnimatedModal({ title, position = 460, children }: AnimatedModalProps) {
+export default function AnimatedModal({ title, position = 460, children, onClose }: AnimatedModalProps) {
   const height = useSharedValue(0);
   const bgOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    const backAction = () => {
+      closeModal(onClose)
+      return true // bloqueia navegação
+    }
+
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    )
+
+    return () => subscription.remove()
+  }, [])
 
   const mainContainer = useAnimatedStyle(() => {
     return {

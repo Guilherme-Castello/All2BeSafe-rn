@@ -120,7 +120,7 @@ export default function UserCreate() {
         <PrimaryButton label="Submit" onPress={() => createUser()} isLoading={isLoading} />
       </View>
       {error !== "" && (
-        <AnimatedModal position={300} title="Attention!">
+        <AnimatedModal onClose={() => setError("")} position={300} title="Attention!">
           {({ closeModal }) => (
             <View style={{ gap: 20 }}>
               <Text>{error}</Text>
@@ -135,7 +135,7 @@ export default function UserCreate() {
         </AnimatedModal>
       )}
       {successMsg !== "" && (
-        <AnimatedModal position={300} title="Attention!">
+        <AnimatedModal onClose={() => setSuccessMsg("")} position={300} title="Attention!">
           {({ closeModal }) => (
             <View style={{ gap: 20 }}>
               <Text>{successMsg}</Text>

@@ -120,7 +120,7 @@ export default function Login() {
           />
 
           {error !== "" && (
-            <AnimatedModal position={300} title="Attention!">
+            <AnimatedModal onClose={() => setError("")} position={300} title="Attention!">
               {({ closeModal }) => (
                 <View style={{ gap: 20 }}>
                   <Text>{error}</Text>

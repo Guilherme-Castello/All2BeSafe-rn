@@ -251,7 +251,7 @@ export default function FormCreate() {
             />}
           </View>}
       </SafeAreaView>
-      {openConfigModal && <AnimatedModal position={700} title="Options">
+      {openConfigModal && <AnimatedModal onClose={() => setOpenConfigModal(false)} position={700} title="Options">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <FlatList data={optionList} style={{ height: 350 }} renderItem={(option) => {
@@ -280,7 +280,7 @@ export default function FormCreate() {
         }
       </AnimatedModal>}
 
-      {openSectionModal && <AnimatedModal position={700} title="Section">
+      {openSectionModal && <AnimatedModal onClose={() => setOpenSectionModal(false)} position={700} title="Section">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <FlatList data={sectionOptions} style={{ height: 350 }} renderItem={(option) => {
@@ -306,7 +306,7 @@ export default function FormCreate() {
         }
       </AnimatedModal>}
 
-      {openPredefinedOptionsModal && <AnimatedModal position={600} title="Options">
+      {openPredefinedOptionsModal && <AnimatedModal onClose={() => setOpenPredefinedOptionsModal(false)} position={600} title="Options">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <FlatList
@@ -342,7 +342,7 @@ export default function FormCreate() {
         }
       </AnimatedModal>}
 
-      {openFinishgModal && <AnimatedModal position={300} title="Save this form?">
+      {openFinishgModal && <AnimatedModal onClose={() => setOpenFinishModal(false)} position={300} title="Save this form?">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Save" onPress={() => closeModal(() => [setOpenFinishModal(false), handleSaveForm()])} />
