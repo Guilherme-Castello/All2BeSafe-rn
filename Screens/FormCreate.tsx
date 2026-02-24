@@ -251,7 +251,7 @@ export default function FormCreate() {
             />}
           </View>}
       </SafeAreaView>
-      {openConfigModal && <AnimatedModal onClose={() => setOpenConfigModal(false)} position={700} title="Options">
+      {openConfigModal && <AnimatedModal onClose={() => [setOpenConfigModal(false), setOptionList([])]} position={700} title="Options">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <FlatList data={optionList} style={{ height: 350 }} renderItem={(option) => {
@@ -274,7 +274,7 @@ export default function FormCreate() {
             </View>
             <View style={{ gap: 5 }}>
               <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Submit" onPress={() => closeModal(() => [setOpenConfigModal(false), addQuestion()])} />
-              <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenConfigModal(false))} />
+              <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => [setOpenConfigModal(false), setOptionList([])])} />
             </View>
           </View>
         }
