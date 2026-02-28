@@ -53,10 +53,7 @@ export default function QuestionContainer({ answareNote, images, children, title
   async function handleAddNote() {
     try {
       if (!aId || !id) return
-      console.log({ aId: aId, qId: String(parseInt(id) - 1), aNote: "Teste" })
       const result = await api.addNote({ aId: aId, qId: String(parseInt(id) - 1), aNote: newNote })
-      console.log("result")
-      console.log(result)
     } catch (e) {
 
     }
@@ -75,7 +72,6 @@ export default function QuestionContainer({ answareNote, images, children, title
 
 
   useEffect(() => {
-    console.log(answareNote)
     if(!answareNote) return
 
     setNewNote(answareNote)

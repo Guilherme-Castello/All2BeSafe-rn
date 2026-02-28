@@ -7,7 +7,7 @@ import PrimaryButton from "../Components/PrimaryButton";
 import AnimatedModal from "../Components/AnimatedModal";
 import { colors } from "../Utils/colors";
 
-export default function CompanyCreate() {
+export default function CompanyManager() {
 
   const { user } = useAuth()
 

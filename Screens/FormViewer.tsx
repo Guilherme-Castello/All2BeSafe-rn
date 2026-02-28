@@ -37,7 +37,6 @@ export default function FormViewer() {
   const [forcedSave, setForcedSave] = useState<number>(0)
 
   useEffect(() => {
-    console.log(currentQuestions)
     currentForm && setCurrentQuestions(currentForm.questions)
   }, [currentForm])
 
@@ -57,7 +56,6 @@ export default function FormViewer() {
   }
 
   const handleChangeSignature = useCallback(async (receivedIndex: number, newText: string) => {
-    console.log(receivedIndex)
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
       const test = prev.map((item, index) => {
@@ -72,7 +70,6 @@ export default function FormViewer() {
   }, []);
 
   const handleChangeImage = useCallback(async (receivedIndex: number, newText: string) => {
-    console.log(receivedIndex)
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
       const test = prev.map((item, index) => {
@@ -94,7 +91,6 @@ export default function FormViewer() {
   }, []);
 
   const handleChangeText = useCallback((receivedIndex: number, newText: string) => {
-    console.log(receivedIndex)
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
       const test = prev.map((item, index) => {
@@ -157,7 +153,6 @@ export default function FormViewer() {
       getSelectedForm()
 
       return () => {
-        console.log('Out')
         setFirstAnswareId(undefined)
         setCurrentOpenForm('')
         setSectionPercentages(undefined)
@@ -177,11 +172,9 @@ export default function FormViewer() {
   }, [isLoading, currentForm])
 
   function formatAnsware(signature?: string, image?: string) {
-    console.log('IMAGE RECEIVED')
     const answaredForm = {
       answares: currentQuestions?.map(q => {
         // const checkboxesAnsware = 
-        console.log('found q', q)
         // @ts-ignore
         return { question_id: q.id, answare_text: q.value, answare_checkboxes: q.check_boxes, answare_coords: q.coords, answare_images: q.answare_images }
       }),
@@ -261,9 +254,7 @@ export default function FormViewer() {
   }
 
   async function uploadImage(uri: string, id: string) {
-    console.log("UPLOAD IMAGE > Received")
     const response = await api.uploadImage(uri)
-    console.log('response: ', response.fileName)
     handleChangeImage(Number(id), response.fileName)
     // await autoSave(response.fileName)
   }

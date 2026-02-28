@@ -82,7 +82,6 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
       googleUUID
     );
     const formattedAddress = createAddressFromResponse(suggestionDetails?.data.result);
-    console.log(formattedAddress)
     // setAddressName(handleAddressName(formattedAddress))
     setCoords({...coords, latitude: formattedAddress.geolocation.lat, longitude: formattedAddress.geolocation.lng})
     animateMap({...coords, latitude: formattedAddress.geolocation.lat, longitude: formattedAddress.geolocation.lng})
@@ -97,7 +96,6 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
     function getSecondField(){
       return item.structured_formatting.secondary_text
     }
-    console.log(item)
     return (
       <TouchableOpacity style={{paddingVertical: 10}} onPress={() => [handleSelectGoogle(item.place_id), closeFn()]}>
         <Text style={{fontSize: 16, fontWeight: 700}}>{getFirstField()}</Text>
@@ -116,7 +114,6 @@ export default function SearchAddressModal({openSearch, setOpenSearch, setCoords
               style={{ height: '70%' }}
               data={suggestions}
               renderItem={(list) => {
-                console.log(list.item)
                 return <AddressItem item={list.item} closeFn={() => closeModal(() => setOpenSearch(false))}/>
               }}
             />

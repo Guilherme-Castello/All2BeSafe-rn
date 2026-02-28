@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://api-formularios-render.onrender.com'
+const baseAPIUrl = 'https://6f0e-2804-14d-8e86-9cfc-7d7e-2e5-d25d-670.ngrok-free.app'
                     
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
@@ -251,12 +251,42 @@ const api = {
   getImageUrl: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/images/getImageUrl', data)
+      return response.data
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+  listUsers: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/users/list', data)
+      console.log(response)
       return response.data.content
     } catch (e) {
       console.error(e)
       return { success: false }
     }
   },
+  deleteUser: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/users/delete', data)
+      console.log(response)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+  updateUser: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/users/update', data)
+      console.log(response)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  }
 }
 
 export default api;

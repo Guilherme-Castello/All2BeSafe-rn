@@ -25,7 +25,6 @@ export default function SignatureQuestionContainer({
 
   const [url, setUrl] = useState()
   const [isOpen, setIsOpen] = useState(false)
-  console.log(question)
   async function base64ToFile(base64: string) {
     // remove header se existir
     const cleanBase64 = base64.replace(/^data:image\/\w+;base64,/, '')
@@ -44,14 +43,12 @@ export default function SignatureQuestionContainer({
   async function submit(signature: string) {
     const uri = await base64ToFile(signature)
     const uploadedImage = await api.uploadImage(uri)
-    console.log(uploadedImage)
     handleChangeSignature(index, uploadedImage.fileName)
   }
 
   async function getUrl(image: string) {
     if(image == "") return
     
-    console.log('CALLING');
     setUrl(undefined)
     const url = await api.getImageUrl({ fileName: image })
     setUrl(url);

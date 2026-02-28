@@ -1,9 +1,9 @@
-import CompanyCreate from "../Screens/CompanyCreate";
+import CompanyManager from "../Screens/CompanyManager";
 import FormCreate from "../Screens/FormCreate";
 import FormList from "../Screens/FormList";
 import FormViewer from "../Screens/FormViewer";
 import SectionManager from "../Screens/SectionManager";
-import UserCreate from "../Screens/UserCreate";
+import UserManager from "../Screens/UserManager";
 
 export const screens = [
   {
@@ -34,30 +34,30 @@ export const screens = [
     showInDrawer: false
   },
   {
-    name: 'UserCreate',
+    name: 'User Manager',
     title: 'Create User',
-    label: 'Create User',
-    component: UserCreate,
+    label: 'User Manager',
+    component: UserManager,
     requiredPermission: 2,
-    icon: 'file-document',
+    icon: 'account',
     showInDrawer: true
   },
   {
-    name: 'CompanyCreate',
-    title: 'Create Company',
-    label: 'Create Company',
-    component: CompanyCreate,
+    name: 'Company Manager',
+    title: 'Company Manager',
+    label: 'Company Manager',
+    component: CompanyManager,
     requiredPermission: 3,
-    icon: 'file-document',
+    icon: 'domain',
     showInDrawer: true
   },
   {
-    name: 'SectionManager',
+    name: 'Section Manager',
     title: 'Section Manager',
     label: 'Section Manager',
     component: SectionManager,
     requiredPermission: 2,
-    icon: 'file-document',
+    icon: 'set-center',
     showInDrawer: true
   },
 ]

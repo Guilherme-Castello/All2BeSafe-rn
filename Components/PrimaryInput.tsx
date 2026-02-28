@@ -162,7 +162,7 @@ const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
 
     return (
       <View style={[styles.inputCase, caseStyle]}>
-
+        {label && <Text>{label}</Text>}
         <View
           style={[
             {
