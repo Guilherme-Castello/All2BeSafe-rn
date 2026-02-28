@@ -150,9 +150,6 @@ function PublicRouter() {
 
 function Routes() {
   const { user } = useAuth();
-  React.useEffect(() => {
-    console.log(user)
-  }, [user])
   if (user) {
     return <PrivateRouter />
   } else {

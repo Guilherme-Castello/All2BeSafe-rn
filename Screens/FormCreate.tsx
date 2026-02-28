@@ -77,8 +77,6 @@ export default function FormCreate() {
       [questionOptionalType]: optionalOptions,
     }
 
-    console.log(newQuestion)
-
     setNewFormQuestions((prev: any) => {
       return [...prev, newQuestion]
     })
@@ -96,8 +94,6 @@ export default function FormCreate() {
   }
 
   function removeQuestion(itemIndex: number) {
-    console.log(itemIndex)
-    console.log(newFormQuestions)
     const updatedForm = newFormQuestions.filter(prev => prev.id != itemIndex)
     setNewFormQuestions(updatedForm as FormItem[])
   }
@@ -169,7 +165,6 @@ export default function FormCreate() {
 
   async function listSections() {
     const sectionsReturned = await api.listSections({})
-    console.log(sectionsReturned)
     setSectionOptions(sectionsReturned.content.map((section: any) => section.name))
     setSelectedSection((sectionsReturned.content.map((section: any) => section.name))[0])
   }

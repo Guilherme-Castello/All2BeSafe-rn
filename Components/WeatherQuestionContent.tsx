@@ -18,8 +18,6 @@ export default function WeatherQuestionContent({onChangeText, question, index}: 
 
   async function fetchWeather() {
 
-    //console.log('Vai buscar clima');
-
     try {
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Low,

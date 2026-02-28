@@ -1,7 +1,7 @@
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import AnimatedModal from "./AnimatedModal";
 import PrimaryButton from "./PrimaryButton";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { colors } from "../Utils/colors";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -17,7 +17,7 @@ interface SelectInterface {
 export default function Select({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180, autoSave}: SelectInterface) {
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false)
-  const [renderCount, setRenderCount] = useState(0)
+  // const [renderCount, setRenderCount] = useState(0)
   function translateOption(op: string){
     switch(op){
       case 'text':
@@ -41,19 +41,17 @@ export default function Select({selectedOption, options, setSelectedOption, posi
     }
   }
 
-  useFocusEffect(
-      useCallback(() => {
-  
-        return () => {
-          setRenderCount(0)
-        }
-      }, [])
-    );
+   const renderCount = useRef(0)
 
   useEffect(() => {
-    setRenderCount(prev => prev+1)
-    if(renderCount < 1) return
-    
+    console.log("Render count:", renderCount.current)
+  })
+
+  useEffect(() => {
+    renderCount.current += 1
+
+    if(renderCount.current < 1) return
+    console.log("SAVING!!!!!!!!!!!!!!!!!")
     autoSave && autoSave()
 
   }, [selectedOption])

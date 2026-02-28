@@ -202,7 +202,6 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
   }
 
   async function handleChangeMap(r: Region) {
-    console.log('HANDLE CHANGE MAP')
     if(!r || !r.latitude || !r.longitude) return
     setCoords(r)
     handleChangeCoords(index, {latitude: r?.latitude?.toString(), longitude: r?.longitude?.toString()})
