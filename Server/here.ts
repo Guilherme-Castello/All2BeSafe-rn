@@ -24,7 +24,7 @@ const hereApiAutoSuggest = {
       verbose && console.log('Here Request', 'getAddress');
       try {
         const baseUrl = 'https://autosuggest.search.hereapi.com/v1/autosuggest';
-        let params = `?at=${lat},${long}&apiKey=${api}&limit=10&show=details&lang=pt-BR&q=${query}`;
+        let params = `?at=${lat},${long}&apiKey=${api}&limit=10&show=details&lang=en-CA&q=${query}`;
         console.log(params)
         const response = await axiosinstancesHereAutoSuggest.baseDomain.instance.get(baseUrl + params);
         return response.data.items;

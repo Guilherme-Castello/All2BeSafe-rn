@@ -1,7 +1,6 @@
 import { Dimensions, SafeAreaView, ScrollView, Text, View } from "react-native";
 import PrimaryInput from "../Components/PrimaryInput";
 import { useCallback, useEffect, useState } from "react";
-import Select from "../Components/Select";
 import api from "../Server/api";
 import { useAuth } from "../contexts/AuthContext";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -10,6 +9,7 @@ import { colors } from "../Utils/colors";
 import { useFocusEffect } from "@react-navigation/native";
 import PermissionTable from "../Components/PermissionTable";
 import AdaptableTable from "../Components/UsersTable";
+import SelectWithoutCallback from "../Components/SelectWithoutCallback";
 
 export default function CompanyManager() {
 
@@ -159,11 +159,11 @@ export default function CompanyManager() {
 
                   {user && user.access_level == "3" && <View>
                     <Text>Company</Text>
-                    {companies && <Select options={companies.map((company: any) => company.name)} selectedOption={selectedCompany} setSelectedOption={(e: string) => getCompanyByName(e)} />}
+                    {companies && <SelectWithoutCallback options={companies.map((company: any) => company.name)} selectedOption={selectedCompany} setSelectedOption={(e: string) => getCompanyByName(e)} />}
                   </View>}
 
                   <Text>Access Level</Text>
-                  <Select options={["0", "1", "2"]} selectedOption={accessLevel} setSelectedOption={e => setAccessLevel(e)} />
+                  <SelectWithoutCallback options={["0", "1", "2"]} selectedOption={accessLevel} setSelectedOption={e => setAccessLevel(e)} />
                   <PermissionTable userAccessLevel={user?.access_level} />
                 </View>
 

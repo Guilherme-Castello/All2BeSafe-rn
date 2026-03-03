@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { colors } from "../Utils/colors";
 import { useFocusEffect } from "@react-navigation/native";
 
-interface SelectInterface {
+interface SelectWithoutCallbackInterface {
   setSelectedOption: (option: string) => void,
   options: string[],
   selectedOption: string,
@@ -14,11 +14,9 @@ interface SelectInterface {
   autoSave?: () => void
 }
 
-export default function Select({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180, autoSave}: SelectInterface) {
+export default function SelectWithoutCallback({selectedOption, options, setSelectedOption, position = 400, containerHeight = 180}: SelectWithoutCallbackInterface) {
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false)
-
-  const [renderCount, setRenderCount] = useState(0)
 
   function translateOption(op: string){
     switch(op){
@@ -42,24 +40,6 @@ export default function Select({selectedOption, options, setSelectedOption, posi
         return op
     }
   }
-
-  useFocusEffect(
-      useCallback(() => {
-  
-        return () => {
-          setRenderCount(0)
-        }
-      }, [])
-    );
-
-  useEffect(() => {
-    setRenderCount(prev => prev+1)
-    if(renderCount < 1) return
-    
-
-    autoSave && autoSave()
-
-  }, [selectedOption])
 
   function SelectItem({ option, closeModal }: { option: string, closeModal: (callBack: () => void) => void }) {
     return (

@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-const baseAPIUrl = 'https://6f0e-2804-14d-8e86-9cfc-7d7e-2e5-d25d-670.ngrok-free.app'
+const baseAPIUrl = 'https://2e56-2804-14d-8e86-9cfc-1de3-302d-4ced-2d60.ngrok-free.app'
                     
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
@@ -39,7 +39,6 @@ const api = {
   getFormById: async (id: string) => {
     try {
       const response = await serverInstance.get(`/templates/${id}`);
-      console.log(response.data)
       return response.data.content;
     } catch (error: any) {
       console.error('Error fetching forms:', error.message);
@@ -196,7 +195,6 @@ const api = {
   newSection: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/sections/newSection', data)
-      console.log(response.data)
       return response.data
     } catch (e) {
       console.error(e)
@@ -226,7 +224,6 @@ const api = {
 
   uploadImage: async (data: any) => {
     try {
-      console.log(data)
       const formData = new FormData()
       formData.append('file', {
         uri: data,
@@ -260,7 +257,6 @@ const api = {
   listUsers: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/users/list', data)
-      console.log(response)
       return response.data.content
     } catch (e) {
       console.error(e)
@@ -270,7 +266,6 @@ const api = {
   deleteUser: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/users/delete', data)
-      console.log(response)
       return response.data.content
     } catch (e) {
       console.error(e)
@@ -280,7 +275,6 @@ const api = {
   updateUser: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/users/update', data)
-      console.log(response)
       return response.data.content
     } catch (e) {
       console.error(e)
