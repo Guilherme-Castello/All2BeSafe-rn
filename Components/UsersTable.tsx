@@ -3,11 +3,10 @@ import PrimaryButton from "./PrimaryButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors } from "../Utils/colors";
 import { useAuth } from "../contexts/AuthContext";
-import api from "../Server/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AnimatedModal from "./AnimatedModal";
 import PrimaryInput from "./PrimaryInput";
-import Select from "./Select";
+import SelectWithoutCallback from "./SelectWithoutCallback";
 
 export default function UsersTable({ usersList, deleteUser, updateUser }: { usersList: any[], deleteUser: (id: string) => Promise<void>, updateUser: (userId: string, updatedUser: any) => Promise<void> }) {
   const { user } = useAuth()
@@ -71,7 +70,7 @@ export default function UsersTable({ usersList, deleteUser, updateUser }: { user
               <View>
 
                 <Text>Access Level</Text>
-                <Select options={["0", "1", "2"]} selectedOption={newAccessLvl} setSelectedOption={e => setNewAccessLvl(e)} />
+                <SelectWithoutCallback options={["0", "1", "2"]} selectedOption={newAccessLvl} setSelectedOption={e => setNewAccessLvl(e)} />
               </View>
 
               <PrimaryButton

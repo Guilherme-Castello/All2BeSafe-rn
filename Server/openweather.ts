@@ -4,7 +4,7 @@ const WEATHER_API_GOOGLE_KEY = "AIzaSyBlazjumTpwjY9OP56YDYxyYHGLIcIzDEg";
 export async function getWeather(lat: number, lon: number) {
   try {
     
-    const url = `https://weather.googleapis.com/v1/currentConditions:lookup?location.latitude=${lat}&location.longitude=${lon}&key=${WEATHER_API_GOOGLE_KEY}&languageCode=pt-BR`;
+    const url = `https://weather.googleapis.com/v1/currentConditions:lookup?location.latitude=${lat}&location.longitude=${lon}&key=${WEATHER_API_GOOGLE_KEY}&languageCode=en-CA`;
     const response = await fetch(url);
     const data = await response.json();
     return data;
