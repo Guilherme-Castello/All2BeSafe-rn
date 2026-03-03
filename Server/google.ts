@@ -73,7 +73,7 @@ const googleApi = {
 
       try {
         const response = await axiosIntancesGoogleMaps.baseDomain.instance.get(
-          `/place/autocomplete/json?input=${address}&key=${api}&lang=pt&location=${latitude},${longitude}&radius=50000&components=country:br&language=pt-BR&sessiontoken=${sessionUUID}`
+          `/place/autocomplete/json?input=${address}&key=${api}&lang=en&location=${latitude},${longitude}&radius=50000&components=country:ca&language=en-CA&sessiontoken=${sessionUUID}`
         );
         return response;
       } catch (e) {

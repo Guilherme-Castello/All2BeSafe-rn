@@ -48,17 +48,15 @@ export default function SignatureQuestionContainer({
 
   async function getUrl(image: string) {
     if(image == "") return
-    
     setUrl(undefined)
     const url = await api.getImageUrl({ fileName: image })
-    setUrl(url);
+    setUrl(url.content);
   }
 
   useEffect(() => {
     if(!question || hasConfig) return
     getUrl(question.value)
   }, [question])
-
   return (
     <>
       <View style={{alignItems: 'center', gap: 16}}>

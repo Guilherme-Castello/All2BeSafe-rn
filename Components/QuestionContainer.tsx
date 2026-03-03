@@ -66,8 +66,7 @@ export default function QuestionContainer({ answareNote, images, children, title
         api.getImageUrl({ fileName: image })
       )
     );
-
-    setUrlList(urls);
+    setUrlList(urls.map(url => url.content));
   }
 
 
