@@ -17,10 +17,9 @@ export default function SectionManager() {
   async function submitNewSection() {
     if (!newSectionName || newSectionName == "") return
     const createdSection = await api.newSection({ sectionName: newSectionName.toUpperCase() })
-    if(createdSection && !createdSection.sucess) {
+    if((createdSection && createdSection.success == false)) {
       setErrorMsg(createdSection.message ?? "Something went wrong")
-    }
-    console.log(createdSection)
+    } 
     await listSections()
   }
 

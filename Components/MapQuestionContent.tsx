@@ -179,26 +179,44 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
     }
   }, [question])
 
+// function handleAddressName(data: LocationAddressType) {
+//     if (data?.isEstabilishment || data?.provided_by == 'foursquare' || data?.provided_by == 'here') {
+//       if (data.title) {
+//         return data.title;
+//       } else {
+//         return data.formatted_address
+//       }
+//     } else if (data?.street) {
+//       console.log(data)
+//       return data?.street.indexOf(',') == -1 ? `${data?.number}, ${data?.street}` : data?.street;
+//     } else if (data?.neighborhood) {
+//       return `${data?.neighborhood}`;
+//     } else if (data?.city) {
+//       return data?.city;
+//     } else if (data.state) {
+//       return data.state;
+//     }
+//     return data.country;
+//   }
+
+
   function handleAddressName(data: LocationAddressType) {
-    if (data?.source == 'deeplink') {
-      return data?.formatted_address;
-    }
     if (data?.isEstabilishment || data?.provided_by == 'foursquare' || data?.provided_by == 'here') {
       if (data.title) {
         return data.title;
       } else {
         return data.formatted_address
       }
-    } else if (data?.street) {
-      return data?.street.indexOf(',') == -1 ? `${data?.street}, ${data?.number}` : data?.street;
-    } else if (data?.neighborhood) {
-      return `${data?.neighborhood}`;
-    } else if (data?.city) {
-      return data?.city;
-    } else if (data.state) {
-      return data.state;
+    } else {
+      let finalAddrs = ""
+      if(data.number) finalAddrs += data.number
+      if(data.street) finalAddrs += ", "+data.street
+      if(data.neighborhood) finalAddrs += ", "+data.neighborhood
+      if(data.state) finalAddrs += ", "+data.state
+      if(data.zipCode) finalAddrs += ", "+data.zipCode
+
+      return finalAddrs
     }
-    return data.country;
   }
 
   async function handleChangeMap(r: Region) {
@@ -208,6 +226,7 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
     const response = await googleApi.getAddressByCoordinate.get(r?.latitude?.toString(), r?.longitude?.toString(), 'AIzaSyAWOENgGdjyMam4FPZHs99OcIj3PCDNJqM')
     const address = createAddressFromResponse(response?.data?.results[0])
     setAddressName(handleAddressName(address))
+    console.log(handleAddressName(address))
 
     autoSaveFn && autoSaveFn()
   }
@@ -220,12 +239,15 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
     <>
       <View style={{ position: 'relative', gap: 10 }}>
         <MaterialCommunityIcons name="pin" style={{ position: 'absolute', zIndex: 100, top: 220, left: 140 }} size={20} color={colors.primary} />
-        <PrimaryInput onChange={setAddressName} value={question.value} />
+        {/* @ts-ignore */}
+        <PrimaryInput onChange={setAddressName} value={question.value} multiline inputStyle={{ height: 80 }} />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ width: '45%' }}>
+        {/* @ts-ignore */}
             <PrimaryInput onChange={setAddressName} value={( question && question.coords && question?.coords.latitude ? Number(question?.coords.latitude).toFixed(4).toString() : coords.latitude.toFixed(4).toString())} />
           </View>
           <View style={{ width: '45%' }}>
+        {/* @ts-ignore */}
             <PrimaryInput onChange={setAddressName} value={( question && question.coords && question?.coords.longitude ? Number(question?.coords.longitude).toFixed(4).toString() : coords.longitude.toFixed(4).toString())} />
           </View>
         </View>
