@@ -134,10 +134,11 @@ export default function QuestionContainer({ answareNote, images, children, title
         </TouchableOpacity>
       </View>}
       {isNoteModalOpen && (
-        <AnimatedModal onClose={() => setIsNoteModalOpen(false)} position={300} title="Insert your note">
+        <AnimatedModal onClose={() => setIsNoteModalOpen(false)} position={500} title="Insert your note">
           {({ closeModal }) => (
             <View style={{ gap: 20 }}>
-              <PrimaryInput label="Insert your note" onChange={setNewNote} value={newNote} />
+              <PrimaryInput label="Note:" multiline numberOfLines={5} onChange={setNewNote} value={newNote} inputStyle={{ minHeight: 120 }}            
+               />
               <PrimaryButton
                 textStyle={{ color: "white", fontSize: 18 }}
                 label="Send"
