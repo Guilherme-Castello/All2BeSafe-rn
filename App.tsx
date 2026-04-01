@@ -12,6 +12,7 @@ import { colors } from './Utils/colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
+import SplashScreen from './Screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -158,6 +159,12 @@ function Routes() {
 }
 
 export default function App() {
+
+  const [showSplash, setShowSplash] = React.useState(true);
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
   return (
     <PortalProvider>
       <AuthProvider>
