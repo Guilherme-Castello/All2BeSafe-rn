@@ -28,24 +28,29 @@ export default function QuestionContainer({ answareNote, images, children, title
 
   const [urlList, setUrlList] = useState<string[]>([])
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
+  const [isMediaModalOpen, setIsMediaModalOpen] = useState(false)
   const [newNote, setNewNote] = useState("")
 
-  async function handleUploadImage() {
+  async function handlePickFromGallery() {
+    setIsMediaModalOpen(false)
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
-    if (!result) return
-    if (result.canceled) return
-    if (!uploadImage) return
-    // const formData = new FormData()
-    // formData.append('file', {
-    //   uri: result.assets[0].uri,
-    //   name: 'photo.jpg',
-    //   type: 'image/jpeg',
-    // } as any);
+    if (!result || result.canceled || !uploadImage) return
+    // @ts-ignore
+    uploadImage(result.assets[0].uri, parseInt(id) - 1)
+  }
 
-    // console.log('picked image')
+  async function handleTakePhoto() {
+    setIsMediaModalOpen(false)
+    const { status } = await ImagePicker.requestCameraPermissionsAsync()
+    if (status !== 'granted') return
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result || result.canceled || !uploadImage) return
     // @ts-ignore
     uploadImage(result.assets[0].uri, parseInt(id) - 1)
   }
@@ -122,7 +127,7 @@ export default function QuestionContainer({ answareNote, images, children, title
           <Text style={{ marginLeft: 6, fontSize: 14 }}>Add Note</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => handleUploadImage()}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setIsMediaModalOpen(true)}>
           <MaterialCommunityIcons name="camera-plus" size={20} />
           <Text style={{ marginLeft: 6, fontSize: 14 }}>Media</Text>
         </TouchableOpacity>
@@ -136,8 +141,7 @@ export default function QuestionContainer({ answareNote, images, children, title
         <AnimatedModal onClose={() => setIsNoteModalOpen(false)} position={500} title="Insert your note">
           {({ closeModal }) => (
             <View style={{ gap: 20 }}>
-              <PrimaryInput label="Note:" multiline numberOfLines={5} onChange={setNewNote} value={newNote} inputStyle={{ minHeight: 120 }}            
-               />
+              <PrimaryInput label="Note:" multiline numberOfLines={5} onChange={setNewNote} value={newNote} inputStyle={{ minHeight: 120 }} />
               <PrimaryButton
                 textStyle={{ color: "white", fontSize: 18 }}
                 label="Send"
@@ -148,6 +152,43 @@ export default function QuestionContainer({ answareNote, images, children, title
                 textStyle={{ color: "white", fontSize: 18 }}
                 label="Close"
                 onPress={() => closeModal(() => setIsNoteModalOpen(false))}
+              />
+            </View>
+          )}
+        </AnimatedModal>
+      )}
+
+      {isMediaModalOpen && (
+        <AnimatedModal onClose={() => setIsMediaModalOpen(false)} position={230} title="Add Media">
+          {({ closeModal }) => (
+            <View style={{ gap: 14 }}>
+              <TouchableOpacity
+                onPress={() => closeModal(handlePickFromGallery)}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: colors.primary + '20', borderRadius: 12, padding: 16 }}
+              >
+                <MaterialCommunityIcons name="image-multiple" size={28} color={colors.primary} />
+                <View>
+                  <Text style={{ fontSize: 16, fontWeight: '600' }}>Gallery</Text>
+                  <Text style={{ fontSize: 13, color: 'gray' }}>Choose an existing photo</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => closeModal(handleTakePhoto)}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 14, backgroundColor: colors.primary + '20', borderRadius: 12, padding: 16 }}
+              >
+                <MaterialCommunityIcons name="camera" size={28} color={colors.primary} />
+                <View>
+                  <Text style={{ fontSize: 16, fontWeight: '600' }}>Camera</Text>
+                  <Text style={{ fontSize: 13, color: 'gray' }}>Take a photo now</Text>
+                </View>
+              </TouchableOpacity>
+
+              <PrimaryButton
+                style={{ backgroundColor: colors.danger }}
+                textStyle={{ color: 'white', fontSize: 16 }}
+                label="Cancel"
+                onPress={() => closeModal(() => setIsMediaModalOpen(false))}
               />
             </View>
           )}
