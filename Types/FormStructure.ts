@@ -28,7 +28,8 @@ export type FormConfig = {
   description: string,
   in_charge: string,
   weather: boolean,
-  location: boolean
+  location: boolean,
+  kind: number
 }
 
 export type FormItem = {
@@ -36,7 +37,7 @@ export type FormItem = {
   title: string;
   value: string;
   section: string;
-  id: number;
+  id: number | string;
   options: string[] | undefined;
   answare_images: string[]
   answare_note: string
