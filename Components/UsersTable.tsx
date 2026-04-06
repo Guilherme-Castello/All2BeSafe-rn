@@ -35,24 +35,24 @@ export default function UsersTable({ usersList, deleteUser, updateUser }: { user
     <>
       <View style={styles.container}>
         <View style={[styles.row, styles.header]}>
-          <Text style={[styles.cell, styles.name]}>Name</Text>
-          <Text style={[styles.cell, styles.email]}>Email</Text>
+          <Text style={[styles.cell, styles.nameEmail]}>User</Text>
           <Text style={[styles.cell, styles.accessLvl]}>Level</Text>
           <Text style={[styles.cell, styles.company]}>Company</Text>
-          <Text style={[styles.cell, styles.password]}>
-          </Text>
+          <Text style={[styles.cell, styles.action]}></Text>
         </View>
 
         {usersList.length > 0 && usersList.map((item, idx) => {
           return (
             <View key={idx + 5} style={styles.row}>
-              <View style={[styles.name]}><Text style={[styles.cell]}>{item.name}</Text></View>
-              <View style={[styles.email]}><Text style={[styles.cell]}>{item.email}</Text></View>
-              <View style={[styles.accessLvl]}><Text style={[styles.cell]}>{item.access_level}</Text></View>
-              <View style={[styles.company]}><Text style={[styles.cell]}>{item.company}</Text></View>
-              <View style={[styles.password]}>
-                <TouchableOpacity onPress={() => handleOpenEditUserModal(item._id)} style={{ backgroundColor: colors.primary, height: 20, justifyContent: "center", alignItems: "center", borderRadius: 10 }}>
-                  <MaterialCommunityIcons name="cog" color={"white"} />
+              <View style={styles.nameEmail}>
+                <Text style={[styles.cell, { fontWeight: '600' }]}>{item.name}</Text>
+                <Text style={styles.emailText}>{item.email}</Text>
+              </View>
+              <View style={styles.accessLvl}><Text style={styles.cell}>{item.access_level}</Text></View>
+              <View style={styles.company}><Text style={styles.cell}>{item.company}</Text></View>
+              <View style={styles.action}>
+                <TouchableOpacity onPress={() => handleOpenEditUserModal(item._id)} style={{ backgroundColor: colors.primary, height: 28, paddingHorizontal: 8, justifyContent: "center", alignItems: "center", borderRadius: 14 }}>
+                  <MaterialCommunityIcons name="cog" color={"white"} size={16} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -144,23 +144,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
   },
-  name: {
-    width: 80,
-    fontWeight: "bold",
+  nameEmail: {
+    flex: 3,
+    paddingRight: 6,
   },
-  email: {
-    flex: 2,
-    fontWeight: "600",
+  emailText: {
+    fontSize: 12,
+    color: "gray",
+    marginTop: 2,
   },
   company: {
-    width: 80,
+    width: 70,
     fontWeight: "600",
   },
   accessLvl: {
-    width: 40,
+    width: 44,
     fontWeight: "600",
   },
-  password: {
-    flex: 1
+  action: {
+    width: 44,
+    alignItems: 'center',
   },
 });
