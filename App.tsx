@@ -151,7 +151,12 @@ function PublicRouter() {
 
 function Routes() {
   const { user } = useAuth();
-  if (user) {
+
+  const [showSplash, setShowSplash] = React.useState(true);
+
+  if(showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />
+  } else if (user) {
     return <PrivateRouter />
   } else {
     return <PublicRouter />
@@ -159,11 +164,6 @@ function Routes() {
 }
 
 export default function App() {
-
-  const [showSplash, setShowSplash] = React.useState(true);
-  if (showSplash) {
-    return <SplashScreen onFinish={() => setShowSplash(false)} />;
-  }
 
   return (
     <PortalProvider>

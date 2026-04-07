@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,6 +8,9 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../Server/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -16,17 +19,67 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ onFinish }: SplashScreenProps) {
+
+  const { setUser } = useAuth()
+
   const screenOpacity = useSharedValue(1);
 
+  // Flag que verifica se o tempo minimo de exibição da Splash já passou
+  const [didTimerFinished, setDidTimerFinished] = useState<boolean>(false)
+
+  // Flag que verifica se a request de login já retornou
+  const [didLoginFinished, setLoginFinished] = useState<boolean>(false)
+
+  async function autoLogin() {
+    // Logica de login aqui
+    // Puxar do async storage etc etc etc
+    try {
+      const loginDataRaw = await AsyncStorage.getItem("credentials");
+
+      if(!loginDataRaw) throw new Error("Login data not found")
+
+      const loginDataJson = JSON.parse(loginDataRaw)
+      const response = await api.login({email: loginDataJson.email, password: loginDataJson.password})
+
+      if(!response.success) {
+        throw new Error("Login data wrong")
+      }
+
+      setUser(response.content.user);
+    } catch(e) {
+      console.error(e)
+    
+    } finally {
+      setLoginFinished(true)
+    }
+  }
+
   useEffect(() => {
+
+    autoLogin()
+
     const timer = setTimeout(() => {
       screenOpacity.value = withTiming(0, { duration: 500 }, (finished) => {
-        if (finished) runOnJS(onFinish)();
+        // if (finished) runOnJS(onFinish)();
       });
+      setDidTimerFinished(true)
     }, 5000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      setDidTimerFinished(false)
+      clearTimeout(timer)
+    };
   }, []);
+
+  useEffect(() => {
+    console.log("Use Effect Flags")
+    if(didLoginFinished && didTimerFinished) {
+      console.log("Inside if")
+      console.log(didLoginFinished)
+      console.log(didTimerFinished)
+      runOnJS(onFinish)();
+    }
+  }, [didTimerFinished, didLoginFinished])
 
   const screenAnimatedStyle = useAnimatedStyle(() => ({
     opacity: screenOpacity.value,
