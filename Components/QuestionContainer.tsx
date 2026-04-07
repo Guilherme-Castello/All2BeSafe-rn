@@ -196,6 +196,6 @@ export default function QuestionContainer({ qId, onLongPress, answareNote, image
           )}
         </AnimatedModal>
       )}
-    </View>
+    </TouchableOpacity>
   )
 }
