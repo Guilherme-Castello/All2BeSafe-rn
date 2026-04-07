@@ -13,13 +13,23 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigation, useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import RenderQuestionContainer from "../Components/RenderQuestionContainer";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import CheckBox from "../Components/CheckBox";
 // @ts-ignore
 
 export default function FormCreate() {
 
-  const { newForm, setNewForm } = useAuth()
+  const route = useRoute();
+
+  const { id } = route.params as { id: string };
+
+  const { newForm, setNewForm, user } = useAuth()
   const [newFormQuestions, setNewFormQuestions] = useState<FormItem[]>([])
+
+  const [openEditModal, setOpenEditModal] = useState(false)
+  const [questionToEdit, setQuestionToEdit] = useState<FormItem | undefined>()
+
+  const [isUserEditingOption, setIsUserEditingOption] = useState<boolean>(false)
 
   const componentTypeOptions = ['text', 'select', 'input_date', 'input_time', 'check_boxes', 'weather', 'location', 'signature']
 
@@ -29,6 +39,7 @@ export default function FormCreate() {
   const [newSectionName, setNewSectionName] = useState<string>('')
 
   const [formTitle, setFormTitle] = useState<string>('')
+  const [templateAsMaster, setTemplateAsMaster] = useState(false)
 
   const [viewMode, setViewMode] = useState<'create' | 'preview'>('create')
 
@@ -98,6 +109,29 @@ export default function FormCreate() {
     setNewFormQuestions(updatedForm as FormItem[])
   }
 
+  function getQuestionToBeUpdated(questionId: any) {
+    const toUpdate = newFormQuestions.find(prev => prev.id == questionId)
+    setQuestionToEdit(toUpdate)
+  }
+
+  function updateQuestion(newSection?: string) {
+    if (!questionToEdit) return
+
+    const editQuestionIdx = newFormQuestions.findIndex(
+      q => q.id === questionToEdit.id
+    )
+    if (editQuestionIdx === -1) return
+
+    const updatedQuestions = [...newFormQuestions]
+
+    updatedQuestions[editQuestionIdx] = questionToEdit
+
+    if(questionToEdit.kind == "check_boxes") updatedQuestions[editQuestionIdx] = {...questionToEdit, check_boxes: optionList.map((cb, idx) => ({id: idx, label: cb, value: false}))}
+    if(questionToEdit.kind == "select") updatedQuestions[editQuestionIdx] = {...questionToEdit, options: optionList}
+    updatedQuestions[editQuestionIdx] = {...updatedQuestions[editQuestionIdx], section: newSection != undefined ? newSection : questionToEdit.section}
+    setNewFormQuestions(updatedQuestions)
+  }
+
   useEffect(() => {
     switch (selectedLabel) {
       case 'select':
@@ -113,10 +147,13 @@ export default function FormCreate() {
   }, [selectedLabel])
 
   async function handleSaveForm() {
-    if (newForm == undefined) {
+    if (newForm == undefined || user == undefined) {
       return
     }
-    setNewForm({ ...newForm, questions: newFormQuestions })
+
+    const companyToAdd = templateAsMaster ? -1 : parseInt(user?.company)
+
+    setNewForm({ ...newForm, questions: newFormQuestions, config: { ...newForm.config, kind: companyToAdd } })
 
     // let newFormCompleteStructure: any = {
     //   questions: newFormQuestions as FormItem[],
@@ -126,7 +163,7 @@ export default function FormCreate() {
 
     try {
       setIsCreateFormloading(true)
-      await api.createForm({ ...newForm, questions: newFormQuestions })
+      await api.createForm({ ...newForm, questions: newFormQuestions, config: { ...newForm.config, kind: companyToAdd } })
       setNewFormQuestions([])
       setNewForm(undefined)
       setFormTitle('')
@@ -169,15 +206,33 @@ export default function FormCreate() {
     setSelectedSection((sectionsReturned.content.map((section: any) => section.name))[0])
   }
 
+  async function getTemplateById() {
+    const templateBase = await api.getFormById(id)
+    setNewFormQuestions(templateBase.questions)
+    console.log(templateBase)
+  }
+
+  function handleSubmitOptionsModal() {
+    if(isUserEditingOption) {
+      if(!questionToEdit) return
+      updateQuestion()
+    } else {
+      addQuestion()
+    }
+  }
+
   useFocusEffect(
-      useCallback(() => {
-        listSections()
-        
-        return () => {
-  
-        }
-      }, [])
-    )
+    useCallback(() => {
+      listSections()
+      if (id && id != undefined && id != "") {
+        getTemplateById()
+      }
+
+      return () => {
+
+      }
+    }, [id])
+  )
 
   return (
     <>
@@ -218,6 +273,7 @@ export default function FormCreate() {
           </View>
           {newFormQuestions && newFormQuestions[0] != undefined && <RenderQuestionContainer
             formQuestions={newFormQuestions}
+            onLongPress={(aId: string) => [setOpenEditModal(true), getQuestionToBeUpdated(aId)]}
             removeQuestion={removeQuestion}
             handleChangeCheckbox={() => { }}
             onChangeText={() => { }}
@@ -268,7 +324,8 @@ export default function FormCreate() {
               </TouchableOpacity>
             </View>
             <View style={{ gap: 5 }}>
-              <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Submit" onPress={() => closeModal(() => [setOpenConfigModal(false), addQuestion()])} />
+              {/* @ts-ignore */}
+              <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Submit" onPress={() => closeModal(() => [setOpenConfigModal(false), handleSubmitOptionsModal()])} />
               <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => [setOpenConfigModal(false), setOptionList([])])} />
             </View>
           </View>
@@ -280,7 +337,7 @@ export default function FormCreate() {
           <View style={{ gap: 20 }}>
             <FlatList data={sectionOptions} style={{ height: 350 }} renderItem={(option) => {
               return (
-                <TouchableOpacity onPress={() => closeModal(() => [setOpenSectionModal(false), setSelectedSection(option.item)])} style={{ height: 50, borderColor: colors.primary, borderTopWidth: 1, borderBottomWidth: 1, justifyContent: 'space-between', borderRadius: 20, flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => closeModal(() => [setOpenSectionModal(false), setSelectedSection(option.item), openEditModal && updateQuestion(option.item)])} style={{ height: 50, borderColor: colors.primary, borderTopWidth: 1, borderBottomWidth: 1, justifyContent: 'space-between', borderRadius: 20, flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
                   <Text>{option.item}</Text>
                 </TouchableOpacity>
               )
@@ -294,7 +351,6 @@ export default function FormCreate() {
               </TouchableOpacity>
             </View>
             <View style={{ gap: 5 }}>
-              <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Submit" onPress={() => closeModal(() => [setOpenSectionModal(false), addQuestion()])} />
               <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenSectionModal(false))} />
             </View>
           </View>
@@ -309,7 +365,7 @@ export default function FormCreate() {
               contentContainerStyle={{ width: '100%', justifyContent: 'center', gap: 5 }}
               style={{ height: 300 }}
               renderItem={({ item }) => {
-                return <TouchableOpacity style={{ borderColor: item.color, borderWidth: 0.9, width: '100%', height: 36, borderRadius: 15 }} onPress={() => closeModal(() => [setOptionList(prev => [...prev, ...item.options]), setOpenPredefinedOptionsModal(false), setOpenConfigModal(true), console.log(item.options)])}>
+                return <TouchableOpacity style={{ borderColor: item.color, borderWidth: 0.9, width: '100%', height: 36, borderRadius: 15 }} onPress={() => closeModal(() => [setOptionList(prev => [...prev, ...item.options]), setOpenPredefinedOptionsModal(false), setOpenConfigModal(true)])}>
                   <FlatList
                     data={item.options}
                     style={{ flexDirection: 'row', width: '100%' }}
@@ -337,11 +393,26 @@ export default function FormCreate() {
         }
       </AnimatedModal>}
 
-      {openFinishgModal && <AnimatedModal onClose={() => setOpenFinishModal(false)} position={300} title="Save this form?">
+      {openFinishgModal && <AnimatedModal onClose={() => setOpenFinishModal(false)} position={350} title="Save this form?">
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <PrimaryButton style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white', fontSize: 18 }} label="Save" onPress={() => closeModal(() => [setOpenFinishModal(false), handleSaveForm()])} />
             <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenFinishModal(false))} />
+            {user?.company == "0" && parseInt(user.access_level) == 3 && <CheckBox isCheck={templateAsMaster} label="Set as master?" setIsCheck={() => setTemplateAsMaster(!templateAsMaster)} />}
+          </View>
+        }
+      </AnimatedModal>}
+      {openEditModal && <AnimatedModal onClose={() => setOpenEditModal(false)} position={550} title="Edit question">
+        {({ closeModal }) =>
+          <View style={{ gap: 20 }}>
+            {/* @ts-ignore */}
+            <PrimaryInput value={questionToEdit?.title || ""} onChange={(e) => setQuestionToEdit({ ...questionToEdit, title: e })} />
+            <PrimaryButton label="Change Section" onPress={() => setOpenSectionModal(true)}/>
+            {/* @ts-ignore */}
+            {questionToEdit?.kind == "select" && <PrimaryButton label="Edit Options" onPress={() => [setOpenConfigModal(true), setOptionList(questionToEdit.options), setIsUserEditingOption(true)]} />}
+            {questionToEdit?.kind == "check_boxes" && <PrimaryButton label="Edit Boxes" onPress={() => [setOpenConfigModal(true), setOptionList(questionToEdit.check_boxes!.map (cb => cb.label)), setIsUserEditingOption(true)]} />}
+            <PrimaryButton label="Update" onPress={() => closeModal(() => [setOpenEditModal(false), updateQuestion()])} />
+            <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenEditModal(false))} />
           </View>
         }
       </AnimatedModal>}

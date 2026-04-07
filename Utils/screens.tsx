@@ -2,6 +2,7 @@ import CompanyManager from "../Screens/CompanyManager";
 import FormCreate from "../Screens/FormCreate";
 import FormList from "../Screens/FormList";
 import FormViewer from "../Screens/FormViewer";
+import Library from "../Screens/Library";
 import SectionManager from "../Screens/SectionManager";
 import UserManager from "../Screens/UserManager";
 
@@ -59,5 +60,14 @@ export const screens = [
     requiredPermission: 2,
     icon: 'set-center',
     showInDrawer: true
+  },
+  {
+    name: 'Library',
+    title: 'Library',
+    label: 'Library',
+    component: Library,
+    requiredPermission: 2,
+    icon: 'set-center',
+    showInDrawer: false
   },
 ]

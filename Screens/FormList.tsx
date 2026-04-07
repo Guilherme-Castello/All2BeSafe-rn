@@ -17,71 +17,9 @@ import { Search } from "../Components/Search";
 // Importe sua função de normalização aqui. 
 // Se o caminho for diferente, ajuste conforme sua estrutura.
 import { normalizeString } from "../Utils/string";
+import FormCard from "../Components/FormCard";
 
-function FormCard({ getForms, aId, description, title, status, onPress, isAnsware = false }: {getForms?: () => Promise<void>, aId?: string, isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
-  const [optionsModalOpen, setOptionsModalOpen] = useState<boolean>(false)
 
-  async function setAsDone() {
-    await api.setAsDone({ aId })
-    getForms && await getForms()
-  }
-
-  function getStatusColor() {
-    switch (status) {
-      case 'open':
-        return colors.primary
-      case 'in_progress':
-        return colors.secondary
-      case 'done':
-        return colors.safe
-      default:
-        return colors.primary
-    }
-  }
-
-  function translateStatus() {
-    switch (status) {
-      case 'open': return 'Open'
-      case 'in_progress': return 'In Progress'
-      case 'done': return 'Done'
-      default: return status
-    }
-  }
-
-  return (
-    <>
-      <TouchableOpacity onLongPress={() => isAnsware ? setOptionsModalOpen(true) : console.log("A lot better, huh?")} onPress={onPress} style={{ backgroundColor: colors.primary + '50', flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
-        <View style={{ width: '15%' }}>
-          <Image source={require('../assets/all2bsafe.png')} style={{ width: 50, height: 50, borderRadius: 10 }} />
-        </View>
-        <View style={{ width: '80%' }}>
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 16, fontWeight: '700', maxWidth: '75%' }}>{title}</Text>
-            <Text style={[{ backgroundColor: getStatusColor(), color: 'white', paddingHorizontal: 4, paddingVertical: 2, maxHeight: 27, borderRadius: 8 }]}>{translateStatus()}</Text>
-          </View>
-          <View style={{ width: '100%' }}>
-            <Text>{description}</Text>
-            {!isAnsware && <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', gap: 5 }}>
-              <MaterialIcons name="person" size={15} />
-              <Text>All 2B Safe (office)</Text>
-            </View>}
-          </View>
-        </View>
-      </TouchableOpacity>
-      {optionsModalOpen && <AnimatedModal onClose={() => setOptionsModalOpen(false)} position={700} title="Choose an option">
-        {({ closeModal }) =>
-          <View style={{ gap: 20 }}>
-            <TouchableOpacity onPress={() => closeModal(() => [setAsDone(), setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18 }}>Set as "done"</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => closeModal(() => [setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>Details</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => closeModal(() => [setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>View</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => closeModal(() => [setOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>Export Report</Text></TouchableOpacity>
-            <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOptionsModalOpen(false))} />
-          </View>
-        }
-      </AnimatedModal>}
-    </>
-  )
-}
 
 export default function FormList() {
 
@@ -100,6 +38,8 @@ export default function FormList() {
   const [searchTerm, setSearchTerm] = useState('')
 
   const [isNewFormModalOpen, setIsNewFormModalOpen] = useState<boolean>(false)
+  const [isNewModalOpen, setIsNewModalOpen] = useState<boolean>(false)
+
   const [isNewAnswareModalOpen, setIsNewAnswareModalOpen] = useState<boolean>(false)
   const [answareName, setAnswareName] = useState<string>('')
   const [templateToOpen, setTemplateToOpen] = useState<string>('')
@@ -123,12 +63,13 @@ export default function FormList() {
   function handleContinue() {
     if (formName == '' || formDescription == '' || formInCharge == '') return
     resetFormConfigState()
-    setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather }, status: 'open' })
+    setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather, kind: -2 }, status: 'open' })
   }
 
   async function getForms() {
     try {
-      const forms: any = await api.getForms();
+      console.log(user)
+      const forms: any = await api.getForms({user_id: user?._id});
       if (forms) {
         setLoadedForms(forms)
         setFilteredTemplates(forms) // Inicializa filtro com tudo
@@ -226,15 +167,17 @@ export default function FormList() {
           contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }}
           data={filteredTemplates}
           keyExtractor={(item: any) => item._id || Math.random().toString()}
-          renderItem={(item) => (
-            <FormCard
-              status={'open'}
-              title={item.item.config.name}
-              description={item.item.config.description}
-              onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]}
-              isAnsware={false}
-            />
-          )}
+          renderItem={(item) => {
+            return (
+              <FormCard
+                status={'open'}
+                title={item.item.config.name}
+                description={item.item.config.description}
+                onPress={() => [setIsNewAnswareModalOpen(true), setTemplateToOpen(item.item._id)]}
+                isAnsware={false}
+              />
+            )
+          }}
         />
       )}
 
@@ -244,22 +187,40 @@ export default function FormList() {
           contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }}
           data={filteredInProgress}
           keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
-          renderItem={(item) => (
-            <FormCard
-              getForms={getForms}
-              aId={item.item.answare_id}
-              isAnsware
-              status={item.item.status}
-              title={item.item.name}
-              description={`Template: ${item.item.config.name}`}
-              // @ts-ignore
-              onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })}
-            />
-          )}
+          renderItem={(item) => {
+            console.log(item)
+            return (
+              <FormCard
+                getForms={getForms}
+                aId={item.item.answare_id}
+                isAnsware
+                status={item.item.status}
+                title={item.item.config.name}
+                description={`Template: ${item.item.config.name}`}
+                // @ts-ignore
+                onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })}
+              />
+            )
+          }}
         />
       )}
 
-      <PrimaryButton label="+" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 80, height: 80, borderRadius: 100 }} textStyle={{ fontSize: 40, color: 'white' }} />
+      {/* <PrimaryButton label="New! +" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 100, height: 40, borderRadius: 100 }} textStyle={{ fontSize: 20, color: 'white' }} /> */}
+      <PrimaryButton label="New! +" onPress={() => setIsNewModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 100, height: 40, borderRadius: 100 }} textStyle={{ fontSize: 20, color: 'white' }} />
+
+      {isNewModalOpen && <AnimatedModal onClose={() => setIsNewAnswareModalOpen(false)} position={Dimensions.get('screen').height * 0.6} title="Choose an option">
+        {({ closeModal }) =>
+          <ScrollView style={{ height: '90%' }} contentContainerStyle={{ alignItems: 'center' }}>
+            <View style={{ gap: 10, width: "90%" }}>
+              <PrimaryButton label="Create my own form" onPress={() => closeModal(() => [setIsNewModalOpen(false), setIsNewFormModalOpen(true)])} />
+              {/* @ts-ignore */}
+              <PrimaryButton label="Open Library" onPress={() => closeModal(() => [setIsNewModalOpen(false), navigate.navigate("Library")])} />
+              <PrimaryButton style={{backgroundColor: colors.danger}} label="Cancel" onPress={() => closeModal(() => [setIsNewModalOpen(false)])} />
+            </View>
+          </ScrollView>
+        }
+      </AnimatedModal>}
+
 
       {/* MANTIVE SEUS MODAIS ORIGINAIS ABAIXO SEM ALTERAÇÕES */}
       {isNewAnswareModalOpen && <AnimatedModal onClose={() => setIsNewAnswareModalOpen(false)} position={Dimensions.get('screen').height * 0.6} title="Choose an option">
@@ -300,7 +261,8 @@ export default function FormList() {
                 <CheckBox label="Get Location on fill" isCheck={formLocation} setIsCheck={() => setFormLocation(!formLocation)} />
               </View>
 
-              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
+              {/* @ts-ignore */}
+              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate", {id: ""} ), setIsNewFormModalOpen(false), handleContinue()])} />
               <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} />
             </View>
           </ScrollView>

@@ -21,10 +21,12 @@ interface QuestionContainerProps {
   answareNote?: string,
   uploadImage?: (uri: string, id: string) => void
   images?: string[]
+  onLongPress?: (a: string) => void,
+  qId: string
 }
 
 
-export default function QuestionContainer({ answareNote, images, children, title, aId = "0", id = '0', canDelete = false, onDelete, hasConfig = true, hasPhoto = false, uploadImage }: QuestionContainerProps) {
+export default function QuestionContainer({ qId, onLongPress, answareNote, images, children, title, aId = "0", id = '0', canDelete = false, onDelete, hasConfig = true, hasPhoto = false, uploadImage }: QuestionContainerProps) {
 
   const [urlList, setUrlList] = useState<string[]>([])
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
@@ -87,9 +89,9 @@ export default function QuestionContainer({ answareNote, images, children, title
     if (images && images?.length <= 0) return
     getUrl(images)
   }, [images])
-
+  
   return (
-    <View style={{ backgroundColor: colors.primary + '25', paddingVertical: 10, paddingHorizontal: 10, gap: 10, borderRadius: 10 }}>
+    <TouchableOpacity onLongPress={() => onLongPress && onLongPress(qId)} style={{ backgroundColor: colors.primary + '25', paddingVertical: 10, paddingHorizontal: 10, gap: 10, borderRadius: 10 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text style={{ fontSize: 17 }}>{id}- {title}</Text>
         {canDelete && <TouchableOpacity onPress={() => onDelete && onDelete()} style={{ backgroundColor: colors.danger, width: 20, height: 20, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
@@ -194,6 +196,6 @@ export default function QuestionContainer({ answareNote, images, children, title
           )}
         </AnimatedModal>
       )}
-    </View>
+    </TouchableOpacity>
   )
 }

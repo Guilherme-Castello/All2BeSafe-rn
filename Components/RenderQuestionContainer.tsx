@@ -12,6 +12,7 @@ interface RenderQuestionContainer {
   onDelete?: () => void;
   canDelete?: boolean;
   hasConfig?: boolean;
+  onLongPress?: (a: string) => void
   onChangeText: (index: number, value: string) => void;
   handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void;
   hasFooterButton?: boolean
@@ -46,6 +47,7 @@ export default function RenderQuestionContainer({
   onSubmit,
   uploadImage,
   sectionPercentage,
+  onLongPress,
   aId
 }: RenderQuestionContainer) {
 
@@ -142,6 +144,7 @@ export default function RenderQuestionContainer({
         return (
           <View style={{ paddingHorizontal: 10 }}>
             <RenderQuestion
+              onLongPress={onLongPress}
               aId={aId}
               handleChangeSignature={handleChangeSignature as any}
               uploadImage={uploadImage}
