@@ -62,8 +62,10 @@ export default function FormList() {
 
   function handleContinue() {
     if (formName == '' || formDescription == '' || formInCharge == '') return
+
     resetFormConfigState()
     setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather, kind: -2 }, status: 'open' })
+    navigate.navigate("FormCreate" as never)
   }
 
   async function getForms() {
@@ -256,14 +258,8 @@ export default function FormList() {
               <Text>In charge of</Text>
               <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge} />
 
-              <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <CheckBox label="Get Wheather on fill" isCheck={formWeather} setIsCheck={() => setFormWeather(!formWeather)} />
-                <CheckBox label="Get Location on fill" isCheck={formLocation} setIsCheck={() => setFormLocation(!formLocation)} />
-              </View>
-
-              {/* @ts-ignore */}
-              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate", {id: ""} ), setIsNewFormModalOpen(false), handleContinue()])} />
-              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} />
+              <PrimaryButton disabled={formName == "" || formDescription == "" || formInCharge == ""} label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
+              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} style={{ backgroundColor: colors.danger }} />
             </View>
           </ScrollView>
         }

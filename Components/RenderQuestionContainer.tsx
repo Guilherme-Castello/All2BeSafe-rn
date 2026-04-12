@@ -92,7 +92,7 @@ export default function RenderQuestionContainer({
 
   return (
     <FlatList
-      contentContainerStyle={{ gap: 12, paddingBottom: 40, backgroundColor: 'white' }}
+      contentContainerStyle={{ gap: 12, backgroundColor: 'white' }}
       data={groupedData}
       keyExtractor={(item, index) =>
         item.type === 'section'

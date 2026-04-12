@@ -8,11 +8,12 @@ interface PrimaryButtonInterface {
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   isLoading?: boolean
+  disabled?: boolean
 }
 
-export default function PrimaryButton({ isLoading = false, label, onPress, style, textStyle }: PrimaryButtonInterface) {
+export default function PrimaryButton({ disabled = false, isLoading = false, label, onPress, style, textStyle }: PrimaryButtonInterface) {
   return (
-    <TouchableOpacity disabled={isLoading} onPress={onPress} style={[{ backgroundColor: colors.primary, height: 50, borderRadius: 10, justifyContent: 'center' }, style]}>
+    <TouchableOpacity disabled={isLoading || disabled} onPress={onPress} style={[disabled ? {backgroundColor: colors.primary+"99"} : {backgroundColor: colors.primary}, { height: 50, borderRadius: 10, justifyContent: 'center' }, style]}>
       {!isLoading ? <Text style={[{ textAlign: 'center', color: 'white', fontSize: 16 }, textStyle]}>
         {label}
       </Text> :
