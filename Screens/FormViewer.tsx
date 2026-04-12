@@ -220,7 +220,7 @@ export default function FormViewer() {
     try {
       setIsFormSubmitLoading(true)
       const currentId = (firstAnswareId != undefined) ? firstAnswareId : id
-      const response = await api.generateAnswaredPdf({ answare_id: currentId, userid: user?._id })
+      const response = await api.generateAnswaredPdf({ answare_id: currentId, userid: user?._id, formName: aName })
       if (response.success) {
         setDownloadFormModal('sucess')
       } else {
