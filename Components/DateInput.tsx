@@ -38,18 +38,17 @@ export default function DateInput({
   };
 
   function formatedValue() {
-    const locale = Intl.DateTimeFormat().resolvedOptions().locale;
     if (mode === 'date') {
-      return value.toLocaleDateString(locale, {
+      return value.toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
       });
     } else {
-      return value.toLocaleTimeString(locale, {
+      return value.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
-        hour12: !is24Hour,
+        hour12: true,
       });
     }
   }
