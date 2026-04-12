@@ -132,10 +132,19 @@ const api = {
       // converte o PDF recebido em base64
       const base64Data = Buffer.from(response.data, "binary").toString("base64");
 
+      // monta o nome do arquivo: "NomeForm_2026-04-12.pdf"
+      const today = new Date().toLocaleDateString('en-CA'); // formato YYYY-MM-DD
+      const safeName = (data.formName as string | undefined)
+        ?.trim()
+        .replace(/[^a-zA-Z0-9À-ÿ _-]/g, '')  // remove caracteres inválidos em nomes de arquivo
+        .replace(/\s+/g, '_')
+        ?? 'Form';
+      const fileName = `${safeName}_${today}.pdf`;
+
       // cria o arquivo dentro da pasta escolhida pelo usuário
       const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
         permissions.directoryUri,
-        "formulario.pdf",
+        fileName,
         "application/pdf"
       );
 
