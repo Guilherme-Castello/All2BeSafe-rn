@@ -77,3 +77,9 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+
+# Cursor
+.cursor/
+.cursorrules
+.cursor/rules/
+
