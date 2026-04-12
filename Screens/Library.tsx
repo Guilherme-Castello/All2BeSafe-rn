@@ -113,8 +113,8 @@ export default function Library() {
               <Text>In charge of</Text>
               <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge} />
 
-              <PrimaryButton label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
-              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} />
+              <PrimaryButton disabled={formName == "" || formDescription == "" || formInCharge == ""} label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
+              <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} style={{ backgroundColor: colors.danger }}/>
             </View>
           </ScrollView>
         }

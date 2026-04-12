@@ -60,7 +60,7 @@ export default function SignatureQuestionContainer({
   return (
     <>
       <View style={{alignItems: 'center', gap: 16}}>
-        <PrimaryButton style={{width: '100%'}} label="Asign" onPress={() => [hasConfig ? () => console.warn('disabled on create form screen') : setIsOpen(true)]} />
+        <PrimaryButton style={{width: '100%'}} label="Sign" onPress={() => [hasConfig ? () => console.warn('disabled on create form screen') : setIsOpen(true)]} />
         {url && <Image
           source={url}
           key={index}

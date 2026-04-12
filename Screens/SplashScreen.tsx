@@ -7,7 +7,7 @@ import Animated, {
   runOnJS,
   Easing,
 } from 'react-native-reanimated';
-import { StyleSheet, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../Server/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,7 +19,7 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ onFinish }: SplashScreenProps) {
-
+  
   const { setUser } = useAuth()
 
   const screenOpacity = useSharedValue(1);
@@ -93,7 +93,6 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
       <Image
         source={require('../assets/Fundo.png')}
         style={styles.fundo}
-        resizeMode="cover"
       />
     </Animated.View>
   );

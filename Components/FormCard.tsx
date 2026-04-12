@@ -1,15 +1,13 @@
 import { useState } from "react"
 import api from "../Server/api"
 import { colors } from "../Utils/colors"
-import { Text, TouchableOpacity, View } from "react-native"
-import { Image } from "expo-image"
+import { Text, TouchableOpacity, View, Image } from "react-native"
 import { MaterialIcons } from "@expo/vector-icons"
 import AnimatedModal from "./AnimatedModal"
 import PrimaryButton from "./PrimaryButton"
 
 export default function FormCard({ getForms, aId, description, title, status, onPress, isAnsware = false }: { getForms?: () => Promise<void>, aId?: string, isAnsware: boolean, onPress: () => void, title: string, status: string, description: string }) {
   const [optionsAnswareModalOpen, setAnswareOptionsModalOpen] = useState<boolean>(false)
-  const [optionsTemplateModalOpen, setTemplateOptionsModalOpen] = useState<boolean>(false)
 
   async function setAsDone() {
     await api.setAsDone({ aId })
@@ -40,7 +38,7 @@ export default function FormCard({ getForms, aId, description, title, status, on
 
   return (
     <>
-      <TouchableOpacity onLongPress={() => isAnsware ? setAnswareOptionsModalOpen(true) : setTemplateOptionsModalOpen(true)} onPress={onPress} style={{ backgroundColor: colors.primary + '50', flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
+      <TouchableOpacity onLongPress={() => isAnsware ? setAnswareOptionsModalOpen(true) : console.log("modal removed")} onPress={onPress} style={{ backgroundColor: colors.primary + '50', flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 10, paddingVertical: 20, alignItems: 'center', borderRadius: 20 }}>
         <View style={{ width: '15%' }}>
           <Image source={require('../assets/all2bsafe.png')} style={{ width: 50, height: 50, borderRadius: 10 }} />
         </View>
@@ -69,16 +67,6 @@ export default function FormCard({ getForms, aId, description, title, status, on
           </View>
         }
       </AnimatedModal>}
-
-      {optionsTemplateModalOpen && <AnimatedModal onClose={() => setTemplateOptionsModalOpen(false)} position={300} title="Choose an option">
-        {({ closeModal }) =>
-          <View style={{ gap: 20 }}>
-            <TouchableOpacity onPress={() => closeModal(() => [setTemplateOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18 }}>Edit</Text></TouchableOpacity>
-            <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setTemplateOptionsModalOpen(false))} />
-          </View>
-        }
-      </AnimatedModal>}
-
     </>
   )
 }

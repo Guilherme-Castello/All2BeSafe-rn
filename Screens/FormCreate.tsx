@@ -126,9 +126,9 @@ export default function FormCreate() {
 
     updatedQuestions[editQuestionIdx] = questionToEdit
 
-    if(questionToEdit.kind == "check_boxes") updatedQuestions[editQuestionIdx] = {...questionToEdit, check_boxes: optionList.map((cb, idx) => ({id: idx, label: cb, value: false}))}
-    if(questionToEdit.kind == "select") updatedQuestions[editQuestionIdx] = {...questionToEdit, options: optionList}
-    updatedQuestions[editQuestionIdx] = {...updatedQuestions[editQuestionIdx], section: newSection != undefined ? newSection : questionToEdit.section}
+    if (questionToEdit.kind == "check_boxes") updatedQuestions[editQuestionIdx] = { ...questionToEdit, check_boxes: optionList.map((cb, idx) => ({ id: idx, label: cb, value: false })) }
+    if (questionToEdit.kind == "select") updatedQuestions[editQuestionIdx] = { ...questionToEdit, options: optionList }
+    updatedQuestions[editQuestionIdx] = { ...updatedQuestions[editQuestionIdx], section: newSection != undefined ? newSection : questionToEdit.section }
     setNewFormQuestions(updatedQuestions)
   }
 
@@ -196,7 +196,38 @@ export default function FormCreate() {
       ],
       //color: colors.secondary,
       color: colors.primary,
-
+    },
+    {
+      options: [
+        "Forklift Class 5",
+        "Forklift class 7",
+        "Forklift calss 5 & 7",
+        "E.W.P.",
+        "Mobile Crane (0-8 ton)",
+        "Industrial Crane",
+        "Working at Heights",
+        "WHMIS",
+        "Worker Awareness",
+        "Supervisor Awareness",
+        "Scaffold (setup & use)",
+        "Propane in Construction",
+        "Propane in Roofing",
+        "PPE",
+        "Confined space",
+        "First aid",
+        "Traffic control",
+        "First Aid/CPR",
+        "Hoisting & Rigging",
+        "Suspended Access Equipment",
+        "Stilts",
+        "Competent supervisor",
+        "Skid steer x Mini excavator",
+        "Fire extinguishers",
+        "Lockout/Tagout",
+        "Ground Disturbance",
+        "Asbestos Awareness"
+      ],
+      color: colors.primary,
     }
   ]
 
@@ -213,8 +244,8 @@ export default function FormCreate() {
   }
 
   function handleSubmitOptionsModal() {
-    if(isUserEditingOption) {
-      if(!questionToEdit) return
+    if (isUserEditingOption) {
+      if (!questionToEdit) return
       updateQuestion()
     } else {
       addQuestion()
@@ -245,8 +276,8 @@ export default function FormCreate() {
             <Text>Preview</Text>
           </TouchableOpacity>
         </View>
-        {viewMode == 'create' ? <View>
-          <View style={{ gap: 10, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: colors.primary, paddingHorizontal: 20 }}>
+        {viewMode == 'create' ? <View style={{ gap: 10 }}>
+          <View style={{ gap: 10, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: colors.primary, paddingHorizontal: 20, height: "32%" }}>
             <View style={{ gap: 5, flexDirection: 'row' }}>
               <View style={{ width: '50%' }}>
                 <Text>Question kind: </Text>
@@ -271,15 +302,18 @@ export default function FormCreate() {
               </View>
             </View>
           </View>
-          {newFormQuestions && newFormQuestions[0] != undefined && <RenderQuestionContainer
-            formQuestions={newFormQuestions}
-            onLongPress={(aId: string) => [setOpenEditModal(true), getQuestionToBeUpdated(aId)]}
-            removeQuestion={removeQuestion}
-            handleChangeCheckbox={() => { }}
-            onChangeText={() => { }}
-            canDelete
-            hasConfig
-          />}
+          {newFormQuestions && newFormQuestions[0] != undefined &&
+            <View style={{ height: "60%" }}>
+              <RenderQuestionContainer
+                formQuestions={newFormQuestions}
+                onLongPress={(aId: string) => [setOpenEditModal(true), getQuestionToBeUpdated(aId)]}
+                removeQuestion={removeQuestion}
+                handleChangeCheckbox={() => { }}
+                onChangeText={() => { }}
+                canDelete
+                hasConfig
+              />
+            </View>}
         </View> :
           <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: 'center' }}>
             {/* <RenderHTML source={{ html: previewTemplate }} 
@@ -407,10 +441,10 @@ export default function FormCreate() {
           <View style={{ gap: 20 }}>
             {/* @ts-ignore */}
             <PrimaryInput value={questionToEdit?.title || ""} onChange={(e) => setQuestionToEdit({ ...questionToEdit, title: e })} />
-            <PrimaryButton label="Change Section" onPress={() => setOpenSectionModal(true)}/>
+            <PrimaryButton label="Change Section" onPress={() => setOpenSectionModal(true)} />
             {/* @ts-ignore */}
             {questionToEdit?.kind == "select" && <PrimaryButton label="Edit Options" onPress={() => [setOpenConfigModal(true), setOptionList(questionToEdit.options), setIsUserEditingOption(true)]} />}
-            {questionToEdit?.kind == "check_boxes" && <PrimaryButton label="Edit Boxes" onPress={() => [setOpenConfigModal(true), setOptionList(questionToEdit.check_boxes!.map (cb => cb.label)), setIsUserEditingOption(true)]} />}
+            {questionToEdit?.kind == "check_boxes" && <PrimaryButton label="Edit Boxes" onPress={() => [setOpenConfigModal(true), setOptionList(questionToEdit.check_boxes!.map(cb => cb.label)), setIsUserEditingOption(true)]} />}
             <PrimaryButton label="Update" onPress={() => closeModal(() => [setOpenEditModal(false), updateQuestion()])} />
             <PrimaryButton style={{ backgroundColor: colors.danger }} textStyle={{ color: 'white', fontSize: 18 }} label="Close" onPress={() => closeModal(() => setOpenEditModal(false))} />
           </View>

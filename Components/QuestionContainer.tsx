@@ -93,7 +93,7 @@ export default function QuestionContainer({ qId, onLongPress, answareNote, image
   return (
     <TouchableOpacity onLongPress={() => onLongPress && onLongPress(qId)} style={{ backgroundColor: colors.primary + '25', paddingVertical: 10, paddingHorizontal: 10, gap: 10, borderRadius: 10 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Text style={{ fontSize: 17 }}>{id}- {title}</Text>
+        <Text style={{ fontSize: 17 }}>{title}</Text>
         {canDelete && <TouchableOpacity onPress={() => onDelete && onDelete()} style={{ backgroundColor: colors.danger, width: 20, height: 20, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Text style={{ color: 'white' }}>X</Text>
         </TouchableOpacity>}
