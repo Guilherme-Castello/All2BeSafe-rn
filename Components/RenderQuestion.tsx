@@ -10,8 +10,8 @@ import MapQuestionContent from "./MapQuestionContent";
 import WeatherQuestionContent from "./WeatherQuestionContent";
 import SignatureQuestionContainer from "./SignatureQuestionContainer";
 
-const RenderQuestion = React.memo(
-  ({ onLongPress, aId, question, index, handleChangeSignature, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords, uploadImage }: {
+  const RenderQuestion = React.memo(
+  ({ onLongPress, aId, question, index, handleChangeSignature, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords, uploadImage, deleteImage }: {
     handleChangeCoords: (receivedIndex: number, newCoord: {latitude: string; longitude: string;}) => void,
     onLongPress?: (a: string) => void,
     handleChangeSignature: (receivedIndex: number, uri: string) => void,
@@ -19,13 +19,14 @@ const RenderQuestion = React.memo(
     onDelete?: () => void;
     canDelete?: boolean;
     uploadImage?: (uri: string, id: string) => void
+    deleteImage?: (filename: string, questionIndex: number) => void
     aId?: string
     hasConfig?: boolean; question: FormItem; index: number; onChangeText: (index: number, value: string) => void; handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void
   },) => {
     switch (question.kind) {
       case "text":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <PrimaryInput
               // @ts-ignore
               onChange={(text) => onChangeText(index, text)}
@@ -36,27 +37,27 @@ const RenderQuestion = React.memo(
         );
       case "select":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <Select autoSave={autoSaveFn} options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(index, text)} />
           </QuestionContainer>
         )
 
       case "input_date":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(Number(index), date.toString()), autoSaveFn && autoSaveFn()]} mode="date" />
           </QuestionContainer>
         )
       case "input_time":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(Number(index), date.toString()), autoSaveFn && autoSaveFn()]} mode="time" />
           </QuestionContainer>
         )
 
       case "check_boxes":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} title={question.title} id={(Number(index) + 1).toString()} canDelete={canDelete} onDelete={onDelete}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} title={question.title} id={(Number(index) + 1).toString()} canDelete={canDelete} onDelete={onDelete}>
             <FlatList
               data={question.check_boxes}
               renderItem={({ item, index: idx }) => (
@@ -75,21 +76,21 @@ const RenderQuestion = React.memo(
 
       case "weather":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <WeatherQuestionContent index={Number(index)} onChangeText={onChangeText} question={question} />
           </QuestionContainer>
         );
 
       case "location":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <MapQuestionContent onChangeText={onChangeText} index={Number(index)} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn} />
           </QuestionContainer>
         );
 
       case "signature":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <SignatureQuestionContainer hasConfig={hasConfig} onChangeText={onChangeText} index={Number(index)} question={question} handleChangeSignature={handleChangeSignature} autoSaveFn={autoSaveFn} />
           </QuestionContainer>
         )
