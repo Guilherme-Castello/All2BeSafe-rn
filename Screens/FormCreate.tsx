@@ -21,7 +21,7 @@ export default function FormCreate() {
 
   const route = useRoute();
 
-  const { id } = route.params as { id: string };
+  const { id } = (route.params ?? {}) as { id: string | undefined };
 
   const { newForm, setNewForm, user } = useAuth()
   const [newFormQuestions, setNewFormQuestions] = useState<FormItem[]>([])
