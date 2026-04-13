@@ -105,7 +105,7 @@ export default function RenderQuestionContainer({
         if(!hasFooterButton){
           return
         }
-        return <View>
+        return <View style={{marginBottom: 50}}>
           <PrimaryButton isLoading={isFooterButtonLoading} label="Submit" onPress={() => [onSubmit && onSubmit()]} style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
         </View>
       }}

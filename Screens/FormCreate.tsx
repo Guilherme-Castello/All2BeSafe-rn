@@ -21,6 +21,7 @@ export default function FormCreate() {
 
   const route = useRoute();
 
+  // const { id } = route.params as { id: string | undefined};
   const { id } = (route.params ?? {}) as { id: string | undefined };
 
   const { newForm, setNewForm, user } = useAuth()
@@ -238,6 +239,11 @@ export default function FormCreate() {
   }
 
   async function getTemplateById() {
+    console.log(id)
+    if(!id) {
+      return
+    }
+    console.log("after validation")
     const templateBase = await api.getFormById(id)
     setNewFormQuestions(templateBase.questions)
     console.log(templateBase)
