@@ -256,7 +256,22 @@ export default function FormViewer() {
   async function uploadImage(uri: string, id: string) {
     const response = await api.uploadImage(uri)
     handleChangeImage(Number(id), response.fileName)
-    // await autoSave(response.fileName)
+  }
+
+  // Remove o filename do estado local da questão e auto-salva.
+  // A exclusão no GCS já foi feita pelo QuestionContainer antes de chamar esta função.
+  function handleDeleteImageFromQuestion(filename: string, questionIndex: number) {
+    setCurrentQuestions((prev) => {
+      if (!prev) return prev
+      return prev.map((item, index) => {
+        if (index !== questionIndex) return item
+        return {
+          ...item,
+          answare_images: (item.answare_images ?? []).filter(img => img !== filename)
+        }
+      })
+    })
+    forceAutoSave()
   }
 
   return (
@@ -267,6 +282,7 @@ export default function FormViewer() {
           sectionPercentage={sectionPercentages}
           handleChangeSignature={handleChangeSignature}
           uploadImage={uploadImage}
+          deleteImage={handleDeleteImageFromQuestion}
           formQuestions={currentQuestions}
           handleChangeCheckbox={handleChangeCheckbox}
           onChangeText={handleChangeText}

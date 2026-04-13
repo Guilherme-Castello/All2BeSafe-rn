@@ -263,6 +263,15 @@ const api = {
       return { success: false }
     }
   },
+  deleteImage: async (data: { fileName: string }) => {
+    try {
+      const response: any = await serverInstance.post('/images/deleteImage', data)
+      return response.data
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
   listUsers: async (data: any) => {
     try {
       const response: any = await serverInstance.post('/users/list', data)

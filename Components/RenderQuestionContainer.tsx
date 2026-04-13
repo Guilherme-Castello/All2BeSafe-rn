@@ -19,6 +19,7 @@ interface RenderQuestionContainer {
   isFooterButtonLoading?: boolean;
   autoSaveFn?: () => Promise<void>
   uploadImage?: (uri: string, id: string) => void
+  deleteImage?: (filename: string, questionIndex: number) => void
   handleChangeCoords?: (receivedIndex: number, newCoord: {
     latitude: string;
     longitude: string;
@@ -46,6 +47,7 @@ export default function RenderQuestionContainer({
   handleChangeCoords,
   onSubmit,
   uploadImage,
+  deleteImage,
   sectionPercentage,
   onLongPress,
   aId
@@ -148,6 +150,7 @@ export default function RenderQuestionContainer({
               aId={aId}
               handleChangeSignature={handleChangeSignature as any}
               uploadImage={uploadImage}
+              deleteImage={deleteImage}
               handleChangeCoords={handleChangeCoords as any}
               hasConfig={hasConfig}
               canDelete={canDelete}
