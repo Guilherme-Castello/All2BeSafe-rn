@@ -140,10 +140,10 @@ export default function CompanyManager() {
         <PrimaryButton label="Create User" onPress={() => setIsCreateUserModalOpen(true)} isLoading={isLoading} />
       </View>
       {isCreateUserModalOpen && (
-        <AnimatedModal onClose={() => setIsCreateUserModalOpen(false)} position={Dimensions.get("screen").height * 0.9} title="Create new user">
+        <AnimatedModal onClose={() => setIsCreateUserModalOpen(false)} position={Dimensions.get("screen").height * 0.7} title="Create new user">
           {({ closeModal }) => (
-            <View style={{ gap: 20 }}>
-              <ScrollView style={{ height: '90%' }}>
+            <View style={{ flex: 1 }}>
+              <ScrollView style={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
                 <View style={{ gap: 5, marginBottom: 10 }}>
                   <Text>Name</Text>
                   <PrimaryInput onChange={setName} value={name} />
