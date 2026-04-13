@@ -17,7 +17,7 @@ export default function FormViewer() {
 
   const route = useRoute();
 
-  const { id, isAnsware, aName } = route.params as { id: string, isAnsware: boolean, aName: string };
+  const { id = undefined, isAnsware, aName } = route.params as { id: string | undefined, isAnsware: boolean, aName: string };
   const [currentQuestions, setCurrentQuestions] = useState<FormItem[]>()
   const [currentForm, setCurrentForm] = useState<Form>()
   const [downloadFormModal, setDownloadFormModal] = useState<string>('')
@@ -133,7 +133,7 @@ export default function FormViewer() {
   async function getSelectedForm() {
     try {
       setIsLoading(true)
-      if (!isAnsware) {
+      if (!isAnsware && id) {
         const selectedForm: Form | undefined = await api.getFormById(id);
         selectedForm && setCurrentForm(selectedForm);
       } else {
