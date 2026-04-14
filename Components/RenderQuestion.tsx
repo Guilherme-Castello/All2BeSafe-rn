@@ -9,6 +9,7 @@ import { FormItem } from "../Types/FormStructure";
 import MapQuestionContent from "./MapQuestionContent";
 import WeatherQuestionContent from "./WeatherQuestionContent";
 import SignatureQuestionContainer from "./SignatureQuestionContainer";
+import SelectDown from "./SelectDown";
 
   const RenderQuestion = React.memo(
   ({ onLongPress, aId, question, index, handleChangeSignature, onChangeText, handleChangeCheckbox, canDelete = false, onDelete, hasConfig, autoSaveFn, handleChangeCoords, uploadImage, deleteImage }: {
@@ -38,7 +39,7 @@ import SignatureQuestionContainer from "./SignatureQuestionContainer";
       case "select":
         return (
           <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
-            <Select autoSave={autoSaveFn} options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(index, text)} />
+            <SelectDown autoSave={autoSaveFn} options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(index, text)} />
           </QuestionContainer>
         )
 
