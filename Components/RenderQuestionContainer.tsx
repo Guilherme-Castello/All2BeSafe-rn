@@ -128,7 +128,7 @@ export default function RenderQuestionContainer({
               }}
             >
               <Text style={{ fontSize: 16, fontWeight: '600', color: 'white' }}>
-                {item.title}
+                {item.id }{item.title}
               </Text>
               <Text style={{ fontSize: 16, fontWeight: '600', color: 'white' }}>
                 {sectionPercentage && sectionPercentage.find(section => section.section_name == item.title)?.percentage.toFixed(0)+"%"}
