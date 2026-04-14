@@ -188,6 +188,7 @@ const PrimaryInput = forwardRef<TextInput, PrimaryInput>(
                 multiline && { height: undefined, minHeight: 40, textAlignVertical: 'top' }
               ]}
               placeholder={placeHolder}
+              placeholderTextColor="#9ca3af"
               defaultValue={defineFormatData(value)}
               onChangeText={handleChangeText}
               onBlur={onBlur}
