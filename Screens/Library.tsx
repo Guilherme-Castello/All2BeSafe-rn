@@ -33,7 +33,7 @@ export default function Library() {
   const [formInCharge, setFormInCharge] = useState<string>(user?.name ?? '')
 
   function handleContinue() {
-    if (formName == '' || formDescription == '' || formInCharge == '') return
+    if (formName == '' || formInCharge == '') return
     resetFormConfigState()
     setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: false, name: formName, weather: false, kind: -2 }, status: 'open' })
     // @ts-ignore
@@ -113,7 +113,7 @@ export default function Library() {
               <Text>In charge of</Text>
               <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge} />
 
-              <PrimaryButton disabled={formName == "" || formDescription == "" || formInCharge == ""} label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
+              <PrimaryButton disabled={formName == "" || formInCharge == ""} label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate" as never), setIsNewFormModalOpen(false), handleContinue()])} />
               <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} style={{ backgroundColor: colors.danger }}/>
             </View>
           </ScrollView>
