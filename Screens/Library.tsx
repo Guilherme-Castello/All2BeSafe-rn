@@ -30,7 +30,7 @@ export default function Library() {
 
   const [formName, setFormName] = useState<string>('')
   const [formDescription, setFormDescription] = useState<string>('')
-  const [formInCharge, setFormInCharge] = useState<string>('')
+  const [formInCharge, setFormInCharge] = useState<string>(user?.name ?? '')
 
   function handleContinue() {
     if (formName == '' || formDescription == '' || formInCharge == '') return
@@ -104,11 +104,11 @@ export default function Library() {
               <Image source={require('../assets/all2bsafe.png')} width={200} height={200} />
             </View>
             <View style={{ width: '100%', gap: 10 }}>
-              <Text>Form name</Text>
+              <Text>Client / Site</Text>
               <PrimaryInput onChange={e => setFormName(e)} value={formName} />
 
-              <Text>Description</Text>
-              <PrimaryInput onChange={e => setFormDescription(e)} value={formDescription} />
+              <Text>Describe the inspection</Text>
+              <PrimaryInput placeHolder="Brief inspection description" onChange={e => setFormDescription(e)} value={formDescription} />
 
               <Text>In charge of</Text>
               <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge} />
