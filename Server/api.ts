@@ -1,6 +1,8 @@
 import axios from 'axios';
-import * as FileSystem from "expo-file-system";
-import { Buffer } from "buffer";
+import { Platform } from 'react-native';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import { Buffer } from 'buffer';
 
 const baseAPIUrl = 'https://api-formularios-render.onrender.com'
 // const baseAPIUrl = 'https://f7a0-2804-14d-8e86-9cfc-9240-6012-cc3e-a5c3.ngrok-free.app'
@@ -15,6 +17,84 @@ const serverInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PDF helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Sanitiza o nome do formulário e retorna "NomeForm_YYYY-MM-DD.pdf" */
+function buildPdfFileName(formName?: string): string {
+  const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+  const safeName = (formName ?? '')
+    .trim()
+    .replace(/[^a-zA-Z0-9À-ÿ _-]/g, '')
+    .replace(/\s+/g, '_')
+    || 'Form';
+  return `${safeName}_${today}.pdf`;
+}
+
+/**
+ * iOS — escreve o PDF num ficheiro temporário e abre o Share Sheet nativo.
+ * O utilizador pode escolher "Salvar em Arquivos", enviar por WhatsApp, etc.
+ */
+async function savePdfIos(
+  base64Data: string,
+  fileName: string
+): Promise<{ success: boolean; fileUri?: string; error?: string }> {
+  const sharingAvailable = await Sharing.isAvailableAsync();
+  if (!sharingAvailable) {
+    return { success: false, error: 'Compartilhamento não disponível neste dispositivo' };
+  }
+
+  // Grava num diretório temporário (cache) — não requer permissão
+  const tempUri = `${FileSystem.cacheDirectory}${fileName}`;
+  await FileSystem.writeAsStringAsync(tempUri, base64Data, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  // Abre o Share Sheet do iOS
+  await Sharing.shareAsync(tempUri, {
+    mimeType: 'application/pdf',
+    dialogTitle: 'Salvar ou compartilhar PDF',
+    UTI: 'com.adobe.pdf',
+  });
+
+  // Remove o arquivo temporário após o share (best-effort)
+  FileSystem.deleteAsync(tempUri, { idempotent: true }).catch(() => {});
+
+  return { success: true, fileUri: tempUri };
+}
+
+/**
+ * Android — solicita permissão ao SAF para o usuário escolher a pasta de destino
+ * e salva o arquivo diretamente lá. Comportamento original mantido.
+ */
+async function savePdfAndroid(
+  base64Data: string,
+  fileName: string
+): Promise<{ success: boolean; fileUri?: string; error?: string }> {
+  const permissions =
+    await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+  if (!permissions.granted) {
+    return { success: false, error: 'Permissão negada para salvar arquivo' };
+  }
+
+  const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
+    permissions.directoryUri,
+    fileName,
+    'application/pdf'
+  );
+
+  await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  console.log('[savePdfAndroid] PDF salvo em:', fileUri);
+  return { success: true, fileUri };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const api = {
   createForm: async (formData: any) => {
@@ -112,53 +192,31 @@ const api = {
 
   generateAnswaredPdf: async (data: any) => {
     try {
-
-      // faz a requisição para gerar o PDF
+      // ── 1. Busca o PDF na API ──────────────────────────────────────────────
       const response: any = await serverInstance.post(
-        "/templates/generateAnswarePDF",
+        '/templates/generateAnswarePDF',
         data,
-        { responseType: "arraybuffer" }
+        { responseType: 'arraybuffer' }
       );
 
       if (response?.data?.error) throw new Error(response.data.error);
 
-      // pede permissão para escolher o diretório
-      const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+      // ── 2. Converte arraybuffer → base64 ──────────────────────────────────
+      const base64Data = Buffer.from(response.data, 'binary').toString('base64');
+      if (!base64Data) throw new Error('Conversão base64 inválida');
 
-      if (!permissions.granted) {
-        console.log("Permissão negada para salvar arquivo");
-        return { success: false, error: "Permission denied" };
+      // ── 3. Monta nome do arquivo: "NomeForm_YYYY-MM-DD.pdf" ───────────────
+      const fileName = buildPdfFileName(data.formName);
+
+      // ── 4. Delega para o fluxo da plataforma ─────────────────────────────
+      if (Platform.OS === 'ios') {
+        return await savePdfIos(base64Data, fileName);
       }
+      return await savePdfAndroid(base64Data, fileName);
 
-      // converte o PDF recebido em base64
-      const base64Data = Buffer.from(response.data, "binary").toString("base64");
-
-      // monta o nome do arquivo: "NomeForm_2026-04-12.pdf"
-      const today = new Date().toLocaleDateString('en-CA'); // formato YYYY-MM-DD
-      const safeName = (data.formName as string | undefined)
-        ?.trim()
-        .replace(/[^a-zA-Z0-9À-ÿ _-]/g, '')  // remove caracteres inválidos em nomes de arquivo
-        .replace(/\s+/g, '_')
-        ?? 'Form';
-      const fileName = `${safeName}_${today}.pdf`;
-
-      // cria o arquivo dentro da pasta escolhida pelo usuário
-      const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
-        permissions.directoryUri,
-        fileName,
-        "application/pdf"
-      );
-
-      // escreve o conteúdo no arquivo criado
-      await FileSystem.writeAsStringAsync(fileUri, base64Data, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-
-      console.log("PDF salvo em:", fileUri);
-      return { success: true, fileUri };
     } catch (e: any) {
-      console.error(e);
-      return { success: false, error: e.message };
+      console.error('[generateAnswaredPdf]', e);
+      return { success: false, error: e.message ?? 'Erro desconhecido' };
     }
   },
   getUserAnswares: async (data: any) => {
