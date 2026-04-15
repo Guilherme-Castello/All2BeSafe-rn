@@ -61,7 +61,7 @@ export default function FormList() {
   }
 
   function handleContinue() {
-    if (formName == '' || formDescription == '' || formInCharge == '') return
+    if (formName == '' || formInCharge == '') return
 
     resetFormConfigState()
     setNewForm({ ...newForm, config: { description: formDescription, in_charge: formInCharge, location: formLocation, name: formName, weather: formWeather, kind: -2 }, status: 'open' })
@@ -191,14 +191,14 @@ export default function FormList() {
           data={filteredInProgress}
           keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
           renderItem={(item) => {
-            console.log(item)
+
             return (
               <FormCard
                 getForms={getForms}
                 aId={item.item.answare_id}
                 isAnsware
                 status={item.item.status}
-                title={item.item.config.name}
+                title={item.item.name}
                 description={`Template: ${item.item.config.name}`}
                 // @ts-ignore
                 onPress={() => navigate.navigate("FormViewer", { id: item.item.answare_id, isAnsware: true, aName: item.item.name })}
@@ -209,7 +209,7 @@ export default function FormList() {
       )}
 
       {/* <PrimaryButton label="New! +" onPress={() => setIsNewFormModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 100, height: 40, borderRadius: 100 }} textStyle={{ fontSize: 20, color: 'white' }} /> */}
-      <PrimaryButton label="New! +" onPress={() => setIsNewModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 100, height: 40, borderRadius: 100 }} textStyle={{ fontSize: 20, color: 'white' }} />
+      {listMode == "template" && <PrimaryButton label="New! +" onPress={() => setIsNewModalOpen(true)} style={{ position: 'absolute', bottom: 100, right: 10, width: 100, height: 40, borderRadius: 100 }} textStyle={{ fontSize: 20, color: 'white' }} />}
 
       {isNewModalOpen && <AnimatedModal onClose={() => setIsNewAnswareModalOpen(false)} position={Dimensions.get('screen').height * 0.6} title="Choose an option">
         {({ closeModal }) =>
@@ -260,7 +260,7 @@ export default function FormList() {
               <PrimaryInput onChange={e => setFormInCharge(e)} value={formInCharge} />
 
               {/* @ts-ignore */}
-              <PrimaryButton disabled={formName == "" || formDescription == "" || formInCharge == ""} label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate"), setIsNewFormModalOpen(false), handleContinue()])} />
+              <PrimaryButton disabled={formName == "" || formInCharge == ""} label="Continue" onPress={() => closeModal(() => [navigate.navigate("FormCreate"), setIsNewFormModalOpen(false), handleContinue()])} />
               <PrimaryButton label="Cancel" onPress={() => closeModal(() => [setIsNewFormModalOpen(false), resetFormConfigState()])} style={{ backgroundColor: colors.danger }} />
             </View>
           </ScrollView>

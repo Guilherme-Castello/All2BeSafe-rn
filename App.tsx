@@ -103,7 +103,7 @@ function CustomDrawerContent(props: any) {
           <MaterialCommunityIcons name={'exit-run'} size={20} color={'white'} />
           <Text style={{ color: 'white', fontWeight: 700 }}>Logout</Text>
         </TouchableOpacity>
-        <Text style={{ textAlign: 'center' }}>v3.0.0</Text>
+        <Text style={{ textAlign: 'center' }}>v3.0.6</Text>
       </View>
 
     </DrawerContentScrollView >

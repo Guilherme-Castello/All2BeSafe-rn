@@ -193,17 +193,17 @@ export default function FormCreate() {
         "No",
         "N/A"
       ],
-      //color: colors.safe,
       color: colors.primary,
     },
     {
       options: [
-        "Safe",
-        "Not safe",
-        "Unsure",
-        "N/A"
+        "Cash",
+        "Debit/Credit",
+        "Invoice",
+        "E-transfer (a.cruz@all2bsafe.ca)",
+        "Website",
+        "Free"
       ],
-      //color: colors.secondary,
       color: colors.primary,
     },
     {
@@ -264,6 +264,11 @@ export default function FormCreate() {
     } else {
       addQuestion()
     }
+  }
+  
+  function handleCreateNewSection(){
+    if(sectionOptions.includes(newSectionName)) return
+    setSectionOptions(prev => [...prev, newSectionName]), setNewSectionName('')
   }
 
   useFocusEffect(
@@ -367,7 +372,7 @@ export default function FormCreate() {
               <View style={{ width: '90%' }}>
                 <PrimaryInput placeHolder="...or add your own option" onChange={setOptionName} value={optionName} />
               </View>
-              <TouchableOpacity onPress={() => [setOptionList(prev => [...prev, optionName]), setOptionName('')]} style={{ width: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center', borderRadius: 100 }}>
+              <TouchableOpacity onPress={() => optionName ? [setOptionList(prev => [...prev, optionName]), setOptionName('')] : console.log("Blocked empty alternative")} style={{ width: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center', borderRadius: 100 }}>
                 <Text style={{ color: 'white', fontWeight: 700, fontSize: 25, backgroundColor: colors.primary, paddingHorizontal: 10, borderRadius: 100 }}>+</Text>
               </TouchableOpacity>
             </View>
@@ -394,7 +399,7 @@ export default function FormCreate() {
               <View style={{ width: '90%' }}>
                 <PrimaryInput placeHolder="Create a new section" onChange={setNewSectionName} value={newSectionName} />
               </View>
-              <TouchableOpacity onPress={() => [setSectionOptions(prev => [...prev, newSectionName]), setNewSectionName('')]} style={{ width: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center', borderRadius: 100 }}>
+              <TouchableOpacity onPress={() => handleCreateNewSection()} style={{ width: '10%', justifyContent: 'center', alignContent: 'center', alignItems: 'center', borderRadius: 100 }}>
                 <Text style={{ color: 'white', fontWeight: 700, fontSize: 25, backgroundColor: colors.primary, paddingHorizontal: 10, borderRadius: 100 }}>+</Text>
               </TouchableOpacity>
             </View>
