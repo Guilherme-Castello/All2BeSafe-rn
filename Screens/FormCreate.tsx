@@ -181,9 +181,8 @@ export default function FormCreate() {
   const predefinedOptions = [
     {
       options: [
-        "Safe",
-        "Not safe",
-        "Unsure",
+        "Yes",
+        "No",
         "N/A"
       ],
       color: colors.primary,

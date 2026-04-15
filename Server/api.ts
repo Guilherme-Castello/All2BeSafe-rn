@@ -2,8 +2,8 @@ import axios from 'axios';
 import * as FileSystem from "expo-file-system";
 import { Buffer } from "buffer";
 
-// const baseAPIUrl = 'https://api-formularios-render.onrender.com'
-const baseAPIUrl = 'https://f7a0-2804-14d-8e86-9cfc-9240-6012-cc3e-a5c3.ngrok-free.app'
+const baseAPIUrl = 'https://api-formularios-render.onrender.com'
+// const baseAPIUrl = 'https://f7a0-2804-14d-8e86-9cfc-9240-6012-cc3e-a5c3.ngrok-free.app'
                     
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]

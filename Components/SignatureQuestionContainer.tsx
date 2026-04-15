@@ -7,6 +7,7 @@ import * as FileSystem from 'expo-file-system'
 import { FormItem } from "../Types/FormStructure";
 import api from "../Server/api";
 import { Image } from "expo-image";
+import PrimaryInput from "./PrimaryInput";
 
 export default function SignatureQuestionContainer({
   onChangeText,
@@ -24,6 +25,9 @@ export default function SignatureQuestionContainer({
   }) {
 
   const [url, setUrl] = useState()
+
+  const [name, setName] = useState("")
+
   const [isOpen, setIsOpen] = useState(false)
   async function base64ToFile(base64: string) {
     // remove header se existir
@@ -43,7 +47,7 @@ export default function SignatureQuestionContainer({
   async function submit(signature: string) {
     const uri = await base64ToFile(signature)
     const uploadedImage = await api.uploadImage(uri)
-    handleChangeSignature(index, uploadedImage.fileName)
+    handleChangeSignature(index, name+"|divide|"+uploadedImage.fileName)
   }
 
   async function getUrl(image: string) {
@@ -55,12 +59,16 @@ export default function SignatureQuestionContainer({
 
   useEffect(() => {
     if(!question || hasConfig) return
-    getUrl(question.value)
+    const splittedValue = question.value.split("|divide|")
+    setName(splittedValue[0])
+    getUrl(splittedValue[splittedValue.length-1])
   }, [question])
+
   return (
     <>
       <View style={{alignItems: 'center', gap: 16}}>
-        <PrimaryButton style={{width: '100%'}} label="Sign" onPress={() => [hasConfig ? () => console.warn('disabled on create form screen') : setIsOpen(true)]} />
+        <PrimaryInput onChange={setName} value={name} label="Name"/>
+        <PrimaryButton disabled={name == ""} style={{width: '100%'}} label="Sign" onPress={() => [hasConfig ? () => console.warn('disabled on create form screen') : setIsOpen(true)]} />
         {url && <Image
           source={url}
           key={index}
