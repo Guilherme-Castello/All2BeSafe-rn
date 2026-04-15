@@ -71,6 +71,14 @@ export default function FormCreate() {
   }
 
 
+  // Gera sempre um ID maior que qualquer ID existente.
+  // Evita colisões ao remover questões e adicionar novas.
+  function getNextQuestionId(): string {
+    if (newFormQuestions.length === 0) return '0'
+    const maxId = Math.max(...newFormQuestions.map(q => Number(q.id)))
+    return String(maxId + 1)
+  }
+
   function addQuestion() {
 
     if (questionTitle == '') {
@@ -81,7 +89,7 @@ export default function FormCreate() {
     const optionalOptions = optionList.map((option, idx) => selectedLabel == 'check_boxes' ? { id: idx, value: false, label: option } : option)
 
     const newQuestion = {
-      id: newFormQuestions.length,
+      id: getNextQuestionId(),
       kind: selectedLabel,
       title: questionTitle,
       value: value,
