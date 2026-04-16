@@ -75,7 +75,9 @@ export default function FormCreate() {
   // Evita colisões ao remover questões e adicionar novas.
   function getNextQuestionId(): string {
     if (newFormQuestions.length === 0) return '0'
-    const maxId = Math.max(...newFormQuestions.map(q => Number(q.id)))
+    const maxId = Math.max(...newFormQuestions.map(q => {
+      return Number(q.id)
+    }))
     return String(maxId + 1)
   }
 

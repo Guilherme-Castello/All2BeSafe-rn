@@ -55,11 +55,11 @@ export default function FormViewer() {
     setForcedSave(prev => prev + 1)
   }
 
-  const handleChangeSignature = useCallback(async (receivedIndex: number, newText: string) => {
+  const handleChangeSignature = useCallback(async (receivedId: number, newText: string) => {
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
-      const test = prev.map((item, index) => {
-        if (index == receivedIndex) {
+      const test = prev.map((item) => {
+        if (item.id == receivedId) {
           return { ...item, value: newText }
         } else { return item }
       })
@@ -90,11 +90,11 @@ export default function FormViewer() {
     forceAutoSave()
   }, []);
 
-  const handleChangeText = useCallback((receivedIndex: number, newText: string) => {
+  const handleChangeText = useCallback((receivedID: number, newText: string) => {
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
-      const test = prev.map((item, index) => {
-        if (index == receivedIndex) {
+      const test = prev.map((item) => {
+        if (item.id == receivedID) {
           return { ...item, value: newText }
         } else { return item }
       })
@@ -114,11 +114,11 @@ export default function FormViewer() {
     });
   }, []);
 
-  const handleChangeCheckbox = useCallback((receivedIndex: number, check: boolean, boxid: number) => {
+  const handleChangeCheckbox = useCallback((receivedId: number, check: boolean, boxid: number) => {
     setCurrentQuestions((prev) => {
       if (prev == undefined) return undefined
-      return prev.map((item, index) => {
-        return index === receivedIndex ? {
+      return prev.map((item) => {
+        return Number(item.id) === receivedId ? {
           ...item, check_boxes: item.check_boxes!.map(box => {
             if (box.id == boxid) {
               return { ...box, value: typeof box.value == 'string' ? true : !box.value }
@@ -273,7 +273,6 @@ export default function FormViewer() {
     })
     forceAutoSave()
   }
-
   return (
     <SafeAreaView style={{ backgroundColor: 'white', justifyContent: 'center' }}>
       <LoadingContainer condition={isLoading}>

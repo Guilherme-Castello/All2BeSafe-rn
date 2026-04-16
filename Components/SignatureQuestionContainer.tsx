@@ -10,18 +10,15 @@ import { Image } from "expo-image";
 import PrimaryInput from "./PrimaryInput";
 
 export default function SignatureQuestionContainer({
-  onChangeText,
-  index,
+  questionId,
   question,
   handleChangeSignature,
-  hasConfig,
-  autoSaveFn }: {
+  hasConfig, } : 
+  {
     hasConfig?: boolean
-    autoSaveFn: (() => void) | undefined,
-    handleChangeSignature: (receivedIndex: number, uri: string) => void,
+    handleChangeSignature: (receivedId: number, uri: string) => void,
     question: FormItem,
-    onChangeText: (index: number, value: string) => void,
-    index: number
+    questionId: number
   }) {
 
   const [url, setUrl] = useState()
@@ -47,7 +44,7 @@ export default function SignatureQuestionContainer({
   async function submit(signature: string) {
     const uri = await base64ToFile(signature)
     const uploadedImage = await api.uploadImage(uri)
-    handleChangeSignature(index, name+"|divide|"+uploadedImage.fileName)
+    handleChangeSignature(questionId, name+"|divide|"+uploadedImage.fileName)
   }
 
   async function getUrl(image: string) {
@@ -71,7 +68,7 @@ export default function SignatureQuestionContainer({
         <PrimaryButton disabled={name == ""} style={{width: '100%'}} label="Sign" onPress={() => [hasConfig ? () => console.warn('disabled on create form screen') : setIsOpen(true)]} />
         {url && <Image
           source={url}
-          key={index}
+          key={questionId}
           style={{ width: 200, height: 200, borderRadius: 10, backgroundColor: 'white' }}
           contentFit="cover"
           cachePolicy="memory-disk"
