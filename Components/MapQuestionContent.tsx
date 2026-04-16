@@ -11,10 +11,10 @@ import googleApi from "../Server/google";
 import LocationAddressType from "../Types/LocationAddress";
 import { FormItem } from "../Types/FormStructure";
 
-export default function MapQuestionContent({ onChangeText, index, question, handleChangeCoords,autoSaveFn }: {autoSaveFn: (() => void) | undefined, handleChangeCoords: (receivedIndex: number, newCoord: {
+export default function MapQuestionContent({ onChangeText, questionId, question, handleChangeCoords,autoSaveFn }: {autoSaveFn: (() => void) | undefined, handleChangeCoords: (receivedIndex: number, newCoord: {
     latitude: string;
     longitude: string;
-}) => void, question: FormItem ,onChangeText: (index: number, value: string) => void, index: number}) {
+}) => void, question: FormItem ,onChangeText: (questionId: number, value: string) => void, questionId: number}) {
 
   //@ts-ignore
   const mapRef = useRef<any>();
@@ -222,17 +222,16 @@ export default function MapQuestionContent({ onChangeText, index, question, hand
   async function handleChangeMap(r: Region) {
     if(!r || !r.latitude || !r.longitude) return
     setCoords(r)
-    handleChangeCoords(index, {latitude: r?.latitude?.toString(), longitude: r?.longitude?.toString()})
+    handleChangeCoords(questionId, {latitude: r?.latitude?.toString(), longitude: r?.longitude?.toString()})
     const response = await googleApi.getAddressByCoordinate.get(r?.latitude?.toString(), r?.longitude?.toString(), 'AIzaSyAWOENgGdjyMam4FPZHs99OcIj3PCDNJqM')
     const address = createAddressFromResponse(response?.data?.results[0])
     setAddressName(handleAddressName(address))
-    console.log(handleAddressName(address))
 
     autoSaveFn && autoSaveFn()
   }
 
   function setAddressName(e: string){
-    onChangeText(index, e)
+    onChangeText(questionId, e)
   }
 
   return (

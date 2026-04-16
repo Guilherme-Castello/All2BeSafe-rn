@@ -5,7 +5,7 @@ import { FormItem } from "../Types/FormStructure"
 import { getWeather } from "../Server/openweather"
 import * as Location from 'expo-location';
 
-export default function WeatherQuestionContent({onChangeText, question, index}: {onChangeText: (index: number, value: string) => void, question: FormItem, index: number}){
+export default function WeatherQuestionContent({onChangeText, question, questionId}: {onChangeText: (questionId: number, value: string) => void, question: FormItem, questionId: number}){
   
   const region = {
     latitude: 0,
@@ -41,14 +41,14 @@ export default function WeatherQuestionContent({onChangeText, question, index}: 
   }
 
   function formatWeather(weather: any){    
-    onChangeText(index, `MIN.${weather.currentConditionsHistory.minTemperature.degrees}° - MAX.${weather.currentConditionsHistory.maxTemperature.degrees}° \n${weather.weatherCondition.description.text} \nNow: ${weather.temperature.degrees}°C - Humidity: ${weather.relativeHumidity}g/m³`)       
+    onChangeText(questionId, `MIN.${weather.currentConditionsHistory.minTemperature.degrees}° - MAX.${weather.currentConditionsHistory.maxTemperature.degrees}° \n${weather.weatherCondition.description.text} \nNow: ${weather.temperature.degrees}°C - Humidity: ${weather.relativeHumidity}g/m³`)       
   }
 
   
   return(
     <View style={{gap: 16}}>
       <PrimaryInput
-        onChange={(text) => onChangeText(index, text)}
+        onChange={(text) => onChangeText(questionId, text.toString())}
         value={question.value}    
         multiline
         numberOfLines={3}

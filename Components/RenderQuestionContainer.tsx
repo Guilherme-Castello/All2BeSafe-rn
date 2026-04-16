@@ -13,7 +13,7 @@ interface RenderQuestionContainer {
   canDelete?: boolean;
   hasConfig?: boolean;
   onLongPress?: (a: string) => void
-  onChangeText: (index: number, value: string) => void;
+  onChangeText: (questionId: number, value: string) => void;
   handleChangeCheckbox: (id: number, check: boolean, boxid: number) => void;
   hasFooterButton?: boolean
   isFooterButtonLoading?: boolean;
@@ -26,7 +26,7 @@ interface RenderQuestionContainer {
   }) => void
   onSubmit?: () => void
   aId?: string
-  handleChangeSignature?: (receivedIndex: number, uri: string) => void,
+  handleChangeSignature?: (receivedId: number, uri: string) => void,
   sectionPercentage?: {
     section_name: string;
     percentage: number;

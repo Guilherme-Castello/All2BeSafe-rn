@@ -212,7 +212,7 @@ export default function QuestionContainer({ qId, onLongPress, answareNote, image
       )}
 
       {isImageViewOpen && urlList[selectedImageIdx] && (
-        <AnimatedModal onClose={() => setIsImageViewOpen(false)} position={520} title="Image">
+        <AnimatedModal onClose={() => setIsImageViewOpen(false)} position={600} title="Image">
           {({ closeModal }) => (
             <View style={{ gap: 14 }}>
               <Image
@@ -237,7 +237,7 @@ export default function QuestionContainer({ qId, onLongPress, answareNote, image
       )}
 
       {isMediaModalOpen && (
-        <AnimatedModal onClose={() => setIsMediaModalOpen(false)} position={230} title="Add Media">
+        <AnimatedModal onClose={() => setIsMediaModalOpen(false)} position={400} title="Add Media">
           {({ closeModal }) => (
             <View style={{ gap: 14 }}>
               <TouchableOpacity
