@@ -11,7 +11,7 @@ import PermissionTable from "../Components/PermissionTable";
 import AdaptableTable from "../Components/UsersTable";
 import SelectWithoutCallback from "../Components/SelectWithoutCallback";
 
-export default function CompanyManager() {
+export default function UserManager() {
 
   const { user } = useAuth()
 
