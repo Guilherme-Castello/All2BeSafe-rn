@@ -357,6 +357,24 @@ const api = {
       console.error(e)
       return { success: false }
     }
+  },
+  updateCompany: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/companies/update', data)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+  deleteCompany: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/companies/delete', data)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
   }
 }
 
