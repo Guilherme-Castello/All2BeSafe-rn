@@ -23,6 +23,28 @@ export default function CompanyManager() {
   const [companiesList, setCompaniesList] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  async function updateCompany(companyId: string, updatedCompany: any) {
+    try {
+      await api.updateCompany({ companyId, updatedCompany })
+      await listCompanies()
+      setSuccessMsg("Company updated")
+    } catch (e) {
+      setError("Something went wrong while updating company")
+      console.error(e)
+    }
+  }
+
+  async function deleteCompany(companyId: string) {
+    try {
+      await api.deleteCompany({ companyId })
+      await listCompanies()
+      setSuccessMsg("Company deleted")
+    } catch (e) {
+      setError("Something went wrong while deleting company")
+      console.error(e)
+    }
+  }
+
   async function listCompanies() {
     try {
       const response = await api.getCompanies({})
@@ -78,7 +100,11 @@ export default function CompanyManager() {
     <SafeAreaView style={{ paddingHorizontal: 15, paddingTop: 10, backgroundColor: "white" }}>
       <ScrollView style={{ height: '80%' }}>
         <View style={{ gap: 5, marginBottom: 10 }}>
-          <CompaniesTable companiesList={companiesList} />
+          <CompaniesTable
+            companiesList={companiesList}
+            updateCompany={updateCompany}
+            deleteCompany={deleteCompany}
+          />
         </View>
       </ScrollView>
 
