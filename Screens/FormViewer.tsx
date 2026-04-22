@@ -140,7 +140,6 @@ export default function FormViewer() {
         const selectedForm: Form | undefined = await api.getAnswaredForm({ aId: id });
         selectedForm && setCurrentForm(selectedForm);
       }
-      autoSave()
     } catch (error) {
       console.error('Error fetching form by ID:', error);
     } finally {
@@ -235,6 +234,7 @@ export default function FormViewer() {
 
   async function autoSave(imageUrl?: string) {
     try {
+      if (!currentQuestions || currentQuestions.length === 0) return
       if (isAnsware || firstAnswareId != undefined) {
         const response = await api.updateAnsware({ aId: firstAnswareId || id, updatedAnware: formatAnsware('', imageUrl) })
 
