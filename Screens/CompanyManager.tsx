@@ -25,7 +25,7 @@ export default function CompanyManager() {
 
   async function updateCompany(companyId: string, updatedCompany: any) {
     try {
-      await api.updateCompany({ companyId, updatedCompany })
+      await api.updateCompany({ companyId, updatedCompany, requestingUserId: user?._id })
       await listCompanies()
       setSuccessMsg("Company updated")
     } catch (e) {
@@ -104,6 +104,7 @@ export default function CompanyManager() {
             companiesList={companiesList}
             updateCompany={updateCompany}
             deleteCompany={deleteCompany}
+            user={user}
           />
         </View>
       </ScrollView>

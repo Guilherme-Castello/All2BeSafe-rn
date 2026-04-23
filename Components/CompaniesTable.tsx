@@ -1,31 +1,68 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors } from "../Utils/colors";
 import { useState } from "react";
 import AnimatedModal from "./AnimatedModal";
 import PrimaryInput from "./PrimaryInput";
 import PrimaryButton from "./PrimaryButton";
+import CheckBox from "./CheckBox";
+import { User } from "../Types/UserStructure";
 
 interface CompaniesTableProps {
   companiesList: any[];
   updateCompany: (companyId: string, updatedCompany: any) => Promise<void>;
   deleteCompany: (companyId: string) => Promise<void>;
+  user?: User;
 }
 
-export default function CompaniesTable({ companiesList, updateCompany, deleteCompany }: CompaniesTableProps) {
+const PLAN_OPTIONS    = ['trial', 'starter', 'professional', 'enterprise']
+const STATUS_OPTIONS  = ['trialing', 'active', 'past_due', 'canceled', 'unpaid']
+
+export default function CompaniesTable({ companiesList, updateCompany, deleteCompany, user }: CompaniesTableProps) {
+
+  const isAdmin = user && (String(user.access_level) === '3' || String(user.company) === '0')
 
   const [isEditOpen, setIsEditOpen]     = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const [selectedCompanyId, setSelectedCompanyId] = useState("")
-  const [newName, setNewName]           = useState("")
-  const [newInCharge, setNewInCharge]   = useState("")
+  const [newName, setNewName]         = useState("")
+  const [newInCharge, setNewInCharge] = useState("")
+
+  // Campos de licença (apenas admin)
+  const [planName, setPlanName]               = useState("trial")
+  const [planSeats, setPlanSeats]             = useState("5")
+  const [subStatus, setSubStatus]             = useState("trialing")
+  const [subEnd, setSubEnd]                   = useState("")   // YYYY-MM-DD ou vazio
+  const [licenseActive, setLicenseActive]     = useState(true)
+  const [licenseNotes, setLicenseNotes]       = useState("")
 
   function handleOpenEditModal(item: any) {
     setSelectedCompanyId(item._id)
     setNewName(item.name)
     setNewInCharge(item.in_charge ?? "")
+    // Licença
+    setPlanName(item.plan_name ?? "trial")
+    setPlanSeats(String(item.plan_seats ?? 5))
+    setSubStatus(item.subscription_status ?? "trialing")
+    setSubEnd(item.subscription_end ? item.subscription_end.slice(0, 10) : "")
+    setLicenseActive(item.is_active !== false)
+    setLicenseNotes(item.notes ?? "")
     setIsEditOpen(true)
+  }
+
+  function buildUpdatePayload() {
+    const base = { name: newName, in_charge: newInCharge }
+    if (!isAdmin) return base
+    return {
+      ...base,
+      plan_name:           planName,
+      plan_seats:          Number(planSeats) || 5,
+      subscription_status: subStatus,
+      subscription_end:    subEnd ? new Date(subEnd).toISOString() : null,
+      is_active:           licenseActive,
+      notes:               licenseNotes,
+    }
   }
 
   return (
@@ -41,6 +78,12 @@ export default function CompaniesTable({ companiesList, updateCompany, deleteCom
           <View key={idx} style={styles.row}>
             <View style={styles.nameCol}>
               <Text style={[styles.cell, { fontWeight: '600' }]}>{item.name}</Text>
+              {/* Badge de status visível para admin */}
+              {isAdmin && (
+                <Text style={[styles.statusBadge, item.is_active === false && styles.inactiveBadge]}>
+                  {item.subscription_status ?? 'trialing'}{item.is_active === false ? ' · inactive' : ''}
+                </Text>
+              )}
             </View>
             <View style={styles.chargeCol}>
               <Text style={styles.cell}>{item.in_charge ?? '-'}</Text>
@@ -64,17 +107,58 @@ export default function CompaniesTable({ companiesList, updateCompany, deleteCom
       </View>
 
       {isEditOpen && (
-        <AnimatedModal onClose={() => setIsEditOpen(false)} position={450} title="Edit company">
+        <AnimatedModal onClose={() => setIsEditOpen(false)} position={isAdmin ? 700 : 450} title="Edit company">
           {({ closeModal }) => (
-            <View style={{ gap: 20 }}>
+            <ScrollView style={{ maxHeight: 520 }} contentContainerStyle={{ gap: 14, paddingBottom: 20 }}>
+
+              {/* ── Informações básicas ────────────────────────────── */}
               <PrimaryInput label="Company Name" onChange={setNewName} value={newName} />
               <PrimaryInput label="In Charge" onChange={setNewInCharge} value={newInCharge} />
+
+              {/* ── Seção de Licença (somente admin) ──────────────── */}
+              {isAdmin && (
+                <View style={styles.licenseSection}>
+                  <Text style={styles.licenseSectionTitle}>License Management</Text>
+
+                  <Text style={styles.fieldLabel}>
+                    Plan  <Text style={styles.hint}>({PLAN_OPTIONS.join(' · ')})</Text>
+                  </Text>
+                  <PrimaryInput onChange={setPlanName} value={planName} />
+
+                  <Text style={styles.fieldLabel}>Max Seats (users)</Text>
+                  <PrimaryInput onChange={setPlanSeats} value={planSeats} keyboardType="numeric" />
+
+                  <Text style={styles.fieldLabel}>
+                    Subscription Status  <Text style={styles.hint}>({STATUS_OPTIONS.join(' · ')})</Text>
+                  </Text>
+                  <PrimaryInput onChange={setSubStatus} value={subStatus} />
+
+                  <Text style={styles.fieldLabel}>Subscription End  <Text style={styles.hint}>(YYYY-MM-DD, leave blank for no expiry)</Text></Text>
+                  <PrimaryInput onChange={setSubEnd} value={subEnd} placeHolder="2026-12-31" />
+
+                  <CheckBox
+                    isCheck={licenseActive}
+                    label="Account Active"
+                    setIsCheck={setLicenseActive}
+                  />
+
+                  <Text style={styles.fieldLabel}>Internal Notes</Text>
+                  <PrimaryInput
+                    onChange={setLicenseNotes}
+                    value={licenseNotes}
+                    multiline
+                    numberOfLines={3}
+                    inputStyle={{ minHeight: 70 }}
+                    placeHolder="Ex: negotiated discount, special plan..."
+                  />
+                </View>
+              )}
 
               <PrimaryButton
                 label="Save"
                 onPress={() => closeModal(() => [
                   setIsEditOpen(false),
-                  updateCompany(selectedCompanyId, { name: newName, in_charge: newInCharge })
+                  updateCompany(selectedCompanyId, buildUpdatePayload())
                 ])}
               />
 
@@ -92,7 +176,7 @@ export default function CompaniesTable({ companiesList, updateCompany, deleteCom
                   onPress={() => closeModal(() => [setIsEditOpen(false), setIsDeleteOpen(true)])}
                 />
               </View>
-            </View>
+            </ScrollView>
           )}
         </AnimatedModal>
       )}
@@ -165,5 +249,35 @@ const styles = StyleSheet.create({
   emptyText: {
     color: "gray",
     fontSize: 13,
+  },
+  statusBadge: {
+    fontSize: 11,
+    color: colors.primary,
+    marginTop: 2,
+  },
+  inactiveBadge: {
+    color: colors.danger,
+  },
+  licenseSection: {
+    borderTopWidth: 1,
+    borderTopColor: "#ddd",
+    paddingTop: 12,
+    gap: 8,
+  },
+  licenseSectionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.primary,
+    marginBottom: 4,
+  },
+  fieldLabel: {
+    fontSize: 13,
+    color: "#444",
+    marginTop: 4,
+  },
+  hint: {
+    fontSize: 11,
+    color: "gray",
+    fontWeight: '400',
   },
 });
