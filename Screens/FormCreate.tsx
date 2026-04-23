@@ -140,8 +140,11 @@ export default function FormCreate() {
 
     updatedQuestions[editQuestionIdx] = questionToEdit
 
-    if (questionToEdit.kind == "check_boxes") updatedQuestions[editQuestionIdx] = { ...questionToEdit, check_boxes: optionList.map((cb, idx) => ({ id: idx, label: cb, value: false })) }
-    if (questionToEdit.kind == "select") updatedQuestions[editQuestionIdx] = { ...questionToEdit, options: optionList }
+    // Só substitui as opções se o usuário abriu e editou explicitamente o modal de options/boxes.
+    // Se optionList estiver vazio, significa que o usuário não tocou nas opções (ex.: só alterou
+    // required_answare), então os dados originais de questionToEdit são preservados.
+    if (questionToEdit.kind == "check_boxes" && optionList.length > 0) updatedQuestions[editQuestionIdx] = { ...questionToEdit, check_boxes: optionList.map((cb, idx) => ({ id: idx, label: cb, value: false })) }
+    if (questionToEdit.kind == "select" && optionList.length > 0) updatedQuestions[editQuestionIdx] = { ...questionToEdit, options: optionList }
     updatedQuestions[editQuestionIdx] = { ...updatedQuestions[editQuestionIdx], section: newSection != undefined ? newSection : questionToEdit.section }
     setNewFormQuestions(updatedQuestions)
   }
