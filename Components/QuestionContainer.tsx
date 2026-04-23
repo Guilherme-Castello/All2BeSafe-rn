@@ -25,10 +25,11 @@ interface QuestionContainerProps {
   images?: string[]
   onLongPress?: (a: string) => void,
   qId: string
+  required_answare?: boolean
 }
 
 
-export default function QuestionContainer({ qId, onLongPress, answareNote, images, children, title, aId = "0", id = '0', canDelete = false, onDelete, hasConfig = true, hasPhoto = false, uploadImage, deleteImage }: QuestionContainerProps) {
+export default function QuestionContainer({ qId, onLongPress, answareNote, images, children, title, aId = "0", id = '0', canDelete = false, onDelete, hasConfig = true, hasPhoto = false, uploadImage, deleteImage, required_answare = false }: QuestionContainerProps) {
 
   const [urlList, setUrlList] = useState<string[]>([])
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
@@ -137,7 +138,12 @@ export default function QuestionContainer({ qId, onLongPress, answareNote, image
   return (
     <TouchableOpacity onLongPress={() => onLongPress && onLongPress(qId)} style={{ backgroundColor: colors.primary + '25', paddingVertical: 10, paddingHorizontal: 10, gap: 10, borderRadius: 10 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Text style={{ fontSize: 17 }}>{title}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: 17 }}>{title}</Text>
+          {required_answare && (
+            <Text style={{ fontSize: 11, color: colors.danger, fontWeight: '600' }}>* Required</Text>
+          )}
+        </View>
         {canDelete && <TouchableOpacity onPress={() => onDelete && onDelete()} style={{ backgroundColor: colors.danger, width: 20, height: 20, justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
           <Text style={{ color: 'white' }}>X</Text>
         </TouchableOpacity>}

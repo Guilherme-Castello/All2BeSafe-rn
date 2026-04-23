@@ -30,7 +30,7 @@ import SelectDown from "./SelectDown";
     switch (question.kind) {
       case "text":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <PrimaryInput
               // @ts-ignore
               onChange={(text) => onChangeText((Number(question.id)), text)}
@@ -41,27 +41,27 @@ import SelectDown from "./SelectDown";
         );
       case "select":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <SelectDown autoSave={autoSaveFn} options={question.options || []} selectedOption={question.value} setSelectedOption={(text) => onChangeText(Number(question.id), text)} />
           </QuestionContainer>
         )
 
       case "input_date":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(Number(question.id), date.toString()), autoSaveFn && autoSaveFn()]} mode="date" />
           </QuestionContainer>
         )
       case "input_time":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <DateInput value={question.value != '' ? new Date(question.value) : new Date()} onChange={(date) => [onChangeText(Number(question.id), date.toString()), autoSaveFn && autoSaveFn()]} mode="time" />
           </QuestionContainer>
         )
 
       case "check_boxes":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} title={question.title} id={(Number(index) + 1).toString()} canDelete={canDelete} onDelete={onDelete}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} title={question.title} id={(Number(index) + 1).toString()} canDelete={canDelete} onDelete={onDelete}>
             <FlatList
               data={question.check_boxes}
               renderItem={({ item, index: idx }) => (
@@ -80,21 +80,21 @@ import SelectDown from "./SelectDown";
 
       case "weather":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <WeatherQuestionContent questionId={Number(question.id)} onChangeText={onChangeText} question={question} />
           </QuestionContainer>
         );
 
       case "location":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <MapQuestionContent onChangeText={onChangeText} questionId={Number(question.id)} question={question} handleChangeCoords={handleChangeCoords} autoSaveFn={autoSaveFn} />
           </QuestionContainer>
         );
 
       case "signature":
         return (
-          <QuestionContainer qId={question.id as string} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
+          <QuestionContainer qId={question.id as string} required_answare={question.required_answare} onLongPress={onLongPress} answareNote={question.answare_note} aId={aId} images={question.answare_images} hasPhoto={question.answare_images && question.answare_images.length > 0} uploadImage={uploadImage} deleteImage={deleteImage} hasConfig={hasConfig} canDelete={canDelete} onDelete={onDelete} title={question.title} id={(Number(index) + 1).toString()}>
             <SignatureQuestionContainer hasConfig={hasConfig} questionId={Number(question.id)} question={question} handleChangeSignature={handleChangeSignature} />
           </QuestionContainer>
         )
