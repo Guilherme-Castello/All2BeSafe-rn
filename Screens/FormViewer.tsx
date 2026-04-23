@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Form, FormItem } from "../Types/FormStructure";
 import RenderQuestion from "../Components/RenderQuestion";
@@ -185,7 +185,28 @@ export default function FormViewer() {
     return answaredForm
   }
 
+  function getUnansweredRequired(): FormItem[] {
+    if (!currentQuestions) return []
+    return currentQuestions.filter(q => {
+      if (!q.required_answare) return false
+      if (q.kind === 'check_boxes') {
+        return !q.check_boxes?.some(cb => cb.value === true)
+      }
+      return !q.value || q.value === ''
+    })
+  }
+
   async function submit() {
+    const unanswered = getUnansweredRequired()
+    if (unanswered.length > 0) {
+      Alert.alert(
+        'Required fields',
+        `Please answer the following required questions before saving:\n\n${unanswered.map(q => `• ${q.title}`).join('\n')}`,
+        [{ text: 'OK' }]
+      )
+      return
+    }
+
     try {
       setIsFormSubmitLoading(true)
 

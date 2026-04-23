@@ -41,6 +41,7 @@ export type FormItem = {
   options: string[] | undefined;
   answare_images: string[]
   answare_note: string
+  required_answare?: boolean;
   check_boxes: {
     label: string;
     value: boolean;

@@ -52,6 +52,7 @@ export default function FormCreate() {
   const [selectedSection, setSelectedSection] = useState('')
 
   const [questionTitle, setQuestionTitle] = useState<string>('')
+  const [requiredAnsware, setRequiredAnsware] = useState<boolean>(false)
 
   const [questionOptionalType, setQuestionOptionalType] = useState<string>('')
   const [optionList, setOptionList] = useState<string[]>([])
@@ -96,6 +97,7 @@ export default function FormCreate() {
       title: questionTitle,
       value: value,
       section: selectedSection,
+      required_answare: requiredAnsware,
       [questionOptionalType]: optionalOptions,
     }
 
@@ -107,6 +109,7 @@ export default function FormCreate() {
     setOptionName('')
     setQuestionOptionalType('')
     setQuestionTitle('')
+    setRequiredAnsware(false)
     setSelectedLabel(componentTypeOptions[0])
   }
 
@@ -298,7 +301,7 @@ export default function FormCreate() {
           </TouchableOpacity>
         </View>
         {viewMode == 'create' ? <View style={{ gap: 10 }}>
-          <View style={{ gap: 10, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: colors.primary, paddingHorizontal: 20, height: "32%" }}>
+          <View style={{ gap: 10, paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: colors.primary, paddingHorizontal: 20, height: "38%" }}>
             <View style={{ gap: 5, flexDirection: 'row' }}>
               <View style={{ width: '50%' }}>
                 <Text>Question kind: </Text>
@@ -314,6 +317,11 @@ export default function FormCreate() {
               <Text>Title: </Text>
               <PrimaryInput onChange={setQuestionTitle} value={questionTitle} />
             </View>
+            <CheckBox
+              isCheck={requiredAnsware}
+              label="Required answer"
+              setIsCheck={setRequiredAnsware}
+            />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ width: '48%' }}>
                 <PrimaryButton onPress={() => handleAddQuestion()} label="Add Question" style={{ backgroundColor: colors.primary }} textStyle={{ color: 'white' }} />
@@ -462,6 +470,12 @@ export default function FormCreate() {
           <View style={{ gap: 20 }}>
             {/* @ts-ignore */}
             <PrimaryInput value={questionToEdit?.title || ""} onChange={(e) => setQuestionToEdit({ ...questionToEdit, title: e })} />
+            <CheckBox
+              isCheck={questionToEdit?.required_answare ?? false}
+              label="Required answer"
+              // @ts-ignore
+              setIsCheck={(v) => setQuestionToEdit({ ...questionToEdit, required_answare: v })}
+            />
             <PrimaryButton label="Change Section" onPress={() => setOpenSectionModal(true)} />
             {/* @ts-ignore */}
             {questionToEdit?.kind == "select" && <PrimaryButton label="Edit Options" onPress={() => [setOpenConfigModal(true), setOptionList(questionToEdit.options), setIsUserEditingOption(true)]} />}
