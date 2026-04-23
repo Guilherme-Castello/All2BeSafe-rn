@@ -5,7 +5,7 @@ import * as Sharing from 'expo-sharing';
 import { Buffer } from 'buffer';
 
 const baseAPIUrl = 'https://api-formularios-render.onrender.com'
-// const baseAPIUrl = 'https://7130-2804-14d-8e86-9cfc-3dca-82be-390-4d2f.ngrok-free.app'
+// const baseAPIUrl = 'https://0874-2804-14d-8e86-9cfc-d0ad-f7b1-5d01-f082.ngrok-free.app'
                     
 const serverInstance = axios.create({
   baseURL: baseAPIUrl+'/api', // On debug environment, remember to use ngrok to access your local server [Remember to set up .env]
@@ -375,7 +375,26 @@ const api = {
       console.error(e)
       return { success: false }
     }
-  }
+  },
+  toggleArchive: async (data: any) => {
+    try {
+      console.log(data)
+      const response: any = await serverInstance.post('/answares/toggleArchive', data)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
+  getArchivedAnswares: async (data: any) => {
+    try {
+      const response: any = await serverInstance.post('/answares/getUserArchivedAnswares', data)
+      return response.data.content
+    } catch (e) {
+      console.error(e)
+      return { success: false }
+    }
+  },
 }
 
 export default api;

@@ -1,3 +1,4 @@
+import ArchivedAnswares from "../Screens/ArchivedAnswares";
 import CompanyManager from "../Screens/CompanyManager";
 import FormCreate from "../Screens/FormCreate";
 import FormList from "../Screens/FormList";
@@ -67,6 +68,15 @@ export const screens = [
     label: 'Library',
     component: Library,
     requiredPermission: 2,
+    icon: 'set-center',
+    showInDrawer: false
+  },
+  {
+    name: 'ArchivedAnswares',
+    title: 'ArchivedAnswares',
+    label: 'ArchivedAnswares',
+    component: ArchivedAnswares,
+    requiredPermission: 0,
     icon: 'set-center',
     showInDrawer: false
   },

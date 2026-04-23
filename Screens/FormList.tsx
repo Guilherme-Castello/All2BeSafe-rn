@@ -190,6 +190,9 @@ export default function FormList() {
           contentContainerStyle={{ gap: 10, top: 10, paddingBottom: 100 }}
           data={filteredInProgress}
           keyExtractor={(item: any) => item.answare_id || Math.random().toString()}
+          ListHeaderComponent={() => <TouchableOpacity onPress={() => navigate.navigate("ArchivedAnswares" as never)} style={{ backgroundColor: colors.primary + '50', marginHorizontal: 10, paddingVertical: 10, alignItems: 'center', borderRadius: 20 }}>
+            <Text style={{ color: colors.primary, fontWeight: '700' }}>See archived</Text>
+          </TouchableOpacity>}
           renderItem={(item) => {
 
             return (

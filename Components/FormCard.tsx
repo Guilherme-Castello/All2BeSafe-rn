@@ -14,6 +14,11 @@ export default function FormCard({ getForms, aId, description, title, status, on
     getForms && await getForms()
   }
 
+  async function toggleArchive() {
+    await api.toggleArchive({ aId })
+    getForms && await getForms()
+  }
+
   function getStatusColor() {
     switch (status) {
       case 'open':
@@ -22,6 +27,8 @@ export default function FormCard({ getForms, aId, description, title, status, on
         return colors.secondary
       case 'done':
         return colors.safe
+      case 'archived':
+        return colors.danger
       default:
         return colors.primary
     }
@@ -60,6 +67,7 @@ export default function FormCard({ getForms, aId, description, title, status, on
         {({ closeModal }) =>
           <View style={{ gap: 20 }}>
             <TouchableOpacity onPress={() => closeModal(() => [setAsDone(), setAnswareOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18 }}>Set as "done"</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => closeModal(() => [toggleArchive(), setAnswareOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18 }}>Toggle Archive</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => closeModal(() => [setAnswareOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>Details</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => closeModal(() => [setAnswareOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>View</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => closeModal(() => [setAnswareOptionsModalOpen(false)])} style={{ borderTopWidth: 0.5, borderTopColor: colors.primary, borderBottomWidth: 0.5, borderBottomColor: colors.primary, height: 60, justifyContent: "center", alignContent: "center", alignItems: "center" }}><Text style={{ fontSize: 18, color: "lightgray" }}>Export Report</Text></TouchableOpacity>
